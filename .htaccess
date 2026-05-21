@@ -53,13 +53,24 @@ ErrorDocument 500 /404.html
 </IfModule>
 
 <IfModule mod_headers.c>
-  # HTML - always revalidate
+  # HTML - always revalidate (so new content shows immediately)
   <FilesMatch "\.(html)$">
     Header set Cache-Control "no-cache, must-revalidate"
   </FilesMatch>
 
-  # Static assets - immutable long cache
-  <FilesMatch "\.(css|js|png|jpg|jpeg|webp|gif|svg|woff2|woff|eot|ttf)$">
+  # Custom SRT scripts (srt-cms.js, srt-blog.js, admin-*.js etc.) - always check for updates
+  # This prevents stale CMS/admin code from being cached across deploys
+  <FilesMatch "(srt-[a-z]+\.js|admin-[a-z]+\.js|supabase-config\.js)$">
+    Header set Cache-Control "no-cache, must-revalidate, max-age=0"
+  </FilesMatch>
+
+  # Vendor libraries & static assets - immutable long cache (these rarely change)
+  <FilesMatch "\.(css|png|jpg|jpeg|webp|gif|svg|woff2|woff|eot|ttf)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Vendor JS (jquery, gsap, bootstrap, swiper, etc.) - long cache
+  <FilesMatch "(jquery|bootstrap|gsap|swiper|isotope|magnific|waypoints|imagesloaded|counterup|Scroll|Split|animation\.min|main)\.js$">
     Header set Cache-Control "public, max-age=31536000, immutable"
   </FilesMatch>
 </IfModule>
