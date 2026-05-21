@@ -1,0 +1,33 @@
+/* --------------------------------------------
+  Animation
+ ---------------------------------------------- */
+.img-revel-animation {
+  position: relative;
+  overflow: hidden;
+  .reveal {
+    width: 0%;
+    height: 0%;
+    position: absolute;
+    top: 50%;
+    transform: translate(0%, -50%);
+    left: 0;
+    background-color: $white;
+  }
+}
+
+.lines {
+  overflow: hidden;
+}
+
+.invert-line {
+  background-image: linear-gradient(
+    to right,
+    hsla(var(--text-color), 1) 50%,
+    hsla(var(--text-color), 0.3) 50%
+  );
+  background-size: 200% 100%;
+  background-position-x: 100%;
+  color: transparent;
+  background-clip: text;
+  -webkit-background-clip: text;
+}

@@ -1,0 +1,258 @@
+/**
+ * SRT Popup Display Engine
+ * Fetches active popups from Supabase and shows them based on display rules
+ * Supports 4 templates: centered-modal, bottom-bar, slide-in-right, full-screen
+ */
+(function () {
+  "use strict";
+
+  // Template HTML builders
+  var templates = {
+    "centered-modal": function (p, content) {
+      return (
+        '<div class="srt-popup-overlay" style="background:rgba(0,0,0,' + (content.overlayOpacity || 60) / 100 + ')" onclick="SRTPopups.close(\'' + p.id + "')\">" +
+        '<div class="srt-popup-content srt-popup-centered" style="background:' + (content.bgColor || "#1a1a2e") + ";color:" + (content.textColor || "#fff") + '" onclick="event.stopPropagation()">' +
+        '<button class="srt-popup-close" onclick="SRTPopups.close(\'' + p.id + "')\">&times;</button>" +
+        (content.title ? '<h2 class="srt-popup-title">' + escapeHtml(content.title) + "</h2>" : "") +
+        (content.subtitle ? '<p class="srt-popup-subtitle">' + escapeHtml(content.subtitle) + "</p>" : "") +
+        (content.description ? '<p class="srt-popup-desc">' + escapeHtml(content.description) + "</p>" : "") +
+        '<div class="srt-popup-actions">' +
+        (content.ctaPrimaryText ? '<a class="srt-popup-btn-primary" href="' + escapeHtml(content.ctaPrimaryLink || "#") + '" style="background:' + (content.accentColor || "#25bbcc") + '" onclick="SRTPopups.trackClick(\'' + p.id + "')\">" + escapeHtml(content.ctaPrimaryText) + "</a>" : "") +
+        (content.ctaSecondaryText ? '<button class="srt-popup-btn-secondary" onclick="SRTPopups.close(\'' + p.id + "')\">" + escapeHtml(content.ctaSecondaryText) + "</button>" : "") +
+        "</div></div></div>"
+      );
+    },
+
+    "bottom-bar": function (p, content) {
+      return (
+        '<div class="srt-popup-content srt-popup-bottom-bar" style="background:' + (content.bgColor || "#1a1a2e") + ";color:" + (content.textColor || "#fff") + '">' +
+        '<div class="srt-popup-bar-inner">' +
+        '<div class="srt-popup-bar-text">' +
+        (content.title ? '<strong>' + escapeHtml(content.title) + "</strong> " : "") +
+        (content.description ? '<span>' + escapeHtml(content.description) + "</span>" : "") +
+        "</div>" +
+        (content.ctaPrimaryText ? '<a class="srt-popup-btn-primary" href="' + escapeHtml(content.ctaPrimaryLink || "#") + '" style="background:' + (content.accentColor || "#25bbcc") + '" onclick="SRTPopups.trackClick(\'' + p.id + "')\">" + escapeHtml(content.ctaPrimaryText) + "</a>" : "") +
+        '<button class="srt-popup-close-bar" onclick="SRTPopups.close(\'' + p.id + "')\">&times;</button>" +
+        "</div></div>"
+      );
+    },
+
+    "slide-in-right": function (p, content) {
+      return (
+        '<div class="srt-popup-content srt-popup-slide-right" style="background:' + (content.bgColor || "#1a1a2e") + ";color:" + (content.textColor || "#fff") + '">' +
+        '<button class="srt-popup-close" onclick="SRTPopups.close(\'' + p.id + "')\">&times;</button>" +
+        (content.title ? '<h3 class="srt-popup-title">' + escapeHtml(content.title) + "</h3>" : "") +
+        (content.subtitle ? '<p class="srt-popup-subtitle">' + escapeHtml(content.subtitle) + "</p>" : "") +
+        (content.description ? '<p class="srt-popup-desc">' + escapeHtml(content.description) + "</p>" : "") +
+        (content.ctaPrimaryText ? '<a class="srt-popup-btn-primary" href="' + escapeHtml(content.ctaPrimaryLink || "#") + '" style="background:' + (content.accentColor || "#25bbcc") + ";display:block;text-align:center;\" onclick=\"SRTPopups.trackClick('" + p.id + "')\">" + escapeHtml(content.ctaPrimaryText) + "</a>" : "") +
+        "</div>"
+      );
+    },
+
+    "full-screen": function (p, content) {
+      return (
+        '<div class="srt-popup-overlay srt-popup-fullscreen" style="background:' + (content.bgColor || "#1a1a2e") + ";color:" + (content.textColor || "#fff") + '">' +
+        '<button class="srt-popup-close srt-popup-close-full" onclick="SRTPopups.close(\'' + p.id + "')\">&times;</button>" +
+        '<div class="srt-popup-full-inner">' +
+        (content.title ? '<h2 class="srt-popup-title" style="font-size:32px;">' + escapeHtml(content.title) + "</h2>" : "") +
+        (content.subtitle ? '<p class="srt-popup-subtitle">' + escapeHtml(content.subtitle) + "</p>" : "") +
+        (content.description ? '<p class="srt-popup-desc" style="max-width:600px;margin:0 auto 24px;">' + escapeHtml(content.description) + "</p>" : "") +
+        '<div class="srt-popup-actions">' +
+        (content.ctaPrimaryText ? '<a class="srt-popup-btn-primary" href="' + escapeHtml(content.ctaPrimaryLink || "#") + '" style="background:' + (content.accentColor || "#25bbcc") + '" onclick="SRTPopups.trackClick(\'' + p.id + "')\">" + escapeHtml(content.ctaPrimaryText) + "</a>" : "") +
+        (content.ctaSecondaryText ? '<button class="srt-popup-btn-secondary" onclick="SRTPopups.close(\'' + p.id + "')\">" + escapeHtml(content.ctaSecondaryText) + "</button>" : "") +
+        "</div></div></div>"
+      );
+    },
+  };
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    var div = document.createElement("div");
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  window.SRTPopups = {
+    shown: {},
+
+    init: function () {
+      if (window.location.pathname.indexOf("admin") > -1) return;
+
+      var sb = SRT.getSupabase();
+      if (!sb) return;
+
+      sb.from("popups")
+        .select("*")
+        .eq("active", true)
+        .then(function (result) {
+          if (!result.data) return;
+          result.data.forEach(function (popup) {
+            SRTPopups.evaluate(popup);
+          });
+        })
+        .catch(function () {});
+    },
+
+    evaluate: function (popup) {
+      var rules = popup.display_rules || {};
+
+      // Device check
+      var isMobile = /mobile|iphone|android/i.test(navigator.userAgent);
+      if (isMobile && rules.showOnMobile === false) return;
+      if (!isMobile && rules.showOnDesktop === false) return;
+
+      // Date range check
+      var now = new Date();
+      if (rules.startDate && new Date(rules.startDate) > now) return;
+      if (rules.endDate && new Date(rules.endDate) < now) return;
+
+      // Frequency check
+      if (!this.shouldShowByFrequency(popup.id, rules.frequency)) return;
+
+      // Trigger
+      var trigger = rules.trigger || "delay";
+      switch (trigger) {
+        case "delay":
+          setTimeout(function () { SRTPopups.show(popup); }, (rules.delaySeconds || 5) * 1000);
+          break;
+        case "scroll":
+          this.addScrollTrigger(popup, rules.scrollPercentage || 50);
+          break;
+        case "exit-intent":
+          this.addExitIntent(popup);
+          break;
+        case "page-load":
+          this.show(popup);
+          break;
+      }
+    },
+
+    shouldShowByFrequency: function (id, frequency) {
+      var key = "srt_popup_" + id;
+      var val = localStorage.getItem(key);
+
+      switch (frequency) {
+        case "once":
+          return !val;
+        case "once-per-session":
+          return !sessionStorage.getItem(key);
+        case "every-visit":
+        default:
+          return true;
+      }
+    },
+
+    markAsShown: function (id, frequency) {
+      var key = "srt_popup_" + id;
+      localStorage.setItem(key, Date.now().toString());
+      sessionStorage.setItem(key, "1");
+    },
+
+    show: function (popup) {
+      if (this.shown[popup.id]) return;
+      this.shown[popup.id] = true;
+
+      var content = popup.content || {};
+      var template = popup.template || "centered-modal";
+      var builder = templates[template] || templates["centered-modal"];
+
+      var container = document.createElement("div");
+      container.id = "srt-popup-" + popup.id;
+      container.className = "srt-popup-wrapper srt-popup-" + template;
+
+      // Add custom CSS if provided
+      if (content.customCSS) {
+        var style = document.createElement("style");
+        style.textContent = content.customCSS;
+        container.appendChild(style);
+      }
+
+      container.innerHTML += builder(popup, content);
+      document.body.appendChild(container);
+
+      // Animate in
+      requestAnimationFrame(function () {
+        container.classList.add("srt-popup-active");
+      });
+
+      // Track impression
+      this.trackImpression(popup.id);
+      this.markAsShown(popup.id, (popup.display_rules || {}).frequency);
+    },
+
+    close: function (id) {
+      var el = document.getElementById("srt-popup-" + id);
+      if (!el) return;
+
+      el.classList.remove("srt-popup-active");
+      el.classList.add("srt-popup-closing");
+
+      setTimeout(function () {
+        el.remove();
+      }, 300);
+
+      // Track close
+      this.trackStat(id, "closes");
+    },
+
+    trackImpression: function (id) {
+      this.trackStat(id, "impressions");
+    },
+
+    trackClick: function (id) {
+      this.trackStat(id, "clicks");
+    },
+
+    trackStat: function (id, field) {
+      var sb = SRT.getSupabase();
+      if (!sb) return;
+
+      // Use RPC or direct increment
+      sb.rpc("increment_popup_stat", { popup_id: id, stat_field: field }).catch(function () {
+        // Fallback: read then write (less reliable but works without RPC)
+        sb.from("popups")
+          .select(field)
+          .eq("id", id)
+          .single()
+          .then(function (result) {
+            if (!result.data) return;
+            var update = {};
+            update[field] = (result.data[field] || 0) + 1;
+            sb.from("popups").update(update).eq("id", id);
+          });
+      });
+    },
+
+    addScrollTrigger: function (popup, percent) {
+      var triggered = false;
+      window.addEventListener("scroll", function onScroll() {
+        if (triggered) return;
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        var docHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
+        var scrollPercent = ((scrollTop + window.innerHeight) / docHeight) * 100;
+        if (scrollPercent >= percent) {
+          triggered = true;
+          window.removeEventListener("scroll", onScroll);
+          SRTPopups.show(popup);
+        }
+      }, { passive: true });
+    },
+
+    addExitIntent: function (popup) {
+      var triggered = false;
+      document.addEventListener("mouseleave", function onLeave(e) {
+        if (triggered || e.clientY > 0) return;
+        triggered = true;
+        document.removeEventListener("mouseleave", onLeave);
+        SRTPopups.show(popup);
+      });
+    },
+  };
+
+  // Init after DOM ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", function () { SRTPopups.init(); });
+  } else {
+    SRTPopups.init();
+  }
+})();

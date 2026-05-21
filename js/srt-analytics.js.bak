@@ -1,0 +1,184 @@
+/**
+ * SRT Analytics Tracker
+ * Lightweight page view and engagement tracker
+ * Writes to Supabase page_views table
+ * Privacy-friendly: no cookies, no fingerprinting
+ */
+(function () {
+  "use strict";
+
+  var pageViewId = null;
+  var startTime = Date.now();
+  var maxScrollDepth = 0;
+
+  // Get or create visitor ID (persists across sessions in localStorage)
+  function getVisitorId() {
+    var key = "srt_visitor_id";
+    var id = localStorage.getItem(key);
+    if (!id) {
+      id = generateUUID();
+      localStorage.setItem(key, id);
+    }
+    return id;
+  }
+
+  // Get or create session ID (expires when tab closes)
+  function getSessionId() {
+    var key = "srt_session_id";
+    var id = sessionStorage.getItem(key);
+    if (!id) {
+      id = generateUUID();
+      sessionStorage.setItem(key, id);
+    }
+    return id;
+  }
+
+  function generateUUID() {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+      var r = (Math.random() * 16) | 0;
+      var v = c === "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    });
+  }
+
+  // Device detection
+  function detectDevice() {
+    var ua = navigator.userAgent;
+    if (/tablet|ipad|playbook|silk/i.test(ua)) return "tablet";
+    if (/mobile|iphone|ipod|android|blackberry|opera mini|iemobile/i.test(ua)) return "mobile";
+    return "desktop";
+  }
+
+  // Browser detection
+  function detectBrowser() {
+    var ua = navigator.userAgent;
+    if (ua.indexOf("Firefox") > -1) return "Firefox";
+    if (ua.indexOf("SamsungBrowser") > -1) return "Samsung";
+    if (ua.indexOf("Opera") > -1 || ua.indexOf("OPR") > -1) return "Opera";
+    if (ua.indexOf("Trident") > -1) return "IE";
+    if (ua.indexOf("Edg") > -1) return "Edge";
+    if (ua.indexOf("Chrome") > -1) return "Chrome";
+    if (ua.indexOf("Safari") > -1) return "Safari";
+    return "Other";
+  }
+
+  // OS detection
+  function detectOS() {
+    var ua = navigator.userAgent;
+    if (ua.indexOf("Win") > -1) return "Windows";
+    if (ua.indexOf("Mac") > -1) return "macOS";
+    if (ua.indexOf("Linux") > -1) return "Linux";
+    if (ua.indexOf("Android") > -1) return "Android";
+    if (ua.indexOf("iPhone") > -1 || ua.indexOf("iPad") > -1) return "iOS";
+    return "Other";
+  }
+
+  // Scroll depth tracking (debounced)
+  var scrollTimer = null;
+  function trackScroll() {
+    if (scrollTimer) return;
+    scrollTimer = setTimeout(function () {
+      scrollTimer = null;
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      var docHeight = Math.max(
+        document.documentElement.scrollHeight,
+        document.body.scrollHeight
+      );
+      var winHeight = window.innerHeight;
+      var scrollPercent = Math.round(((scrollTop + winHeight) / docHeight) * 100);
+      if (scrollPercent > maxScrollDepth) maxScrollDepth = Math.min(scrollPercent, 100);
+    }, 500);
+  }
+
+  // Record initial page view
+  function recordPageView() {
+    var sb = SRT.getSupabase();
+    if (!sb) return;
+
+    var data = {
+      page: window.location.pathname,
+      visitor_id: getVisitorId(),
+      session_id: getSessionId(),
+      referrer: document.referrer || null,
+      device: detectDevice(),
+      browser: detectBrowser(),
+      os: detectOS(),
+      screen_width: window.screen.width,
+      screen_height: window.screen.height,
+      scroll_depth: 0,
+      time_on_page: 0,
+    };
+
+    sb.from("page_views")
+      .insert(data)
+      .select("id")
+      .single()
+      .then(function (result) {
+        if (result.data && result.data.id) {
+          pageViewId = result.data.id;
+        }
+      })
+      .catch(function () {
+        // Silent fail - analytics should never break the site
+      });
+  }
+
+  // Update page view with final scroll depth and time on page
+  function updatePageView() {
+    if (!pageViewId) return;
+    var timeOnPage = Math.round((Date.now() - startTime) / 1000);
+
+    var sb = SRT.getSupabase();
+    if (!sb) return;
+
+    // Use sendBeacon for reliable delivery on page exit
+    var url = SRT.SUPABASE_URL + "/rest/v1/page_views?id=eq." + pageViewId;
+    var body = JSON.stringify({
+      scroll_depth: maxScrollDepth,
+      time_on_page: timeOnPage,
+    });
+
+    if (navigator.sendBeacon) {
+      var blob = new Blob([body], { type: "application/json" });
+      navigator.sendBeacon(url + "&apikey=" + SRT.SUPABASE_ANON_KEY, blob);
+    } else {
+      // Fallback: synchronous XHR (not ideal but works)
+      try {
+        var xhr = new XMLHttpRequest();
+        xhr.open("PATCH", url, false);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.setRequestHeader("apikey", SRT.SUPABASE_ANON_KEY);
+        xhr.setRequestHeader("Authorization", "Bearer " + SRT.SUPABASE_ANON_KEY);
+        xhr.send(body);
+      } catch (e) {}
+    }
+  }
+
+  // Initialize
+  function init() {
+    // Don't track admin pages or localhost development
+    if (window.location.pathname.indexOf("admin") > -1) return;
+
+    // Record page view
+    recordPageView();
+
+    // Track scroll
+    window.addEventListener("scroll", trackScroll, { passive: true });
+
+    // Update on page exit
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "hidden") {
+        updatePageView();
+      }
+    });
+
+    // Fallback for beforeunload
+    window.addEventListener("beforeunload", updatePageView);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

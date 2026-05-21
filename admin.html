@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Admin Panel | SRT Digital Solutions</title>
+  <link rel="stylesheet" href="./css/lib/bootstrap.min.css" />
+  <link rel="stylesheet" href="./css/fonts/font-awesome.css" />
+  <link rel="stylesheet" href="./admin/css/admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body class="admin-body">
+
+  <!-- ==================== LOGIN SCREEN ==================== -->
+  <div id="loginScreen" class="admin-login-wrap">
+    <div class="admin-login-card">
+      <img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT" class="login-logo" />
+      <h2>Admin Panel</h2>
+      <p class="login-subtitle">Sign in to manage your website</p>
+      <form id="adminLoginForm">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="loginEmail" placeholder="admin@srtdigitalsolutions.com" required />
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter password" required />
+        </div>
+        <div class="login-error" id="loginError"></div>
+        <button type="submit" class="btn-login" id="loginBtn">Sign In</button>
+      </form>
+      <div class="demo-hint" id="demoLoginHint" style="display:none;">
+        <p><strong>Demo Login</strong></p>
+        <p>Email: <code>admin@srtdigitalsolutions.com</code></p>
+        <p>Password: <code>admin@123</code></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ADMIN DASHBOARD ==================== -->
+  <div id="adminDashboard" class="admin-layout" style="display:none;">
+
+    <!-- Sidebar Overlay (mobile) -->
+    <div class="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <nav class="admin-sidebar">
+      <div class="sidebar-header">
+        <img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT" />
+        <div>
+          <h3>SRT Admin</h3>
+          <span id="adminUserEmail">admin</span>
+        </div>
+      </div>
+
+      <div class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a class="nav-item active" data-page="dashboard">
+          <i class="fa-solid fa-grid-2"></i> Dashboard
+        </a>
+
+        <div class="nav-section-label">Content</div>
+        <a class="nav-item" data-page="content-header">
+          <i class="fa-solid fa-bars"></i> Header & Nav
+        </a>
+        <a class="nav-item" data-page="content-hero">
+          <i class="fa-solid fa-image"></i> Hero Section
+        </a>
+        <a class="nav-item" data-page="content-about">
+          <i class="fa-solid fa-circle-info"></i> About Section
+        </a>
+        <a class="nav-item" data-page="content-services">
+          <i class="fa-solid fa-briefcase"></i> Services
+        </a>
+        <a class="nav-item" data-page="content-projects">
+          <i class="fa-solid fa-folder-open"></i> Portfolio
+        </a>
+        <a class="nav-item" data-page="content-specialties">
+          <i class="fa-solid fa-user-doctor"></i> Specialties
+        </a>
+        <a class="nav-item" data-page="content-cta">
+          <i class="fa-solid fa-bullhorn"></i> CTA Banner
+        </a>
+        <a class="nav-item" data-page="content-pricing">
+          <i class="fa-solid fa-tags"></i> Pricing
+        </a>
+        <a class="nav-item" data-page="content-blog">
+          <i class="fa-solid fa-newspaper"></i> Blog Cards
+        </a>
+        <a class="nav-item" data-page="content-faq">
+          <i class="fa-solid fa-circle-question"></i> FAQ
+        </a>
+        <a class="nav-item" data-page="content-contact">
+          <i class="fa-solid fa-envelope"></i> Contact Section
+        </a>
+        <a class="nav-item" data-page="content-footer">
+          <i class="fa-solid fa-shoe-prints"></i> Footer
+        </a>
+
+        <div class="nav-section-label">Tools</div>
+        <a class="nav-item" data-page="blog-manager">
+          <i class="fa-solid fa-pen-nib"></i> Blog Manager
+        </a>
+        <a class="nav-item" data-page="popups">
+          <i class="fa-solid fa-window-maximize"></i> Popup Manager
+        </a>
+        <a class="nav-item" data-page="forms">
+          <i class="fa-solid fa-inbox"></i> Form Submissions
+          <span class="nav-badge" id="newFormsBadge" style="display:none;">0</span>
+        </a>
+        <a class="nav-item" data-page="analytics">
+          <i class="fa-solid fa-chart-line"></i> Analytics
+        </a>
+
+        <div class="nav-section-label">System</div>
+        <a class="nav-item" data-page="settings">
+          <i class="fa-solid fa-gear"></i> Settings
+        </a>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="btn-logout" id="btnLogout">
+          <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <!-- Topbar -->
+      <div class="admin-topbar">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+          <span class="topbar-title" id="topbarTitle">Dashboard</span>
+        </div>
+        <div class="topbar-actions">
+          <a class="btn-preview" href="./index.html" target="_blank">
+            <i class="fa-solid fa-external-link"></i> View Site
+          </a>
+        </div>
+      </div>
+
+      <!-- Page Content Area -->
+      <div class="admin-content">
+
+        <!-- ===== Dashboard Page ===== -->
+        <div class="admin-page" id="page-dashboard" style="display:block;">
+          <div class="stat-cards">
+            <div class="stat-card">
+              <div class="stat-label">Page Views (Today)</div>
+              <div class="stat-value" id="statPageViews">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">New Submissions</div>
+              <div class="stat-value" id="statNewForms" style="color:var(--admin-accent)">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Total Submissions (Month)</div>
+              <div class="stat-value" id="statTotalForms">-</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Active Popups</div>
+              <div class="stat-value" id="statActivePopups">-</div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+            <button class="btn-admin btn-secondary" onclick="AdminApp.navigate('content-hero')">
+              <i class="fa-solid fa-pen"></i> Edit Hero
+            </button>
+            <button class="btn-admin btn-secondary" onclick="AdminApp.navigate('analytics')">
+              <i class="fa-solid fa-chart-line"></i> View Analytics
+            </button>
+            <button class="btn-admin btn-secondary" onclick="AdminApp.navigate('popups')">
+              <i class="fa-solid fa-plus"></i> Create Popup
+            </button>
+          </div>
+
+          <!-- Recent Submissions -->
+          <div class="admin-table-wrap">
+            <div class="admin-table-header">
+              <h3>Recent Form Submissions</h3>
+              <button class="btn-admin btn-sm btn-secondary" onclick="AdminApp.navigate('forms')">View All</button>
+            </div>
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Doctor Name</th>
+                  <th>Clinic</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="recentSubmissionsBody">
+                <tr>
+                  <td colspan="5" style="text-align:center;color:var(--admin-text-muted);padding:24px;">
+                    <div class="admin-loading"><div class="admin-spinner"></div></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ===== Content Editor Pages ===== -->
+        <div class="admin-page" id="page-content-header" style="display:none;"></div>
+        <div class="admin-page" id="page-content-hero" style="display:none;"></div>
+        <div class="admin-page" id="page-content-about" style="display:none;"></div>
+        <div class="admin-page" id="page-content-services" style="display:none;"></div>
+        <div class="admin-page" id="page-content-projects" style="display:none;"></div>
+        <div class="admin-page" id="page-content-specialties" style="display:none;"></div>
+        <div class="admin-page" id="page-content-cta" style="display:none;"></div>
+        <div class="admin-page" id="page-content-pricing" style="display:none;"></div>
+        <div class="admin-page" id="page-content-blog" style="display:none;"></div>
+        <div class="admin-page" id="page-content-faq" style="display:none;"></div>
+        <div class="admin-page" id="page-content-contact" style="display:none;"></div>
+        <div class="admin-page" id="page-content-footer" style="display:none;"></div>
+
+        <!-- ===== Blog Manager Page ===== -->
+        <div class="admin-page" id="page-blog-manager" style="display:none;">
+          <div id="blogContainer"></div>
+        </div>
+
+        <!-- ===== Popup Manager Page ===== -->
+        <div class="admin-page" id="page-popups" style="display:none;">
+          <div id="popupsContainer"></div>
+        </div>
+
+        <!-- ===== Form Submissions Page ===== -->
+        <div class="admin-page" id="page-forms" style="display:none;">
+          <div id="formsContainer"></div>
+        </div>
+
+        <!-- ===== Analytics Page ===== -->
+        <div class="admin-page" id="page-analytics" style="display:none;">
+          <div id="analyticsContainer"></div>
+        </div>
+
+        <!-- ===== Settings Page ===== -->
+        <div class="admin-page" id="page-settings" style="display:none;"></div>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- ==================== SCRIPTS ==================== -->
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Supabase Config -->
+  <script src="./js/supabase-config.js"></script>
+  <!-- Admin Modules -->
+  <script src="./admin/js/admin-auth.js"></script>
+  <script src="./admin/js/admin-app.js"></script>
+  <script src="./admin/js/admin-content.js"></script>
+  <script src="./admin/js/admin-forms.js"></script>
+  <script src="./admin/js/admin-analytics.js"></script>
+  <script src="./admin/js/admin-popups.js"></script>
+  <script src="./admin/js/admin-blog.js"></script>
+
+  <script>
+    // Initialize auth on page load
+    document.addEventListener("DOMContentLoaded", function () {
+      AdminAuth.init();
+    });
+  </script>
+</body>
+</html>

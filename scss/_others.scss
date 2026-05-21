@@ -1,0 +1,155 @@
+/* --------------------------------------------
+ Others
+ ---------------------------------------------- */
+.brand-slider {
+  img {
+    filter: brightness(0) saturate(100%) invert(90%) sepia(5%) saturate(12%)
+      hue-rotate(314deg) brightness(88%) contrast(97%);
+  }
+}
+
+.cta {
+  margin-top: 150px;
+  margin-bottom: -200px;
+}
+.cta-bg {
+  background-color: $white;
+  border-radius: 30px;
+  box-shadow: $shadow;
+  overflow: hidden;
+  padding-bottom: 80px;
+  .dark-bg & {
+    background-color: $dark-4;
+  }
+  .cta-img {
+    position: relative;
+    z-index: 2;
+    $height: 351px;
+    content: "";
+    height: $height;
+    width: $height;
+    border-radius: 50%;
+    bottom: -161px;
+    left: 77px;
+    background-color: rgbaGenerate($theme-2, 10%);
+    img {
+      max-width: 384px;
+      position: relative;
+      top: -114px;
+      left: 50%;
+      transform: translate(-50%, 0%);
+      z-index: 2;
+    }
+    i {
+      font-size: 75px;
+      position: absolute;
+      right: -11px;
+      bottom: 100px;
+      z-index: 1;
+      color: $white;
+    }
+  }
+  .misc-icon {
+    font-size: 53px;
+    color: rgbaGenerate($black, 50%);
+    position: absolute;
+    left: 57px;
+    top: 116px;
+    display: block;
+    .dark-bg & {
+      color: rgbaGenerate($white, 50%);
+    }
+  }
+  form {
+    border: 1px solid $gray-2;
+    border-radius: 10px;
+    padding: 10px;
+    padding-left: 30px;
+    margin-top: 30px;
+    @include flex(center, start);
+    .dark-bg & {
+      border: 1px solid rgbaGenerate($white, 20%);
+    }
+    @include breakpoint(max-sm) {
+      padding: 0;
+      border: 0;
+      display: block;
+    }
+    input {
+      width: 390px;
+      padding: 16px 0;
+      color: $dark;
+      border: none;
+      background-color: transparent;
+      margin: 0;
+      .dark-bg & {
+        color: $white;
+      }
+      @include breakpoint(max-xxl) {
+        width: 300px;
+      }
+      @include breakpoint(max-xl) {
+        width: 615px;
+      }
+      @include breakpoint(max-lg) {
+        width: 370px;
+      }
+      @include breakpoint(max-md) {
+        width: 190px;
+      }
+      @include breakpoint(max-sm) {
+        width: 100%;
+        border: 1px solid $gray-2;
+        padding: 16px 10px;
+      }
+    }
+    button {
+      @extend %btn;
+      background-color: $theme-2;
+      color: $white;
+      @include breakpoint(max-sm) {
+        margin-top: 10px;
+        padding: 20px 15px;
+      }
+    }
+  }
+}
+
+.brands {
+  .row {
+    border: 1px solid $gray-2;
+    border-bottom: 0;
+    border-right: 0;
+    .dark-bg & {
+      border: 1px solid rgbaGenerate($white, 10%);
+    }
+    & > * {
+      border-right: 1px solid $gray-2;
+      border-bottom: 1px solid $gray-2;
+      .dark-bg & {
+        border-right: 1px solid rgbaGenerate($white, 10%);
+        border-bottom: 1px solid rgbaGenerate($white, 10%);
+      }
+      .brand-item {
+        overflow: hidden;
+        width: 74px;
+        height: 74px;
+      }
+      @include flex;
+      padding: 0 !important;
+      padding: 60px 0 !important;
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+  }
+}
+
+.brand-slider {
+  .swiper-slide {
+    margin: 0 auto;
+    text-align: center;
+  }
+}

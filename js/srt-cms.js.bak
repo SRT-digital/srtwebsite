@@ -1,0 +1,172 @@
+/**
+ * SRT CMS Content Delivery
+ * Reads content from Supabase and overlays it on the static HTML
+ * Strategy: HTML-first (SEO + fast paint) + dynamic overlay from DB
+ */
+(function () {
+  "use strict";
+
+  var CACHE_KEY = "srt_cms_cache";
+  var CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+  // Check localStorage cache (synchronous read for instant apply)
+  function getCachedContent() {
+    try {
+      var cached = localStorage.getItem(CACHE_KEY);
+      if (!cached) return null;
+      var parsed = JSON.parse(cached);
+      if (Date.now() - parsed.timestamp > CACHE_TTL) return null;
+      return parsed.data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Apply content from DB to DOM using data-cms attributes
+  function applyContent(sections) {
+    if (!sections || typeof sections !== "object") return;
+
+    Object.keys(sections).forEach(function (sectionId) {
+      var section = sections[sectionId];
+      if (!section) return;
+
+      var content = section.content || section;
+
+      // Handle section visibility
+      if (section.visible === false) {
+        var sectionEl = document.getElementById(sectionId);
+        if (sectionEl) sectionEl.style.display = "none";
+        return;
+      }
+
+      // Apply text fields
+      var elements = document.querySelectorAll('[data-cms-section="' + sectionId + '"]');
+      elements.forEach(function (el) {
+        var field = el.getAttribute("data-cms-field");
+        if (!field || content[field] === undefined) return;
+
+        var value = content[field];
+
+        if (el.tagName === "IMG") {
+          if (value && value !== el.src) el.src = value;
+        } else if (el.tagName === "A") {
+          var linkField = el.getAttribute("data-cms-link");
+          if (linkField && content[linkField]) el.href = content[linkField];
+          if (typeof value === "string") el.textContent = value;
+        } else {
+          // For elements with child animations (GSAP SplitText), only set text on simple elements
+          if (!el.querySelector("[data-cms-field]") && typeof value === "string") {
+            el.textContent = value;
+          }
+        }
+      });
+
+      // Apply image fields
+      var images = document.querySelectorAll('[data-cms-section="' + sectionId + '"][data-cms-img]');
+      images.forEach(function (img) {
+        var imgField = img.getAttribute("data-cms-img");
+        if (imgField && content[imgField]) {
+          img.src = content[imgField];
+        }
+      });
+
+      // Apply contact info
+      if (sectionId === "contact") {
+        applyContactInfo(content);
+      }
+
+      // Apply social links
+      if (sectionId === "footer" || sectionId === "contact") {
+        applySocialLinks(content);
+      }
+    });
+  }
+
+  function applyContactInfo(content) {
+    // Update phone, email, address, hours
+    var mappings = {
+      phone: '[data-cms-section="contact"][data-cms-field="phone"]',
+      email: '[data-cms-section="contact"][data-cms-field="email"]',
+      address: '[data-cms-section="contact"][data-cms-field="address"]',
+      hours: '[data-cms-section="contact"][data-cms-field="hours"]',
+    };
+    Object.keys(mappings).forEach(function (key) {
+      if (content[key]) {
+        var el = document.querySelector(mappings[key]);
+        if (el) el.textContent = content[key];
+      }
+    });
+  }
+
+  function applySocialLinks(content) {
+    if (content.facebookUrl) {
+      document.querySelectorAll('a[href*="facebook.com"]').forEach(function (a) {
+        a.href = content.facebookUrl;
+      });
+    }
+    if (content.instagramUrl) {
+      document.querySelectorAll('a[href*="instagram.com"]').forEach(function (a) {
+        a.href = content.instagramUrl;
+      });
+    }
+    if (content.linkedinUrl) {
+      document.querySelectorAll('a[href*="linkedin.com"]').forEach(function (a) {
+        a.href = content.linkedinUrl;
+      });
+    }
+    if (content.whatsappUrl) {
+      document.querySelectorAll('a[href*="wa.me"]').forEach(function (a) {
+        a.href = content.whatsappUrl;
+      });
+    }
+  }
+
+  // Fetch from Supabase and cache
+  function fetchAndApply() {
+    var sb = SRT.getSupabase();
+    if (!sb) return;
+
+    sb.from("site_content")
+      .select("*")
+      .then(function (result) {
+        if (result.error || !result.data) return;
+
+        var data = {};
+        result.data.forEach(function (row) {
+          data[row.id] = row;
+        });
+
+        // Cache it
+        try {
+          localStorage.setItem(
+            CACHE_KEY,
+            JSON.stringify({ timestamp: Date.now(), data: data })
+          );
+        } catch (e) {}
+
+        applyContent(data);
+      })
+      .catch(function (err) {
+        console.warn("SRT CMS: fetch failed, using static content", err);
+      });
+  }
+
+  // Main
+  function init() {
+    // Try cache first (instant, synchronous)
+    var cached = getCachedContent();
+    if (cached) {
+      applyContent(cached);
+      // Refresh in background
+      setTimeout(fetchAndApply, 3000);
+    } else {
+      fetchAndApply();
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

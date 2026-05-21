@@ -1,0 +1,32 @@
+/**
+ * Supabase Configuration for SRT Digital Solutions
+ * Shared by both admin panel and public site scripts
+ */
+(function () {
+  "use strict";
+
+  // Supabase project credentials
+  // IMPORTANT: Replace these with your actual Supabase project values
+  var SUPABASE_URL = "https://uzewigxvtyehdubhujuo.supabase.co";
+  var SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV6ZXdpZ3h2dHllaGR1Ymh1anVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMjI2OTYsImV4cCI6MjA4NzY5ODY5Nn0.Si6xhYGAWg2t1-LGgD52DLVqxhfHIMeWhXykgDBUXyQ";
+
+  // Initialize Supabase client
+  var _supabase = null;
+
+  function getSupabase() {
+    if (!_supabase) {
+      if (typeof window.supabase === "undefined" || !window.supabase.createClient) {
+        console.warn("Supabase SDK not loaded yet");
+        return null;
+      }
+      _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    }
+    return _supabase;
+  }
+
+  // Expose globally
+  window.SRT = window.SRT || {};
+  window.SRT.getSupabase = getSupabase;
+  window.SRT.SUPABASE_URL = SUPABASE_URL;
+  window.SRT.SUPABASE_ANON_KEY = SUPABASE_ANON_KEY;
+})();

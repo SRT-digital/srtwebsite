@@ -1,0 +1,121 @@
+/* --------------------------------------------
+  Testimonial
+ ---------------------------------------------- */
+.testimonial-bg {
+  position: relative;
+  background-color: $black;
+}
+#curved1 {
+  position: absolute;
+  top: 32px;
+  left: 0;
+  width: 400px;
+}
+
+#curved2 {
+  position: absolute;
+  top: 32px;
+  left: 400px;
+  width: 400px;
+}
+
+.dot {
+  //   font-weight: bold;
+  position: absolute;
+  //   font-size: 18px;
+  //   font-family: Arial, Helvetica, sans-serif;
+}
+
+.testimonial-bg {
+  position: relative;
+  &:before {
+    content: "";
+    height: 100%;
+    width: 300px;
+    background: linear-gradient(to right, #000, transparent);
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    @include breakpoint(max-md) {
+      width: 100px;
+    }
+  }
+  &:after {
+    content: "";
+    height: 100%;
+    width: 300px;
+    background: linear-gradient(to left, #000, transparent);
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 2;
+    @include breakpoint(max-md) {
+      width: 100px;
+    }
+  }
+}
+.testimonial-sliders {
+  margin-top: 40px;
+  .swiper-slide.swiper-slide-active {
+    margin-top: -30px;
+    transition: 0.7s all;
+  }
+}
+.testimonial-item {
+  background-color: $white;
+  border-radius: 20px;
+  padding: 40px 60px 60px;
+  color: $dark;
+  .dark-bg & {
+    color: $white;
+  }
+}
+.testimonial-2-bg {
+  box-shadow: $shadow;
+  .dark-bg & {
+    background-color: $dark-3;
+  }
+}
+.testimonial-2-img {
+  @include breakpoint(max-xl) {
+    margin-bottom: -100px;
+    img {
+      width: 100%;
+    }
+  }
+}
+.testimonial-2-qota-icon {
+  background-color: $theme-2;
+  font-size: 50px;
+  color: $white;
+  border-radius: 0 36px 0 0;
+  height: 100px;
+  width: 115px;
+  @include flex;
+  margin-bottom: 45px;
+}
+.testimonial2-sliders {
+  .testimonial2-nav {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    @include breakpoint(max-xl) {
+      position: unset;
+      margin-top: 60px;
+    }
+  }
+  .testimonial-prev,
+  .testimonial-next {
+    background: $theme-2;
+    color: $white;
+    height: 80px;
+    width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+}

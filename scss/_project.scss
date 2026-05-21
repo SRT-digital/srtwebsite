@@ -1,0 +1,63 @@
+/* --------------------------------------------
+  Projects
+ ---------------------------------------------- */
+.projects-items {
+  width: 300%;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 60px;
+  @include breakpoint(max-md) {
+    width: 100%;
+    flex-direction: column;
+  }
+  .project-item-container {
+    background: $white;
+    padding: 30px 0;
+    z-index: 1;
+    @include breakpoint(max-lg) {
+      padding: 15px 0;
+    }
+  }
+}
+.dark-bg {
+  .projects-items {
+    .project-item-container {
+      background: transparent;
+    }
+  }
+}
+.project-item {
+  border-left: 1px solid $gray-2;
+  padding: 34px 0 50px 30px;
+  height: 100%;
+  position: relative;
+  z-index: 1;
+  margin-left: 30px;
+  @include breakpoint(max-lg) {
+    margin-left: 0;
+  }
+  .dark-bg & {
+    border-left: 1px solid $dark-4;
+  }
+  &::before,
+  &::after {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: $gray-2;
+    position: absolute;
+    z-index: 2;
+    .dark-bg & {
+      background-color: $dark-4;
+    }
+  }
+  &::before {
+    top: 0;
+    left: -3px;
+  }
+  &::after {
+    bottom: 0;
+    left: -3px;
+  }
+}

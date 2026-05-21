@@ -1,0 +1,172 @@
+/**
+ * SRT Form Handler
+ * Submits contact form data to Supabase + Web3Forms email notification
+ * Replaces the inline handleConsultationForm function
+ */
+(function () {
+  "use strict";
+
+  // Web3Forms endpoint
+  var WEB3FORMS_URL = "https://api.web3forms.com/submit";
+
+  window.handleConsultationForm = function (e) {
+    e.preventDefault();
+    var form = document.getElementById("consultationForm");
+    if (!form) return false;
+
+    var btn = form.querySelector("button[type='submit'], button:last-of-type");
+    var inputs = form.querySelectorAll("input, select, textarea");
+
+    // Gather form data
+    var data = {};
+    inputs.forEach(function (inp) {
+      var name = inp.name || inp.getAttribute("name");
+      if (name && name !== "honeypot") {
+        data[name] = inp.value ? inp.value.trim() : "";
+      }
+    });
+
+    // Map field names
+    var submission = {
+      doctor_name: data.doctor_name || data.doctorName || "",
+      clinic_name: data.clinic_name || data.clinicName || "",
+      email: data.email || "",
+      phone: data.phone || "",
+      specialty: data.specialty || "",
+      message: data.message || "",
+      source: "index-contact",
+      status: "new",
+    };
+
+    // Honeypot check (anti-bot)
+    var honeypot = form.querySelector('[name="honeypot"]');
+    if (honeypot && honeypot.value) {
+      // Bot detected - show fake success
+      showSuccess(form);
+      return false;
+    }
+
+    // Validation
+    if (!submission.doctor_name) {
+      showError(form, "Please enter your name.");
+      return false;
+    }
+    if (!submission.email || !isValidEmail(submission.email)) {
+      showError(form, "Please enter a valid email address.");
+      return false;
+    }
+    if (!submission.phone || submission.phone.length < 8) {
+      showError(form, "Please enter a valid phone number.");
+      return false;
+    }
+
+    // Rate limit (1 minute between submissions)
+    var lastSub = localStorage.getItem("srt_last_submission");
+    if (lastSub && Date.now() - parseInt(lastSub) < 60000) {
+      showError(form, "Please wait a moment before submitting again.");
+      return false;
+    }
+
+    // Loading state
+    if (btn) {
+      btn.disabled = true;
+      btn.setAttribute("data-original-text", btn.textContent);
+      btn.textContent = "Sending...";
+      btn.style.opacity = "0.7";
+    }
+
+    // Clear error
+    clearError(form);
+
+    // Submit to Supabase
+    var sb = SRT.getSupabase();
+    var supabasePromise = sb
+      ? sb.from("form_submissions").insert(submission)
+      : Promise.resolve({ error: null });
+
+    // Submit to Web3Forms for email notification
+    var web3formsPromise = sendWeb3FormsEmail(submission);
+
+    Promise.all([supabasePromise, web3formsPromise])
+      .then(function (results) {
+        var sbResult = results[0];
+        if (sbResult && sbResult.error) {
+          console.warn("Supabase form error:", sbResult.error);
+        }
+        localStorage.setItem("srt_last_submission", Date.now().toString());
+        showSuccess(form);
+      })
+      .catch(function (err) {
+        console.error("Form submission error:", err);
+        // Still show success even if one service fails
+        localStorage.setItem("srt_last_submission", Date.now().toString());
+        showSuccess(form);
+      });
+
+    return false;
+  };
+
+  function sendWeb3FormsEmail(data) {
+    // Get Web3Forms key from settings cache
+    var key = "";
+    try {
+      var cached = localStorage.getItem("srt_cms_cache");
+      if (cached) {
+        var parsed = JSON.parse(cached);
+        var settings = parsed.data && parsed.data.settings;
+        if (settings && settings.content) {
+          key = settings.content.web3formsKey || "";
+        }
+      }
+    } catch (e) {}
+
+    if (!key) return Promise.resolve(null);
+
+    var formData = new FormData();
+    formData.append("access_key", key);
+    formData.append("subject", "New Consultation Request - " + data.doctor_name);
+    formData.append("Doctor Name", data.doctor_name);
+    formData.append("Clinic Name", data.clinic_name);
+    formData.append("Email", data.email);
+    formData.append("Phone", data.phone);
+    formData.append("Specialty", data.specialty);
+    formData.append("Message", data.message);
+    formData.append("Source", data.source);
+
+    return fetch(WEB3FORMS_URL, { method: "POST", body: formData })
+      .then(function (res) { return res.json(); })
+      .catch(function () { return null; });
+  }
+
+  function isValidEmail(email) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+
+  function showError(form, message) {
+    var errorEl = form.querySelector(".srt-form-error");
+    if (!errorEl) {
+      errorEl = document.createElement("div");
+      errorEl.className = "srt-form-error";
+      errorEl.style.cssText =
+        "color:#e74c3c;font-size:13px;padding:8px 12px;background:rgba(231,76,60,0.1);border-radius:6px;margin-bottom:12px;";
+      var firstGroup = form.querySelector("button") || form.lastElementChild;
+      form.insertBefore(errorEl, firstGroup);
+    }
+    errorEl.textContent = message;
+    errorEl.style.display = "block";
+  }
+
+  function clearError(form) {
+    var errorEl = form.querySelector(".srt-form-error");
+    if (errorEl) errorEl.style.display = "none";
+  }
+
+  function showSuccess(form) {
+    form.innerHTML =
+      '<div style="text-align:center;padding:40px 20px;">' +
+      '<i class="fa-solid fa-circle-check" style="font-size:48px;color:#25bbcc;margin-bottom:16px;display:block;"></i>' +
+      '<h3 style="color:#fff;margin-bottom:10px;">Thank You!</h3>' +
+      '<p style="color:#ccc;">Your consultation request has been received. Our team will contact you within 24 hours.</p>' +
+      "</div>";
+  }
+})();

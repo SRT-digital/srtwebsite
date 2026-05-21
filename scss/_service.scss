@@ -1,0 +1,113 @@
+/* --------------------------------------------
+  Service
+ ---------------------------------------------- */
+.service-section {
+  margin-top: -400px;
+  @include breakpoint(max-md) {
+    margin-top: 80px;
+  }
+}
+
+.service-item {
+  text-align: center;
+  border-radius: 30px;
+  background-color: $white;
+  box-shadow: $shadow;
+  padding: 40px;
+  margin-bottom: 30px;
+  .dark-bg & {
+    background-color: $dark-3;
+  }
+  .service-icon {
+    font-size: 45px;
+    height: 65px;
+    width: 65px;
+    @include flex;
+    border-radius: 10px;
+    background-color: $theme-1;
+    margin: 0 auto;
+    color: $black;
+  }
+  h3 {
+    margin: 23px auto 17px auto;
+  }
+  p {
+    margin-bottom: 17px;
+  }
+}
+
+.service-2 {
+  background-color: $gray;
+  padding-top: 320px;
+  padding-bottom: 120px;
+}
+
+.service-2-items {
+  margin-top: 60px;
+  .service-2-item {
+    background-color: $white;
+    padding: 50px 40px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    cursor: pointer;
+    position: relative;
+    @include transition;
+    overflow: hidden;
+    &::after {
+      content: "";
+      width: 0;
+      height: 2px;
+      background-color: $theme-2;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      transition: 0.3s all;
+    }
+    .dark-bg & {
+      background-color: $dark-4;
+      border-bottom: 2px solid $dark-4;
+    }
+    &:last-child {
+      margin-bottom: 0;
+    }
+    &:hover {
+      &::after {
+        width: 100%;
+      }
+      a {
+        background-color: $theme-2;
+        border: 1px solid $theme-2;
+        color: $white;
+      }
+    }
+    .service-2-icon-name {
+      @include flex(center, start);
+      gap: 15px;
+      i {
+        @include flex;
+        height: 65px;
+        width: 65px;
+        background-color: $gray;
+        font-size: 40px;
+        color: $theme-2;
+        border-radius: 10px;
+        .dark-bg & {
+          background-color: $dark-3;
+        }
+      }
+    }
+    a {
+      @extend %btn;
+      background-color: transparent;
+      border: 1px solid $gray-2;
+      .dark-bg & {
+        border: 1px solid $dark;
+      }
+      &:hover {
+        background-color: $theme-2;
+        border: 1px solid $theme-2;
+        color: $white;
+      }
+    }
+  }
+}

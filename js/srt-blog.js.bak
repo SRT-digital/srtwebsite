@@ -1,0 +1,363 @@
+/**
+ * SRT Blog Public Renderer
+ * Loads blog posts from Supabase and renders them on the site
+ * Works on both blog.html (listing) and blog-post.html (single post)
+ */
+(function () {
+  "use strict";
+
+  var BLOG_CACHE_KEY = "srt_blog_cache";
+  var BLOG_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+  // Check if we're on the listing page or single post page
+  function isListingPage() {
+    return document.getElementById("dynamicBlogList") !== null;
+  }
+
+  function isSinglePostPage() {
+    return document.getElementById("blogPostContent") !== null;
+  }
+
+  // Get cached blog posts
+  function getCachedPosts() {
+    try {
+      var cached = localStorage.getItem(BLOG_CACHE_KEY);
+      if (!cached) return null;
+      var parsed = JSON.parse(cached);
+      if (Date.now() - parsed.timestamp > BLOG_CACHE_TTL) return null;
+      return parsed.data;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function cachePosts(posts) {
+    try {
+      localStorage.setItem(
+        BLOG_CACHE_KEY,
+        JSON.stringify({ timestamp: Date.now(), data: posts })
+      );
+    } catch (e) {}
+  }
+
+  // Format date nicely
+  function formatDate(dateStr) {
+    if (!dateStr) return "";
+    var d = new Date(dateStr);
+    var months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December",
+    ];
+    return d.getDate() + " " + months[d.getMonth()] + ", " + d.getFullYear();
+  }
+
+  function escapeHtml(str) {
+    if (!str) return "";
+    var div = document.createElement("div");
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  // =====================
+  // BLOG LISTING PAGE
+  // =====================
+  function renderBlogListing(posts) {
+    var container = document.getElementById("dynamicBlogList");
+    if (!container || !posts || posts.length === 0) return;
+
+    var html = "";
+
+    posts.forEach(function (post, index) {
+      var imgSrc = post.featured_image || "./img/blog-" + ((index % 3) + 1) + ".png";
+      var date = formatDate(post.published_at || post.created_at);
+      var category = post.category || "Blog";
+      var readTime = post.read_time || "5 min read";
+      var postUrl = "./blog-post.html?slug=" + encodeURIComponent(post.slug);
+
+      html +=
+        '<div class="blog-item default-blog-item">' +
+        '<div class="position-relative">' +
+        '<div class="overflow-hidden">' +
+        '<a href="' + postUrl + '">' +
+        '<img src="' + escapeHtml(imgSrc) + '" class="img-fluid w-100" alt="' + escapeHtml(post.title) + '" loading="lazy" />' +
+        "</a></div>" +
+        '<div class="blog-item-info default-blog-info">' +
+        '<div class="info"><i class="fa-solid fa-calendar-days"></i><p>' + date + "</p></div>" +
+        '<div class="info"><i class="fa-regular fa-tag"></i><p>' + escapeHtml(category) + "</p></div>" +
+        '<div class="info"><i class="fa-solid fa-clock"></i><p>' + escapeHtml(readTime) + "</p></div>" +
+        "</div></div>" +
+        '<div class="blog-item-content">' +
+        "<h3><a href=\"" + postUrl + "\">" + escapeHtml(post.title) + "</a></h3>" +
+        "<p>" + escapeHtml(post.excerpt || "") + "</p>" +
+        '<a href="' + postUrl + '" class="theme-btn-with-bg mt-30 btn_moveing_hover">Read More <i class="fa-regular fa-arrow-right-long"></i></a>' +
+        "</div></div>";
+    });
+
+    container.innerHTML = html;
+
+    // Update sidebar categories
+    updateSidebarCategories(posts);
+  }
+
+  function updateSidebarCategories(posts) {
+    var catContainer = document.getElementById("dynamicBlogCategories");
+    if (!catContainer) return;
+
+    var catCounts = {};
+    posts.forEach(function (p) {
+      var cat = p.category || "Other";
+      catCounts[cat] = (catCounts[cat] || 0) + 1;
+    });
+
+    var html = "<ul>";
+    Object.keys(catCounts).forEach(function (cat) {
+      html += '<li><a href="#">' + escapeHtml(cat) + " <span>" + catCounts[cat].toString().padStart(2, "0") + "</span></a></li>";
+    });
+    html += "</ul>";
+    catContainer.innerHTML = html;
+  }
+
+  // =====================
+  // SINGLE BLOG POST PAGE
+  // =====================
+  function renderSinglePost(post) {
+    if (!post) {
+      showPostNotFound();
+      return;
+    }
+
+    // Update page title
+    document.title = (post.meta_title || post.title) + " | SRT Digital Solutions Blog";
+
+    // Update meta description
+    var metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", post.meta_description || post.excerpt || "");
+    }
+
+    // Update breadcrumb
+    var breadcrumbTitle = document.getElementById("blogPostBreadcrumb");
+    if (breadcrumbTitle) {
+      breadcrumbTitle.textContent = post.title;
+    }
+
+    // Render post content
+    var container = document.getElementById("blogPostContent");
+    if (!container) return;
+
+    var imgSrc = post.featured_image || "./img/blog-details.png";
+    var date = formatDate(post.published_at || post.created_at);
+    var category = post.category || "Blog";
+    var readTime = post.read_time || "5 min read";
+
+    var html =
+      '<div class="blog-details">' +
+      '<div class="position-relative">' +
+      '<div class="overflow-hidden">' +
+      '<img src="' + escapeHtml(imgSrc) + '" class="blog-details-img br-10 w-100 img-fluid" alt="' + escapeHtml(post.title) + '" />' +
+      "</div>" +
+      '<div class="blog-item-info default-blog-info">' +
+      '<div class="info"><i class="fa-solid fa-calendar-days"></i><p>' + date + "</p></div>" +
+      '<div class="info"><i class="fa-regular fa-tag"></i><p>' + escapeHtml(category) + "</p></div>" +
+      '<div class="info"><i class="fa-solid fa-clock"></i><p>' + escapeHtml(readTime) + "</p></div>" +
+      "</div></div>" +
+      '<h2 class="section-title mt-60">' + escapeHtml(post.title) + "</h2>" +
+      '<div class="blog-post-body">' + (post.body || "") + "</div>";
+
+    // Tags
+    if (post.tags && post.tags.length > 0) {
+      html +=
+        '<div class="d-flex flex-column flex-xl-row gap-20 blog-details-footer justify-content-between mt-85 align-items-start">' +
+        '<div class="tags">';
+      post.tags.forEach(function (tag) {
+        html += '<a href="#">' + escapeHtml(tag) + "</a>";
+      });
+      html +=
+        "</div>" +
+        '<div class="share d-flex align-items-center gap-18">' +
+        "<h4>Share:</h4>" +
+        '<div class="social">' +
+        '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(window.location.href) + '" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>' +
+        '<a href="https://twitter.com/intent/tweet?url=' + encodeURIComponent(window.location.href) + "&text=" + encodeURIComponent(post.title) + '" target="_blank"><i class="fa-brands fa-twitter"></i></a>' +
+        '<a href="https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(window.location.href) + '" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>' +
+        '<a href="https://wa.me/?text=' + encodeURIComponent(post.title + " " + window.location.href) + '" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>' +
+        "</div></div></div>";
+    }
+
+    html += "</div>";
+    container.innerHTML = html;
+
+    // Update JSON-LD schema
+    updatePostSchema(post);
+
+    // Render recent posts in sidebar
+    loadRecentPosts(post.id);
+  }
+
+  function showPostNotFound() {
+    var container = document.getElementById("blogPostContent");
+    if (!container) return;
+
+    document.title = "Post Not Found | SRT Digital Solutions Blog";
+
+    container.innerHTML =
+      '<div style="text-align:center;padding:80px 20px;">' +
+      '<i class="fa-solid fa-file-circle-question" style="font-size:64px;color:#25bbcc;margin-bottom:20px;display:block;"></i>' +
+      '<h2 style="margin-bottom:12px;">Post Not Found</h2>' +
+      '<p style="color:#999;margin-bottom:24px;">The blog post you are looking for does not exist or has been removed.</p>' +
+      '<a href="./blog.html" class="theme-btn-with-bg btn_moveing_hover">View All Posts</a>' +
+      "</div>";
+  }
+
+  function updatePostSchema(post) {
+    var schema = {
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.meta_description || post.excerpt || "",
+      datePublished: post.published_at || post.created_at,
+      dateModified: post.updated_at || post.published_at || post.created_at,
+      author: {
+        "@type": "Organization",
+        name: "SRT Digital Solutions",
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "SRT Digital Solutions",
+        url: "https://srtdigitalsolutions.com",
+      },
+      mainEntityOfPage: {
+        "@type": "WebPage",
+        "@id": window.location.href,
+      },
+    };
+    if (post.featured_image) {
+      schema.image = post.featured_image;
+    }
+
+    var existing = document.getElementById("blogPostSchema");
+    if (existing) {
+      existing.textContent = JSON.stringify(schema);
+    } else {
+      var script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.id = "blogPostSchema";
+      script.textContent = JSON.stringify(schema);
+      document.head.appendChild(script);
+    }
+  }
+
+  function loadRecentPosts(excludeId) {
+    var recentContainer = document.getElementById("recentBlogPosts");
+    if (!recentContainer) return;
+
+    var sb = SRT.getSupabase();
+    if (!sb) return;
+
+    sb.from("blog_posts")
+      .select("title, slug, featured_image, category, published_at")
+      .eq("status", "published")
+      .neq("id", excludeId || "")
+      .order("published_at", { ascending: false })
+      .limit(3)
+      .then(function (result) {
+        if (!result.data || result.data.length === 0) return;
+
+        var html = "";
+        result.data.forEach(function (p, i) {
+          var img = p.featured_image || "./img/blog-" + ((i % 3) + 1) + ".png";
+          html +=
+            '<div class="recent-post-item">' +
+            '<div class="recent-post-content">' +
+            '<div class="recent-post-info"><ul>' +
+            "<li><a href=\"#\">" + escapeHtml(p.category || "Blog") + "</a></li>" +
+            "</ul></div>" +
+            '<h4><a href="./blog-post.html?slug=' + encodeURIComponent(p.slug) + '">' + escapeHtml(p.title) + "</a></h4>" +
+            "</div>" +
+            '<img src="' + escapeHtml(img) + '" alt="' + escapeHtml(p.title) + '" />' +
+            "</div>";
+        });
+        recentContainer.innerHTML = html;
+      });
+  }
+
+  // =====================
+  // INIT
+  // =====================
+  function initListing() {
+    var sb = SRT.getSupabase();
+    if (!sb) return;
+
+    // Try cache first
+    var cached = getCachedPosts();
+    if (cached) {
+      renderBlogListing(cached);
+      // Refresh in background
+      setTimeout(function () { fetchListingPosts(); }, 3000);
+    } else {
+      fetchListingPosts();
+    }
+  }
+
+  function fetchListingPosts() {
+    var sb = SRT.getSupabase();
+    if (!sb) return;
+
+    sb.from("blog_posts")
+      .select("id, title, slug, excerpt, category, tags, featured_image, read_time, published_at, created_at")
+      .eq("status", "published")
+      .order("published_at", { ascending: false })
+      .then(function (result) {
+        if (result.data && result.data.length > 0) {
+          cachePosts(result.data);
+          renderBlogListing(result.data);
+        }
+      })
+      .catch(function () {});
+  }
+
+  function initSinglePost() {
+    var params = new URLSearchParams(window.location.search);
+    var slug = params.get("slug");
+    if (!slug) {
+      showPostNotFound();
+      return;
+    }
+
+    var sb = SRT.getSupabase();
+    if (!sb) {
+      showPostNotFound();
+      return;
+    }
+
+    sb.from("blog_posts")
+      .select("*")
+      .eq("slug", slug)
+      .eq("status", "published")
+      .single()
+      .then(function (result) {
+        if (result.error || !result.data) {
+          showPostNotFound();
+          return;
+        }
+        renderSinglePost(result.data);
+      })
+      .catch(function () {
+        showPostNotFound();
+      });
+  }
+
+  function init() {
+    if (isListingPage()) {
+      initListing();
+    } else if (isSinglePostPage()) {
+      initSinglePost();
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();

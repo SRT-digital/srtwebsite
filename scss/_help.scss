@@ -1,0 +1,158 @@
+/* --------------------------------------------
+    Helper
+ ---------------------------------------------- */
+br {
+  @include breakpoint(max-lg) {
+    display: none;
+  }
+}
+.mt-120 {
+  margin-top: 120px;
+}
+.pt-120 {
+  padding-top: 120px;
+}
+
+%sub-title {
+  font-size: 18px;
+  line-height: 35px;
+  text-transform: uppercase;
+  font-weight: 700;
+  @include breakpoint(max-md) {
+    font-size: 16px;
+  }
+}
+
+.sub-title {
+  @extend %sub-title;
+  @include flex(center, start);
+  &::after {
+    content: "\e90a";
+    font-family: "ashik-icon" !important;
+    margin-left: 15px;
+    font-size: 15px;
+    @include breakpoint(max-md) {
+      font-size: 12px;
+      margin-left: 10px;
+    }
+  }
+  &-arrows {
+    @include flex(center, center);
+    @extend .sub-title;
+    &::before {
+      content: "\e90a";
+      font-family: "ashik-icon" !important;
+      margin-right: 15px;
+      font-size: 15px;
+      @include breakpoint(max-md) {
+        font-size: 12px;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.sub-title-2 {
+  @extend %sub-title;
+  color: $theme-2;
+  &::before {
+    content: "\f101";
+    font-family: "Font Awesome 6 Pro" !important;
+    margin-right: 15px;
+    font-size: 15px;
+    @include breakpoint(max-md) {
+      font-size: 12px;
+      margin-right: 10px;
+    }
+  }
+  &-arrows {
+    @include flex(center, center);
+    @extend .sub-title-2;
+    &::after {
+      content: "\f100";
+      font-family: "Font Awesome 6 Pro" !important;
+      margin-left: 15px;
+      font-size: 15px;
+      @include breakpoint(max-md) {
+        font-size: 12px;
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+.section-title {
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 70px;
+  @include breakpoint(max-xl) {
+    font-size: 55px;
+  }
+  @include breakpoint(max-lg) {
+    font-size: 50px;
+    line-height: 60px;
+  }
+  @include breakpoint(max-md) {
+    font-size: 40px;
+    line-height: 50px;
+  }
+  @include breakpoint(max-sm) {
+    font-size: 35px;
+    line-height: 45px;
+  }
+}
+
+.bg-blur {
+  background-color: $theme-1;
+  height: 200px;
+  width: 200px;
+  filter: blur(100px);
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  z-index: -1;
+}
+.bg-blur-2 {
+  background-color: $theme-2;
+  height: 387px;
+  width: 396px;
+  filter: blur(100px);
+  position: absolute;
+  bottom: -100px;
+  left: 45%;
+  transform: translate(-50%, 0%);
+  z-index: -1;
+}
+
+.testimonial-bg-blur-1 {
+  left: 0;
+  transform: translate(0%, 0%);
+  filter: blur(150px);
+}
+.testimonial-bg-blur-2 {
+  @extend .testimonial-bg-blur-1;
+  top: 0;
+  right: 0;
+  left: unset;
+}
+
+form {
+  input,
+  textarea {
+    width: 100%;
+    padding: 15px 20px;
+    background-color: transparent;
+    border: 1px solid rgbaGenerate($white, 10%);
+    border-radius: 10px;
+    resize: none;
+    margin-bottom: 20px;
+    color: inherit;
+    &:focus {
+      outline: none;
+    }
+  }
+  button {
+    color: inherit;
+  }
+}

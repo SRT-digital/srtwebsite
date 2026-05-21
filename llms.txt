@@ -1,0 +1,46 @@
+# SRT Digital Solutions
+> SRT Digital Solutions is a healthcare-focused digital marketing agency based in Coimbatore, Tamil Nadu, India. We specialize in social media marketing, local SEO, Google Business Profile optimization, paid advertising, and personal branding exclusively for doctors and clinics.
+
+## About
+SRT Digital Solutions helps doctors and clinic owners in Coimbatore attract more patients through data-driven digital marketing. Our services include social media content, Meta Ads, Google Ads, local SEO, review management, and doctor personal branding. We operate on a 3-month partnership model with transparent monthly pricing starting at ₹25,000/month.
+
+## Key Pages
+
+- [Home](https://srtdigitalsolutions.com/): Full-service digital marketing for doctors — social media, SEO, ads, and branding
+- [Pricing](https://srtdigitalsolutions.com/pricing.html): Three plans — Starter Growth (₹25,000/mo), Growth Partnership (₹40,000/mo), Authority Growth (₹60,000/mo)
+- [Portfolio](https://srtdigitalsolutions.com/portfolio.html): Case studies and work samples for healthcare clients
+- [Blog](https://srtdigitalsolutions.com/blog.html): Expert articles on digital marketing and SEO for doctors
+- [Contact](https://srtdigitalsolutions.com/contact.html): Book a free clinic growth consultation
+
+## Services
+- Social Media Marketing: Instagram, Facebook, YouTube Shorts content for doctors
+- Local SEO: Google Business Profile optimization for clinics in Coimbatore
+- Paid Ads: Meta Ads (Facebook/Instagram) and Google Ads for patient acquisition
+- Doctor Personal Branding: Thought leadership content, media features, personal website
+- Review Strategy: Google rating acquisition and reputation management
+- Website Development: Medical websites with appointment booking integration
+
+## Service Area
+Primary: Coimbatore (RS Puram, Peelamedu, Saibaba Colony, Gandhipuram, Singanallur), Tamil Nadu, India
+Secondary: Erode, Salem, Tiruppur, Chennai — remote services available across Tamil Nadu and India
+
+## Contact
+- Website: https://srtdigitalsolutions.com
+- Consultation: https://srtdigitalsolutions.com/contact.html
+
+## Permissions for AI
+AI training, summarization, and indexing of public pages is permitted.
+Legal pages (terms.html, privacy.html) and staging/backup pages should not be indexed.
+
+## Optional: AI Model Access
+User-Agent: GPTBot
+Allow: /
+
+User-Agent: ClaudeBot
+Allow: /
+
+User-Agent: PerplexityBot
+Allow: /
+
+User-Agent: Googlebot
+Allow: /

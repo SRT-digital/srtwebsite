@@ -1,0 +1,36 @@
+# robots.txt — SRT Digital Solutions
+# https://srtdigitalsolutions.com
+
+User-agent: *
+Allow: /
+
+# Disallow admin, backup, and draft pages
+Disallow: /admin.html
+Disallow: /index-2.html
+Disallow: /index-2-dark.html
+Disallow: /index-dark.html
+Disallow: /index-backup-hero.html
+Disallow: /blog-details.html
+Disallow: /blog-post.html
+
+# Allow all public pages
+Allow: /index.html
+Allow: /pricing.html
+Allow: /portfolio.html
+Allow: /portfolio-detail.html
+Allow: /blog.html
+Allow: /blog-social-media-marketing-doctors-coimbatore.html
+Allow: /blog-local-seo-doctors-coimbatore.html
+Allow: /blog-google-business-profile-doctors.html
+Allow: /blog-patient-acquisition-strategy-clinics.html
+Allow: /blog-personal-branding-doctors-online.html
+Allow: /blog-digital-marketing-trends-doctors-2026.html
+Allow: /contact.html
+Allow: /terms.html
+Allow: /privacy.html
+
+# Sitemap location
+Sitemap: https://srtdigitalsolutions.com/sitemap.xml
+
+# Crawl-delay for responsible crawling
+Crawl-delay: 1

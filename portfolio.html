@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Analytics 4 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXXXXX', { anonymize_ip: true });
+  </script>
+  <!-- Google Search Console -->
+  <meta name="google-site-verification" content="REPLACE_WITH_GSC_VERIFICATION_TOKEN" />
+  <!-- DNS prefetch for GA -->
+  <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+
+  <!-- Google Fonts (non-blocking, reduced weights) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Spline+Sans:wght@400;500;600;700&display=swap"
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Spline+Sans:wght@400;500;600;700&display=swap" />
+  </noscript>
+
+  <!-- Critical CSS (sync) -->
+  <link rel="stylesheet" href="./css/lib/bootstrap.min.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/custom.css" />
+
+  <!-- Non-critical CSS (deferred) -->
+  <link rel="stylesheet" href="./css/lib/magnific-popup.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="./css/lib/swiper-bundle.min.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="./css/fonts/font-awesome.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="./css/fonts/ashik-icon.css" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="./css/lib/magnific-popup.css" />
+    <link rel="stylesheet" href="./css/lib/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="./css/fonts/font-awesome.css" />
+    <link rel="stylesheet" href="./css/fonts/ashik-icon.css" />
+  </noscript>
+
+  <!-- Font preloads -->
+  <link rel="preload" href="./fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="./fonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin />
+
+  <!-- Critical inline CSS -->
+  <style>
+    body {
+      background: #0a1a2e;
+      color: #ccc;
+      margin: 0
+    }
+
+    .preloader {
+      position: fixed;
+      inset: 0;
+      z-index: 99999;
+      background: #0a1a2e
+    }
+
+    .main-header {
+      will-change: transform
+    }
+
+    img[loading="lazy"] {
+      content-visibility: auto
+    }
+
+    .breadcrumbs {
+      padding: 140px 0 30px;
+    }
+
+    .breadcrumbs+.mt-120 {
+      margin-top: 20px;
+    }
+  </style>
+  <link rel="icon" type="image/png" sizes="512x512" href="./img/favicon-512.png" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./img/favicon-192.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="./img/favicon-48.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./img/apple-touch-icon.png" />
+  <title>Our Portfolio | Digital Marketing &amp; Design Works | SRT Digital Solutions</title>
+  <meta name="description"
+    content="Explore our portfolio of social media marketing, SEO, web development, and branding projects for doctors and clinics in Coimbatore." />
+  <meta name="keywords"
+    content="SRT Digital Solutions portfolio, web design Coimbatore, branding for doctors, SEO projects, UI design, healthcare marketing works" />
+  <link rel="canonical" href="https://srtdigitalsolutions.com/portfolio.html" />
+  <meta property="og:title" content="Our Portfolio | SRT Digital Solutions" />
+  <meta property="og:description"
+    content="Explore our portfolio of digital marketing, design, and development projects for healthcare professionals." />
+  <meta property="og:type" content="website" />
+  <meta name="robots" content="index, follow" />
+  <meta property="og:url" content="https://srtdigitalsolutions.com/portfolio.html" />
+  <meta property="og:image" content="https://srtdigitalsolutions.com/img/srtimg/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="SRT Digital Solutions" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Portfolio | Healthcare Digital Marketing | SRT Digital Solutions" />
+  <meta name="twitter:description"
+    content="See how SRT Digital Solutions helps doctors build digital authority. Portfolio of web design, SEO, and social media projects." />
+  <meta name="twitter:image" content="https://srtdigitalsolutions.com/img/srtimg/og-image.png" />
+
+  <!-- Portfolio Page Styles -->
+  <style>
+    /* ============================================================
+       STICKY CATEGORY NAV
+    ============================================================ */
+    .pf-nav {
+      position: sticky;
+      top: 72px;
+      z-index: 100;
+      background: rgba(10, 26, 46, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding: 0;
+    }
+
+    .pf-nav-inner {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    .pf-nav-inner::-webkit-scrollbar { display: none; }
+
+    .pf-nav-link {
+      display: inline-block;
+      padding: 14px 22px;
+      color: #888;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color 0.25s, border-color 0.25s;
+    }
+
+    .pf-nav-link:hover { color: #fff; }
+
+    .pf-nav-link.active {
+      color: #25bbcc;
+      border-bottom-color: #25bbcc;
+    }
+
+    /* ============================================================
+       PORTFOLIO CATEGORY BLOCKS
+    ============================================================ */
+    .pf-category {
+      padding: 80px 0 0;
+    }
+
+    .pf-cat-label {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #25bbcc;
+      margin-bottom: 6px;
+    }
+
+    .pf-cat-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 48px;
+      line-height: 1.2;
+    }
+
+    /* ============================================================
+       PROJECT ROW
+    ============================================================ */
+    .pf-project {
+      padding-bottom: 60px;
+      margin-bottom: 60px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .pf-project:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .pf-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .pf-row.reverse .pf-img { order: 2; }
+    .pf-row.reverse .pf-content { order: 1; }
+
+    /* ============================================================
+       IMAGE GALLERY (expandable — add <img> to .pf-gal-thumbs)
+    ============================================================ */
+    .pf-gallery {
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    .pf-gal-main {
+      border-radius: 14px;
+      overflow: hidden;
+      position: relative;
+      cursor: zoom-in;
+    }
+
+    .pf-gal-main img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .pf-gal-main:hover img { transform: scale(1.04); }
+
+    /* Slow shine sweep on hover */
+    .pf-gal-main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -140%;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(255,255,255,0.08) 20%,
+        rgba(255,255,255,0.45) 50%,
+        rgba(255,255,255,0.08) 80%,
+        transparent 100%
+      );
+      transform: skewX(-18deg);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .pf-gal-main:hover::before {
+      animation: pf-shine 1.6s ease forwards;
+    }
+    @keyframes pf-shine {
+      0%   { left: -140%; }
+      100% { left: 180%; }
+    }
+
+    .pf-gal-zoom {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(37,187,204,0.85);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .pf-gal-main:hover .pf-gal-zoom { opacity: 1; }
+
+    /* Thumbnail row — add more <img> here anytime */
+    .pf-gal-thumbs {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .pf-gal-thumbs:empty { display: none; }
+
+    .pf-gal-thumbs img {
+      flex: 1;
+      min-width: 0;
+      height: 72px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: zoom-in;
+      transition: opacity 0.25s, transform 0.25s;
+    }
+
+    .pf-gal-thumbs img:hover {
+      opacity: 0.9;
+      transform: scale(1.03);
+    }
+
+    .pf-thumb-wrap {
+      flex: 1;
+      min-width: 0;
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    .pf-thumb-wrap img {
+      width: 100%;
+      height: 72px;
+      object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+      transition: transform 0.25s;
+    }
+
+    .pf-thumb-wrap:hover img { transform: scale(1.06); }
+
+    .pf-thumb-wrap::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -140%;
+      width: 55%;
+      height: 100%;
+      background: linear-gradient(
+        to right,
+        transparent 0%,
+        rgba(255,255,255,0.08) 20%,
+        rgba(255,255,255,0.45) 50%,
+        rgba(255,255,255,0.08) 80%,
+        transparent 100%
+      );
+      transform: skewX(-18deg);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    .pf-thumb-wrap:hover::before {
+      animation: pf-shine 1.6s ease forwards;
+    }
+
+    /* ============================================================
+       CONTENT SIDE
+    ============================================================ */
+    .pf-content { padding: 8px 0; }
+
+    .pf-tag {
+      display: inline-block;
+      background: rgba(37,187,204,0.12);
+      color: #25bbcc;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+
+    .pf-title {
+      color: #fff;
+      font-size: 26px;
+      font-weight: 700;
+      margin: 0 0 14px;
+      line-height: 1.25;
+    }
+
+    .pf-desc {
+      color: #9aacbb;
+      font-size: 15px;
+      line-height: 1.75;
+      margin: 0 0 20px;
+    }
+
+    .pf-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      list-style: none;
+      padding: 0;
+      margin: 0 0 22px;
+    }
+
+    .pf-pills li {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: #aab8c4;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 5px 13px;
+      border-radius: 20px;
+    }
+
+    .pf-result {
+      border-left: 3px solid #25bbcc;
+      padding: 12px 18px;
+      background: rgba(37,187,204,0.07);
+      border-radius: 0 10px 10px 0;
+      color: #d0e8ec;
+      font-size: 14px;
+      font-style: italic;
+      line-height: 1.65;
+    }
+
+    .pf-result strong {
+      color: #25bbcc;
+      font-style: normal;
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      margin-bottom: 4px;
+    }
+
+    /* ============================================================
+       WEB DEVELOPMENT - SIDE BY SIDE SCREENSHOT CARDS
+    ============================================================ */
+    .web-showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 0;
+    }
+
+    .web-showcase-card {
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .web-showcase-card:hover {
+      border-color: rgba(37,187,204,0.25);
+      transform: translateY(-4px);
+    }
+
+    .web-showcase-card a {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .web-showcase-card img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      display: block;
+      cursor: zoom-in;
+    }
+
+    .web-showcase-info {
+      padding: 14px 16px;
+    }
+
+    .web-showcase-info h5 {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+
+    .web-showcase-info p {
+      color: #888;
+      font-size: 12px;
+      margin: 0 0 8px;
+    }
+
+    .web-showcase-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #25bbcc;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .web-showcase-link:hover { text-decoration: underline; }
+
+    /* ============================================================
+       WEB APP — APP CAROUSEL GRID
+    ============================================================ */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .app-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .app-card:hover {
+      border-color: rgba(37,187,204,0.25);
+      box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+    }
+
+    .app-carousel {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 16 / 10;
+      background: #0d1f33;
+    }
+
+    .app-slide {
+      display: none;
+      width: 100%;
+      height: 100%;
+    }
+
+    .app-slide.active { display: block; }
+
+    .app-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: zoom-in;
+      display: block;
+    }
+
+    .app-dots {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .app-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.3);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+
+    .app-dot.active {
+      background: #25bbcc;
+      transform: scale(1.3);
+    }
+
+    .app-card-info {
+      padding: 14px 16px;
+    }
+
+    .app-card-info h5 {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 5px;
+    }
+
+    .app-card-info p {
+      color: #888;
+      font-size: 12px;
+      margin: 0 0 8px;
+      line-height: 1.55;
+    }
+
+    .app-card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 12px;
+      color: #25bbcc;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .app-card-link:hover { text-decoration: underline; }
+
+    /* ============================================================
+       LIGHTBOX OVERLAY
+    ============================================================ */
+    .pf-lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 99998;
+      background: rgba(0,0,0,0.92);
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .pf-lightbox.open { display: flex; }
+
+    .pf-lightbox img {
+      max-width: 92vw;
+      max-height: 88vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 0 80px rgba(0,0,0,0.8);
+    }
+
+    .pf-lightbox-close {
+      position: fixed;
+      top: 20px;
+      right: 24px;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      z-index: 99999;
+    }
+
+    .pf-lightbox-close:hover { background: rgba(37,187,204,0.5); }
+
+    /* ============================================================
+       PORTFOLIO COUNT BADGE (reused from head)
+    ============================================================ */
+    .portfolio-count {
+      background: rgba(37,187,204,0.15);
+      color: #25bbcc;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 16px;
+      border-radius: 20px;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+    @media (max-width: 991px) {
+      .pf-row,
+      .pf-row.reverse {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+
+      .pf-row.reverse .pf-img { order: 0; }
+      .pf-row.reverse .pf-content { order: 0; }
+
+      .app-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .web-showcase-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pf-cat-title { font-size: 26px; }
+      .pf-title { font-size: 22px; }
+    }
+
+    @media (max-width: 767px) {
+      .pf-category { padding: 50px 0 0; }
+      .pf-nav-link { padding: 12px 16px; font-size: 12px; }
+      .pf-title { font-size: 20px; }
+    }
+  </style>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://srtdigitalsolutions.com/"},{"@type":"ListItem","position":2,"name":"Portfolio","item":"https://srtdigitalsolutions.com/portfolio.html"}]}</script>
+</head>
+
+<body class="dark-bg">
+  <div class="preloader">
+    <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+      <path id="svg" d="M0,1005S175,995,500,995s500,5,500,5V0H0Z"></path>
+    </svg>
+    <img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT Digital Solutions" class="preloader-logo" width="420"
+      height="104" loading="lazy" decoding="async" />
+  </div>
+
+  <header class="main-header fixed-header">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="logo">
+          <a href="./index.html"><img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT Digital Solutions"
+              width="420" height="104" loading="lazy" decoding="async" /></a>
+        </div>
+        <div class="d-none d-lg-block main-menu">
+          <nav class="navbar-nav m-auto" id="navbarNav">
+            <ul>
+              <li><a href="./index.html">Home</a></li>
+              <li><a href="./index.html#about">About</a></li>
+              <li><a href="./index.html#services">Services</a></li>
+              <li><a href="./portfolio.html" class="color-theme-1">Portfolio</a></li>
+              <li><a href="./pricing.html">Pricing</a></li>
+              <li><a href="./blog.html">Blog</a></li>
+              <li><a href="./index.html#contact">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div>
+          <a href="./index.html#contact" class="theme-btn d-none d-lg-block btn_moveing_hover">Free Consultation</a>
+          <a href="#" class="toggle-sidebar d-flex d-lg-none ms-0 theme-1-bg">
+            <div class="toggle"><span></span><span></span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu">
+    <div class="menu-backdrop"></div>
+    <div class="main-menu-mobile">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="nav-logo">
+          <a href="index.html"><img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT Digital Solutions" width="420"
+              height="104" loading="lazy" decoding="async" /></a>
+        </div>
+        <div class="close-btn"><span class="far fa-times fa-fw"></span></div>
+      </div>
+      <div id="mobile-nav"></div>
+    </div>
+  </div>
+
+  <div id="scrollsmoother-container">
+    <!-- Breadcrumbs -->
+    <section class="breadcrumbs">
+      <div class="container">
+        <div class="tf__breadcrumbs_text" data-animation="move" data-animation-offset="40" data-animation-delay="1.2">
+          <h1>Our Portfolio</h1>
+          <ul>
+            <li><a href="./index.html">Home</a></li>
+            <li><i class="fa-light fa-angle-right"></i></li>
+            <li><a href="#" class="color-theme-1">Portfolio</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Section -->
+
+    <!-- Sticky Category Nav -->
+    <nav class="pf-nav" aria-label="Portfolio categories">
+      <div class="container">
+        <div class="pf-nav-inner">
+          <a href="#social" class="pf-nav-link active" data-target="social">Social Media</a>
+          <a href="#seo" class="pf-nav-link" data-target="seo">Google Ranking</a>
+          <a href="#webdev" class="pf-nav-link" data-target="webdev">Web Development</a>
+          <a href="#webapp" class="pf-nav-link" data-target="webapp">Web App</a>
+          <a href="#branding" class="pf-nav-link" data-target="branding">Branding</a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Section Intro -->
+    <section class="mt-60">
+      <div class="container text-center">
+        <span class="portfolio-count">15+ Projects Delivered</span>
+        <h2 class="section-title mt-10 mb-15" style="max-width:760px;margin-left:auto;margin-right:auto;">
+          Social Media, SEO &amp; Digital Growth Work for Doctors
+        </h2>
+        <p style="max-width:620px;margin:0 auto;color:#9aacbb;">
+          Real work we've done — social media marketing, local SEO, clinic websites,
+          web applications, and branding — exclusively for doctors and clinics in Coimbatore.
+        </p>
+      </div>
+    </section>
+
+    <!-- ================================================================
+         SOCIAL MEDIA
+    ================================================================ -->
+    <section id="social" class="pf-category">
+      <div class="container">
+        <span class="pf-cat-label">Category</span>
+        <h2 class="pf-cat-title">Social Media</h2>
+
+        <!-- Project 1: Clinical Social Media Posts -->
+        <div id="social-posts" class="pf-project">
+          <div class="pf-row">
+            <div class="pf-gallery">
+              <div class="pf-gal-main">
+                <img src="./img/portfolio/smpost (1).png" alt="Clinical Social Media Post 1" loading="lazy" decoding="async" />
+                <div class="pf-gal-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+              </div>
+              <div class="pf-gal-thumbs">
+                <img src="./img/portfolio/smpost (1).png" alt="Social Media Post 1" loading="lazy" decoding="async" />
+                <img src="./img/portfolio/smpost (2).png" alt="Social Media Post 2" loading="lazy" decoding="async" />
+                <img src="./img/portfolio/smpost (3).png" alt="Social Media Post 3" loading="lazy" decoding="async" />
+                <img src="./img/portfolio/smpost (4).png" alt="Social Media Post 4" loading="lazy" decoding="async" />
+              </div>
+            </div>
+            <div class="pf-content">
+              <span class="pf-tag">Social Media</span>
+              <h3 class="pf-title">Clinical Social Media Posts</h3>
+              <p class="pf-desc">Educational health creatives for Facebook &amp; Instagram — doctor authority &amp; patient trust.</p>
+              <ul class="pf-pills">
+                <li>Health education creatives</li>
+                <li>Facebook &amp; Instagram posts</li>
+                <li>Consistent brand voice</li>
+                <li>Monthly content calendar</li>
+                <li>Patient trust-building content</li>
+              </ul>
+              <div class="pf-result">
+                <strong>Result</strong>
+                3x increase in profile visits and consistent patient inquiries within 60 days.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 3: Instagram & Facebook Reels -->
+        <div id="reels" class="pf-project">
+          <div class="pf-row">
+            <div class="pf-gallery">
+            <div class="pf-gal-main">
+              <img src="./img/portfolio/reels.jpg" alt="Instagram and Facebook Reels" loading="lazy" decoding="async" />
+              <div class="pf-gal-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+            <!-- Add more images below to expand the gallery -->
+            <div class="pf-gal-thumbs">
+            </div>
+          </div>
+            <div class="pf-content">
+              <span class="pf-tag">Social Media</span>
+              <h3 class="pf-title">Instagram &amp; Facebook Reels</h3>
+              <p class="pf-desc">Short-form video content scripted, shot-listed, and edited for maximum reach — hook-first structure, trending formats, educational storytelling.</p>
+              <ul class="pf-pills">
+                <li>Script writing &amp; storyboard</li>
+                <li>Professional reel editing</li>
+                <li>Trending audio integration</li>
+                <li>Hook-first video structure</li>
+                <li>Specialty health tips</li>
+              </ul>
+              <div class="pf-result">
+                <strong>Result</strong>
+                Reels averaged 5x more reach than static posts.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 4: Paid Ads & Lead Generation -->
+        <div id="paid-ads" class="pf-project">
+          <div class="pf-row reverse">
+            <div class="pf-gallery">
+              <div class="pf-gal-main">
+                <img src="./img/portfolio/pagescreen.png" alt="Paid Ads and Lead Generation" loading="lazy" decoding="async" />
+                <div class="pf-gal-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+              </div>
+              <div class="pf-gal-thumbs">
+                <img src="./img/portfolio/pagescreen.png" alt="Paid Ads - Page Screen" loading="lazy" decoding="async" />
+                <img src="./img/portfolio/Screenshot 2024-06-19 114013.png" alt="Paid Ads - Campaign Screenshot" loading="lazy" decoding="async" />
+                <img src="./img/portfolio/Time_series(2024.06.06-2024.06.10).png" alt="Paid Ads - Time Series Analytics" loading="lazy" decoding="async" />
+              </div>
+            </div>
+            <div class="pf-content">
+              <span class="pf-tag">Social Media</span>
+              <h3 class="pf-title">Paid Ads &amp; Lead Generation</h3>
+              <p class="pf-desc">Targeted Facebook and Google ad campaigns — audience segmentation, creative testing, and conversion-optimized landing pages for patient inquiries.</p>
+              <ul class="pf-pills">
+                <li>Custom audience segmentation</li>
+                <li>Ad creative &amp; copywriting</li>
+                <li>A/B testing</li>
+                <li>Budget optimization</li>
+                <li>Conversion tracking</li>
+              </ul>
+              <div class="pf-result">
+                <strong>Result</strong>
+                40+ qualified patient inquiries/month at below-industry cost.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================
+         GOOGLE RANKING / SEO
+    ================================================================ -->
+    <section id="seo" class="pf-category">
+      <div class="container">
+        <span class="pf-cat-label">Category</span>
+        <h2 class="pf-cat-title">Google Ranking</h2>
+
+        <!-- Project 5: Local SEO -->
+        <div id="local-seo" class="pf-project">
+          <div class="pf-row">
+            <div class="pf-gallery">
+            <div class="pf-gal-main">
+              <img src="./img/portfolio/WhatsApp Image 2026-04-09 at 11.26.07 PM.jpeg" alt="Local SEO and Map Pack Ranking" loading="lazy" decoding="async" />
+              <div class="pf-gal-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+            <!-- Add more images below to expand the gallery -->
+            <div class="pf-gal-thumbs">
+            </div>
+          </div>
+            <div class="pf-content">
+              <span class="pf-tag">Google Ranking</span>
+              <h3 class="pf-title">Local SEO &amp; Map Pack Ranking</h3>
+              <p class="pf-desc">Complete local SEO — Google Business Profile optimization, citation building, review management, and map pack ranking strategy.</p>
+              <ul class="pf-pills">
+                <li>Google Business Profile optimization</li>
+                <li>Local citation building</li>
+                <li>Map pack ranking strategy</li>
+                <li>Review generation</li>
+                <li>Local keyword targeting</li>
+              </ul>
+              <div class="pf-result">
+                <strong>Result</strong>
+                Ranked in Google Maps top 3 for key searches within 4 months.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Project 6: SEO Implementation -->
+        <div id="seo-optimization" class="pf-project">
+          <div class="pf-row reverse">
+            <div class="pf-gallery">
+            <div class="pf-gal-main">
+              <img src="./img/portfolio/WhatsApp Image 2026-04-09 at 11.30.55 PM.jpeg" alt="SEO Implementation and Optimization" loading="lazy" decoding="async" />
+              <div class="pf-gal-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+            </div>
+            <!-- Add more images below to expand the gallery -->
+            <div class="pf-gal-thumbs">
+            </div>
+          </div>
+            <div class="pf-content">
+              <span class="pf-tag">SEO</span>
+              <h3 class="pf-title">SEO Implementation &amp; Optimization</h3>
+              <p class="pf-desc">End-to-end SEO strategy — keyword research, on-page optimization, technical fixes, and content strategy for long-term organic visibility.</p>
+              <ul class="pf-pills">
+                <li>In-depth keyword research</li>
+                <li>On-page SEO optimization</li>
+                <li>Technical SEO audit</li>
+                <li>Schema markup</li>
+                <li>Content strategy</li>
+              </ul>
+              <div class="pf-result">
+                <strong>Result</strong>
+                180% organic traffic increase in 5 months.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================
+         WEB DEVELOPMENT
+    ================================================================ -->
+    <section id="webdev" class="pf-category">
+      <div class="container">
+        <span class="pf-cat-label">Category</span>
+        <h2 class="pf-cat-title">Web Development</h2>
+
+        <!-- Project 7: Clinic Website Development -->
+        <div id="clinic-website" class="pf-project">
+          <div style="max-width:100%;">
+            <span class="pf-tag">Web Development</span>
+            <h3 class="pf-title">Clinic Website Development</h3>
+            <p class="pf-desc" style="max-width:760px;">Professional, conversion-focused clinic websites — responsive design, SEO-optimized structure, and clear CTA flows for appointment booking.</p>
+            <ul class="pf-pills">
+              <li>Responsive website design</li>
+              <li>SEO-friendly structure</li>
+              <li>Clear CTA placement</li>
+              <li>Mobile-first optimization</li>
+              <li>Fast loading &amp; performance</li>
+            </ul>
+
+            <!-- Two screenshot cards side by side -->
+            <div class="web-showcase-grid">
+              <div class="web-showcase-card">
+                <img src="./img/portfolio/sunshine-1.jpg" alt="Sunshine Institutions Website" loading="lazy" decoding="async" />
+                <div class="web-showcase-info">
+                  <h5>Sunshine Institutions</h5>
+                  <p>Coaching institute website with LMS integration</p>
+                  <a href="https://sunshineinstitutions.in/" target="_blank" rel="noopener noreferrer" class="web-showcase-link">
+                    Visit Site <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="web-showcase-card">
+                <img src="./img/portfolio/Screenshot 2026-04-09 202500.png" alt="Indian Biogenesis Website" loading="lazy" decoding="async" class="lightbox-trigger" data-lightbox="./img/portfolio/Screenshot 2026-04-09 202500.png" />
+                <div class="web-showcase-info">
+                  <h5>Indian Biogenesis</h5>
+                  <p>Specialty healthcare corporate website</p>
+                  <a href="https://indianbiogenesis.in/" target="_blank" rel="noopener noreferrer" class="web-showcase-link">
+                    Visit Site <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="pf-result mt-20" style="margin-top:24px;">
+              <strong>Result</strong>
+              Website conversion rate of 6.5% — above the healthcare industry average of 2-3%.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================
+         WEB APPLICATION
+    ================================================================ -->
+    <section id="webapp" class="pf-category">
+      <div class="container">
+        <span class="pf-cat-label">Category</span>
+        <h2 class="pf-cat-title">Web Application</h2>
+
+        <!-- Project 8: Web Application Development -->
+        <div id="clinic-webapp" class="pf-project">
+          <div>
+            <span class="pf-tag">Web App</span>
+            <h3 class="pf-title">Web Application Development</h3>
+            <p class="pf-desc" style="max-width:760px;">Full-stack custom web applications for healthcare and business — dental practice management, CMS platforms, and business suites. Each built with role-based access and real-time dashboards.</p>
+            <ul class="pf-pills">
+              <li>Custom module design</li>
+              <li>Role-based access &amp; auth</li>
+              <li>Real-time dashboards</li>
+              <li>Reports &amp; billing modules</li>
+              <li>Mobile-responsive UI</li>
+            </ul>
+
+            <!-- 3-app carousel grid -->
+            <div class="app-grid">
+
+              <!-- App 1: VR Dental Care -->
+              <div class="app-card">
+                <div class="app-carousel" id="carousel-vr">
+                  <div class="app-slide active">
+                    <img src="./img/portfolio/ui/Screenshot 2026-04-09 201436.png" alt="VR Dental Care - Patients" loading="lazy" decoding="async" class="lightbox-trigger" data-lightbox="./img/portfolio/ui/Screenshot 2026-04-09 201436.png" />
+                  </div>
+                  <div class="app-slide">
+                    <img src="./img/portfolio/ui/Screenshot 2026-04-09 201623.png" alt="VR Dental Care - Analytics" loading="lazy" decoding="async" class="lightbox-trigger" data-lightbox="./img/portfolio/ui/Screenshot 2026-04-09 201623.png" />
+                  </div>
+                  <div class="app-dots">
+                    <span class="app-dot active" data-carousel="carousel-vr" data-index="0"></span>
+                    <span class="app-dot" data-carousel="carousel-vr" data-index="1"></span>
+                  </div>
+                </div>
+                <div class="app-card-info">
+                  <h5>VR Dental Care</h5>
+                  <p>Full dental practice management — patients, appointments, expenses, intake forms &amp; monthly analytics.</p>
+                  <a href="https://vrdental.vercel.app/" target="_blank" rel="noopener noreferrer" class="web-showcase-link">
+                    View Application <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i>
+                  </a>
+                </div>
+              </div>
+
+              <!-- App 2: Website CMS & Analytics -->
+              <div class="app-card">
+                <div class="app-carousel" id="carousel-cms">
+                  <div class="app-slide active">
+                    <img src="./img/portfolio/ui/Screenshot 2026-04-09 201741.png" alt="Website CMS and Analytics" loading="lazy" decoding="async" class="lightbox-trigger" data-lightbox="./img/portfolio/ui/Screenshot 2026-04-09 201741.png" />
+                  </div>
+                  <div class="app-dots">
+                    <span class="app-dot active" data-carousel="carousel-cms" data-index="0"></span>
+                  </div>
+                </div>
+                <div class="app-card-info">
+                  <h5>Website CMS &amp; Analytics</h5>
+                  <p>Custom CMS with section editor and real-time analytics — page views, visitors, session time &amp; scroll depth.</p>
+                </div>
+              </div>
+
+              <!-- App 3: SuiteZ Business Suite -->
+              <div class="app-card">
+                <div class="app-carousel" id="carousel-suitez">
+                  <div class="app-slide active">
+                    <img src="./img/portfolio/ui/Screenshot 2026-04-09 202030.png" alt="SuiteZ Business Suite" loading="lazy" decoding="async" class="lightbox-trigger" data-lightbox="./img/portfolio/ui/Screenshot 2026-04-09 202030.png" />
+                  </div>
+                  <div class="app-slide">
+                    <img src="./img/portfolio/ui/Screenshot 2026-04-09 202114.png" alt="SuiteZ Revenue Analytics" loading="lazy" decoding="async" class="lightbox-trigger" data-lightbox="./img/portfolio/ui/Screenshot 2026-04-09 202114.png" />
+                  </div>
+                  <div class="app-dots">
+                    <span class="app-dot active" data-carousel="carousel-suitez" data-index="0"></span>
+                    <span class="app-dot" data-carousel="carousel-suitez" data-index="1"></span>
+                  </div>
+                </div>
+                <div class="app-card-info">
+                  <h5>SuiteZ — Business Suite</h5>
+                  <p>Invoices, quotations, proposals, clients &amp; revenue analytics in one platform.</p>
+                  <a href="https://suitezai.com" target="_blank" rel="noopener noreferrer" class="app-card-link">
+                    Visit App <i class="fa-solid fa-arrow-up-right-from-square" style="font-size:10px;"></i>
+                  </a>
+                </div>
+              </div>
+
+            </div><!-- /app-grid -->
+
+            <div class="pf-result" style="margin-top:28px;">
+              <strong>Result</strong>
+              Replaced manual processes — each app gives clients full digital control of their operations.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ================================================================
+         BRANDING
+    ================================================================ -->
+    <section id="branding" class="pf-category" style="padding-bottom:80px;">
+      <div class="container">
+        <span class="pf-cat-label">Category</span>
+        <h2 class="pf-cat-title">Branding</h2>
+
+        <!-- Project 9: Brand Identity -->
+        <div id="brand-identity" class="pf-project">
+          <div class="pf-row">
+            <div class="pf-gallery">
+              <div class="pf-gal-main">
+                <img src="./img/good live logo.jpg.jpeg" alt="Brand Identity and Logo Design" loading="lazy" decoding="async" />
+                <div class="pf-gal-zoom"><i class="fa-solid fa-magnifying-glass-plus"></i></div>
+              </div>
+              <div class="pf-gal-thumbs">
+                <img src="./img/good live logo.jpg.jpeg" alt="Good Live Logo" loading="lazy" decoding="async" />
+                <img src="./img/logo-dark.png" alt="SRT Logo Dark" loading="lazy" decoding="async" />
+                <img src="./img/srtimg/Am.png" alt="Am Logo" loading="lazy" decoding="async" />
+                <img src="./img/sunshine main logo.png" alt="Sunshine Institutions Logo" loading="lazy" decoding="async" />
+              </div>
+            </div>
+            <div class="pf-content">
+              <span class="pf-tag">Branding</span>
+              <h3 class="pf-title">Brand Identity &amp; Logo Design</h3>
+              <p class="pf-desc">Complete brand identity — logo design, color system, typography, and visual assets that build immediate professional trust with patients.</p>
+              <ul class="pf-pills">
+                <li>Logo design &amp; refinement</li>
+                <li>Brand color system</li>
+                <li>Visual identity consistency</li>
+                <li>Typography selection</li>
+                <li>Trust-building digital assets</li>
+              </ul>
+              <div class="pf-result">
+                <strong>Result</strong>
+                Unified brand identity across clinic signage, website, social media, and print.
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer mt-120 gray-bg pt-75 pb-30 position-relative z-2">
+      <div class="container">
+        <div class="row gap-lg-30">
+          <div class="col-lg-5">
+            <h2 class="footer-title">
+              <i class="ashik-icon-star"></i>
+              <span data-text-animation="slide" data-split="words">
+                <span>Your Clinic Deserves</span> Professional Digital Authority
+              </span>
+            </h2>
+            <div class="footer-email" data-animation="fade" data-animation-direction="left" data-animation-offset="40">
+              <i class="fa-sharp fa-solid fa-paper-plane"></i>
+              <h3 class="footer-email-text">
+                <a href="mailto:growwithus@srtdigitalsolutions.com">growwithus@srtdigitalsolutions.com</a>
+              </h3>
+            </div>
+            <div class="social mt-40">
+              <a href="https://www.facebook.com/profile.php?id=61581895563324" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/srtdigitalsolutions/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/company/srt-digital-solutions/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
+              <a href="https://www.youtube.com/@SRTDigitalSolutions" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
+              <a href="https://in.pinterest.com/srtdigital/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-pinterest-p"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-4 offset-lg-2">
+            <a href="./index.html"><img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT Digital Solutions"
+                width="420" height="104" loading="lazy" decoding="async" /></a>
+            <p class="mt-35">
+              SRT Digital Solutions specializes in social media marketing and digital growth
+              systems for doctors in Coimbatore.
+            </p>
+            <p class="mt-15" style="font-size: 13px; opacity: 0.6;">
+              Serving: Coimbatore (RS Puram, Peelamedu, Saibaba Colony, Gandhipuram, Singanallur) &amp; Erode
+            </p>
+            <div class="footer-menus mt-65">
+              <a href="./index.html">Home</a>
+              <a href="./index.html#services">Services</a>
+              <a href="./portfolio.html">Portfolio</a>
+              <a href="./pricing.html">Pricing</a>
+              <a href="./blog.html">Blog</a>
+              <a href="./index.html#contact">Contact</a>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-80 gap-lg-10">
+          <div class="col-lg-6">
+            <p>&copy; 2026 SRT Digital Solutions | Social Media Marketing for Doctors in Coimbatore</p>
+          </div>
+          <div class="col-lg-6 flex-lg-end">
+            <div class="copyright-menus">
+              <a href="./terms.html">Terms &amp; Conditions</a>
+              <a href="./privacy.html">Privacy Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Lightbox — outside ScrollSmoother so position:fixed works correctly -->
+  <div class="pf-lightbox" id="pfLightbox" role="dialog" aria-modal="true" aria-label="Image preview">
+    <button class="pf-lightbox-close" id="pfLightboxClose" aria-label="Close image preview">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+    <img src="" alt="Portfolio image preview" id="pfLightboxImg" />
+  </div>
+
+  <div class="tf__scroll_btn">
+    <i class="fa-regular fa-arrow-up-long"></i>
+  </div>
+  <div id="magic-cursor">
+    <div id="ball"></div>
+  </div>
+
+  <!-- Critical JS (sync - required for GSAP animations) -->
+  <script src="./js/lib/jquery.min.js"></script>
+  <script src="./js/lib/bootstrap.bundle.min.js"></script>
+  <script src="./js/gsap/gsap.min.js"></script>
+  <script src="./js/gsap/SplitText.min.js"></script>
+  <script src="./js/gsap/ScrollSmoother.min.js"></script>
+  <script src="./js/gsap/ScrollTrigger.min.js"></script>
+
+  <!-- Deferred JS (load after first paint) -->
+  <script src="./js/lib/waypoints.min.js" defer></script>
+  <script src="./js/lib/jquery.counterup.min.js" defer></script>
+  <script src="./js/lib/swiper-bundle.min.js" defer></script>
+  <script src="./js/lib/imagesloaded.js" defer></script>
+  <script src="./js/lib/jquery.magnific-popup.min.js" defer></script>
+  <script src="./js/lib/isotope.js" defer></script>
+  <script src="./js/animation.min.js" defer></script>
+  <script src="./js/main.js" defer></script>
+
+  <!-- Supabase + Analytics + Popups -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
+  <script src="./js/supabase-config.js" defer></script>
+  <script src="./js/srt-analytics.js" defer></script>
+  <script src="./js/srt-popups.js" defer></script>
+
+  <!-- Portfolio: Carousels + Lightbox + Sticky Nav Observer -->
+  <script>
+    (function () {
+      // -------------------------------------------------------
+      // APP CAROUSEL AUTO-SWIPE
+      // -------------------------------------------------------
+      var carousels = {};
+
+      function initCarousel(carouselId) {
+        var el = document.getElementById(carouselId);
+        if (!el) return;
+        var slides = el.querySelectorAll('.app-slide');
+        var dots = el.querySelectorAll('.app-dot');
+        if (slides.length <= 1) return;
+
+        var current = 0;
+
+        function goTo(idx) {
+          slides[current].classList.remove('active');
+          dots[current] && dots[current].classList.remove('active');
+          current = (idx + slides.length) % slides.length;
+          slides[current].classList.add('active');
+          dots[current] && dots[current].classList.add('active');
+        }
+
+        // Dot click
+        dots.forEach(function (dot) {
+          dot.addEventListener('click', function () {
+            goTo(parseInt(this.getAttribute('data-index'), 10));
+            clearInterval(carousels[carouselId]);
+            carousels[carouselId] = setInterval(function () { goTo(current + 1); }, 3200);
+          });
+        });
+
+        // Auto-swipe
+        carousels[carouselId] = setInterval(function () { goTo(current + 1); }, 3200);
+      }
+
+      // -------------------------------------------------------
+      // LIGHTBOX
+      // -------------------------------------------------------
+      var lightbox = document.getElementById('pfLightbox');
+      var lightboxImg = document.getElementById('pfLightboxImg');
+      var lightboxClose = document.getElementById('pfLightboxClose');
+
+      function openLightbox(src) {
+        lightboxImg.src = src;
+        lightbox.classList.add('open');
+        document.body.style.overflow = 'hidden';
+      }
+
+      function closeLightbox() {
+        lightbox.classList.remove('open');
+        lightboxImg.src = '';
+        document.body.style.overflow = '';
+      }
+
+      lightboxClose && lightboxClose.addEventListener('click', closeLightbox);
+      lightbox && lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeLightbox();
+      });
+
+      // -------------------------------------------------------
+      // STICKY NAV INTERSECTION OBSERVER
+      // -------------------------------------------------------
+      var navLinks = document.querySelectorAll('.pf-nav-link');
+      var sections = ['social', 'seo', 'webdev', 'webapp', 'branding'];
+
+      var observerOptions = {
+        root: null,
+        rootMargin: '-120px 0px -60% 0px',
+        threshold: 0
+      };
+
+      var sectionObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var id = entry.target.id;
+            navLinks.forEach(function (link) {
+              link.classList.remove('active');
+              if (link.getAttribute('data-target') === id) {
+                link.classList.add('active');
+              }
+            });
+          }
+        });
+      }, observerOptions);
+
+      // -------------------------------------------------------
+      // INIT ON DOM READY
+      // -------------------------------------------------------
+      document.addEventListener('DOMContentLoaded', function () {
+        // Init carousels
+        ['carousel-vr', 'carousel-cms', 'carousel-suitez'].forEach(initCarousel);
+        // Observe sections for sticky nav
+        sections.forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) sectionObserver.observe(el);
+        });
+      });
+
+      // Lightbox via event delegation — works with GSAP & deferred scripts
+      document.addEventListener('click', function (e) {
+        var t = e.target;
+        // Gallery main
+        var galMain = t.closest && t.closest('.pf-gal-main');
+        if (galMain) {
+          var img = galMain.querySelector('img');
+          if (img) { e.preventDefault(); openLightbox(img.src); }
+          return;
+        }
+        // Gallery thumbnails — swap main image and open lightbox
+        if (t.tagName === 'IMG' && t.closest && t.closest('.pf-gal-thumbs')) {
+          e.preventDefault();
+          var gallery = t.closest('.pf-gallery');
+          if (gallery) {
+            var mainImg = gallery.querySelector('.pf-gal-main img');
+            if (mainImg) mainImg.src = t.src;
+          }
+          openLightbox(t.src); return;
+        }
+        // Web showcase card images
+        if (t.tagName === 'IMG' && t.closest && t.closest('.web-showcase-card')) {
+          e.preventDefault(); openLightbox(t.src); return;
+        }
+        // App carousel slide images
+        if (t.tagName === 'IMG' && t.closest && t.closest('.app-slide')) {
+          e.preventDefault(); openLightbox(t.src); return;
+        }
+      });
+    })();
+  </script>
+
+  <!-- Wrap thumbnail images in .pf-thumb-wrap for shine effect -->
+  <script>
+    document.querySelectorAll('.pf-gal-thumbs img').forEach(function(img) {
+      var wrap = document.createElement('div');
+      wrap.className = 'pf-thumb-wrap';
+      img.parentNode.insertBefore(wrap, img);
+      wrap.appendChild(img);
+    });
+  </script>
+
+</body>
+
+</html>

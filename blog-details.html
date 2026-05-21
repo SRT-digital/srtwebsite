@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google Fonts (non-blocking, reduced weights) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Spline+Sans:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Spline+Sans:wght@400;500;600;700&display=swap" /></noscript>
+
+    <!-- Critical CSS (sync) -->
+    <link rel="stylesheet" href="./css/lib/bootstrap.min.css" />
+    <link rel="stylesheet" href="./css/main.css" />
+    <link rel="stylesheet" href="./css/custom.css" />
+
+    <!-- Non-critical CSS (deferred) -->
+    <link rel="stylesheet" href="./css/lib/magnific-popup.css" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="./css/lib/swiper-bundle.min.css" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="./css/fonts/font-awesome.css" media="print" onload="this.media='all'" />
+    <link rel="stylesheet" href="./css/fonts/ashik-icon.css" media="print" onload="this.media='all'" />
+    <noscript>
+      <link rel="stylesheet" href="./css/lib/magnific-popup.css" />
+      <link rel="stylesheet" href="./css/lib/swiper-bundle.min.css" />
+      <link rel="stylesheet" href="./css/fonts/font-awesome.css" />
+      <link rel="stylesheet" href="./css/fonts/ashik-icon.css" />
+    </noscript>
+
+    <!-- Font preloads -->
+    <link rel="preload" href="./fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin />
+
+    <!-- Critical inline CSS -->
+    <style>body{background:#0a1a2e;color:#ccc;margin:0}.preloader{position:fixed;inset:0;z-index:99999;background:#0a1a2e}.main-header{will-change:transform}img[loading="lazy"]{content-visibility:auto}</style>
+    <link rel="shortcut icon" href="./img/fav.png" type="image/x-icon" />
+    <title>Ashik Personal Portfolio Template</title>
+  </head>
+  <body class="dark-bg">
+    <!--================================
+        PRELOADER START
+    =================================-->
+    <div class="preloader">
+      <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+        <path id="svg" d="M0,1005S175,995,500,995s500,5,500,5V0H0Z"></path>
+      </svg>
+      <h5 class="preloader-text">Ashik</h5>
+    </div>
+    <!--================================
+        PRELOADER END
+    =================================-->
+    <header class="main-header fixed-header">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="logo">
+            <a href="./index.html"><img src="./img/logo-dark.png" alt="" loading="lazy" decoding="async" /></a>
+          </div>
+
+          <div class="d-none d-lg-block main-menu">
+            <nav class="navbar-nav m-auto" id="navbarNav">
+              <ul>
+                <li class="dropdown-nav">
+                  <a href="#">Home</a>
+                  <ul class="submenu">
+                    <li><a href="/index.html">Home 1</a></li>
+                    <li><a href="/index-dark.html">Home 1 Dark</a></li>
+                    <li><a href="/index-2.html">Home 2</a></li>
+                    <li><a href="/index-2-dark.html">Home 2 Dark</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="#about">About</a>
+                </li>
+                <li>
+                  <a href="#services">Services</a>
+                </li>
+                <li>
+                  <a href="#projects">Projects</a>
+                </li>
+                <li class="dropdown-nav">
+                  <a href="#">Blog</a>
+                  <ul class="submenu">
+                    <li><a href="./blog.html">Blog</a></li>
+                    <li><a href="./blog-details.html">Blog Details</a></li>
+                  </ul>
+                </li>
+                <li>
+                  <a href="./contact.html">Contact</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div>
+            <a
+              href="./contact.html"
+              class="theme-btn d-none d-lg-block btn_moveing_hover"
+              >Contact us</a
+            >
+            <a href="#" class="toggle-sidebar d-flex d-lg-none ms-0 theme-1-bg">
+              <div class="toggle">
+                <span></span>
+                <span></span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+    <div id="scrollsmoother-container">
+      <!-- breadcrumbs -->
+      <section class="breadcrumbs">
+        <div class="container">
+          <div
+            class="tf__breadcrumbs_text"
+            data-animation="move"
+            data-animation-offset="40"
+            data-animation-delay="1.2"
+          >
+            <h1>Blog Details</h1>
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><i class="fa-light fa-angle-right"></i></li>
+              <li><a href="#" class="color-theme-1">Blog Details</a></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+      <!-- Blog -->
+      <section
+        class="mt-120"
+        data-pin=".footer-2"
+        data-pin-start="bottom bottom-=100"
+      >
+        <div class="container">
+          <div class="row gap-lg-30">
+            <div class="col-xxl-8 col-lg-7">
+              <div class="blog-details">
+                <div class="position-relative">
+                  <div class="overflow-hidden">
+                    <picture>
+                      <source srcset="./img/blog-details.webp" type="image/webp" />
+                      <img
+                      data-animation="fade"
+                      data-animation-start-scale="1.4"
+                      data-animation-duration="2"
+                      src="./img/blog-details.png"
+                      class="blog-details-img br-10 w-100 img-fluid"
+                      alt="" width="850" height="411" loading="lazy" decoding="async"
+                    />
+                    </picture>
+                  </div>
+                  <div class="blog-item-info default-blog-info">
+                    <div class="info">
+                      <i class="fa-solid fa-calendar-days"></i>
+                      <p>31 December,2022</p>
+                    </div>
+                    <div class="info">
+                      <i class="fa-regular fa-tag"></i>
+                      <p>Web design</p>
+                    </div>
+                    <div class="info">
+                      <i class="fa-light fa-messages"></i>
+                      <p>Comments (05)</p>
+                    </div>
+                  </div>
+                </div>
+                <h2
+                  class="section-title mt-60"
+                  data-text-animation="slide"
+                  data-split="words"
+                >
+                  Results Effective Online
+                </h2>
+                <p data-text-animation="invert">
+                  Aliquam eros justo, posuere loborti viverra laoreet matti
+                  ullamcorpr posuere viverra .Aliquam eros posuere lobortis,
+                  viverra laoreet augue mattis fermentum ullamcorper viverra
+                  laoreet Aliquam eros justo, po loborti viverra laoreet matti
+                  ullamcorper posuere viverra .Aliquam eros justo, posere
+                  lobortis non, viverra laor augue mattis.Aliquam eros justo,
+                  posuere loborti viverra laoreet matti
+                </p>
+                <p data-text-animation="invert">
+                  Aliquam eros justo, posuere loborti viverra laoreet matti
+                  ullamcorpr posuere viverra .Aliquam eros posuere lobortis,
+                  viverra laoreet augue mattis fermentum ullamcorper viverra
+                  laoreet Aliquam eros justo, po loborti viverra laoreet matti
+                  ullamcorper posuere viverra .Aliquam eros justo
+                </p>
+                <blockquote
+                  data-animation="fade"
+                  data-animation-direction="bottom"
+                >
+                  <div class="d-sm-flex d-block justify-content-between mb-20">
+                    <h3>Nafiz Bhuiyan</h3>
+                    <div class="rating">
+                      <i class="fa-sharp fa-solid fa-star color-rating"></i>
+                      <i class="fa-sharp fa-solid fa-star color-rating"></i>
+                      <i class="fa-sharp fa-solid fa-star color-rating"></i>
+                      <i class="fa-sharp fa-solid fa-star color-rating"></i>
+                      <i class="fa-sharp fa-solid fa-star color-gray-2"></i>
+                    </div>
+                  </div>
+                  <p>
+                    Aliquam eros justo, posuere loborti viverra laoreet matti
+                    ullamcorpr posuere viverra .Aliquam eros posuere lobortis,
+                    viverra laoreet augue mattis fermentum ullamcorper viverra
+                    laoreet Aliquam eros justo, po loborti viverra laoreet matti
+                    ullamcorper
+                  </p>
+                </blockquote>
+                <p data-text-animation="invert">
+                  Aliquam eros justo, posuere loborti viverra laoreet matti
+                  ullamcoper posuere viverra .Aliquam eros justo, posuere
+                  lobortis, viverra laoreet augue mattis fermentum ullamcorper
+                  viverra laorees
+                </p>
+                <ul data-animation="fade" data-animation-direction="bottom">
+                  <li>Your Story, My Canvas – Personalized Excellence</li>
+                  <li>Designing Tomorrow, Showcasing Today</li>
+                  <li>Unveiling Potential, One Project at a Time</li>
+                </ul>
+                <div class="row mb-20 mt-20 gap-sm-20">
+                  <div class="col-sm-6 overflow-hidden">
+                    <picture>
+                      <source srcset="./img/blog-1.webp" type="image/webp" />
+                      <img
+                      src="./img/blog-1.jpg"
+                      class="w-100 img-fluid br-10"
+                      alt=""
+                      data-image-animation="reveal" width="800" height="533" loading="lazy" decoding="async"
+                    />
+                    </picture>
+                  </div>
+                  <div class="col-sm-6 overflow-hidden">
+                    <picture>
+                      <source srcset="./img/blog-2.webp" type="image/webp" />
+                      <img
+                      src="./img/blog-2.jpg"
+                      class="w-100 img-fluid br-10"
+                      alt=""
+                      data-image-animation="reveal" width="800" height="533" loading="lazy" decoding="async"
+                    />
+                    </picture>
+                  </div>
+                </div>
+                <h2
+                  class="fs-35 fw-700"
+                  data-text-animation="slide"
+                  data-split="words"
+                >
+                  Elevate Your Online Presence
+                </h2>
+                <p data-text-animation="invert">
+                  Aliquam eros justo, posuere loborti viverra laoreet matti
+                  ullamcorpr posuere viverra .Aliquam eros justo, a posuere
+                  lobortis, viverra laoreet augue mattis fermentum ullamcorper
+                  viverra laoreet Aliquam eros justo, a posuere loborti viverra
+                  laoreet matti ullamcorper posuere viverra
+                </p>
+                <div
+                  class="d-flex flex-column flex-xl-row gap-20 blog-details-footer justify-content-between mt-85 align-items-start"
+                >
+                  <div class="tags">
+                    <a href="#">All Project</a>
+                    <a href="#">Photography</a>
+                    <a href="#">Video Editing</a>
+                  </div>
+                  <div class="share d-flex align-items-center gap-18">
+                    <h4>Share:</h4>
+                    <div class="social">
+                      <a href="https://www.facebook.com/profile.php?id=61581895563324" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i></a>
+                      <a href="https://www.instagram.com/srtdigitalsolutions/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+                      <a href="https://www.linkedin.com/company/srt-digital-solutions/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
+                      <a href="https://www.youtube.com/@SRTDigitalSolutions" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
+                      <a href="https://in.pinterest.com/srtdigital/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-pinterest-p"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="comments mt-80">
+                <h2 class="fs-35 fw-700 mb-30">2 Comment</h2>
+                <div class="comments">
+                  <div class="comment-item">
+                    <div
+                      class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-30 gap-sm-20"
+                    >
+                      <img
+                        src="./img/comment-2.png"
+                        class="comment-author"
+                        alt="" loading="lazy" decoding="async"
+                      />
+                      <div class="comment-content">
+                        <div class="d-flex justify-content-between mb-20">
+                          <div class="comment-author-info">
+                            <h4>Stanio lainto</h4>
+                            <p>October 19, 2022</p>
+                          </div>
+                          <a href="#" class="comment-replay">Reply</a>
+                        </div>
+                        <p>
+                          ished fact that a reader will be distrol acted bioii
+                          the.ished fact that a reader will be distrol acted
+                          laoreet Aliquam reader will be distrol acted
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-item">
+                    <div
+                      class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-30 gap-sm-20"
+                    >
+                      <img
+                        src="./img/comment-1.png"
+                        class="comment-author"
+                        alt="" loading="lazy" decoding="async"
+                      />
+                      <div class="comment-content">
+                        <div class="d-flex justify-content-between mb-20">
+                          <div class="comment-author-info">
+                            <h4>Nafis Ahmed</h4>
+                            <p>October 19, 2022</p>
+                          </div>
+                          <a href="#" class="comment-replay">Reply</a>
+                        </div>
+                        <p>
+                          ished fact that a reader will be distrol acted bioii
+                          the.ished fact that a reader will be distrol acted
+                          laoreet Aliquam reader will be distrol acted
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="comment-form mt-80">
+                    <h2 class="fs-35 fw-700 mb-50">Send Message</h2>
+                    <form>
+                      <div class="row">
+                        <div class="col-md-4">
+                          <input type="text" placeholder="First Name" />
+                        </div>
+                        <div class="col-md-4">
+                          <input type="text" placeholder="Last Name" />
+                        </div>
+                        <div class="col-md-4">
+                          <input type="email" placeholder="E-mail Address" />
+                        </div>
+                        <div class="col-md-12">
+                          <textarea placeholder="Write Message"></textarea>
+                        </div>
+                        <div class="col-md-12">
+                          <button class="theme-btn-with-bg">
+                            Send Message
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xxl-4 col-lg-5">
+              <div class="sidebar">
+                <!-- Search -->
+                <div
+                  class="sidebar-widget"
+                  data-animation="fade"
+                  data-animation-direction="bottom"
+                >
+                  <h3>Search</h3>
+                  <form class="search-form">
+                    <input type="text" placeholder="Search Here..." />
+                    <button>
+                      <i class="fa-regular fa-magnifying-glass"></i>
+                    </button>
+                  </form>
+                </div>
+                <!-- Recent post -->
+                <div
+                  class="sidebar-widget"
+                  data-animation="fade"
+                  data-animation-direction="bottom"
+                >
+                  <h3>Recent post</h3>
+                  <div class="recent-post">
+                    <div class="recent-post-item">
+                      <div class="recent-post-content">
+                        <div class="recent-post-info">
+                          <ul>
+                            <li><a href="#">Category</a></li>
+                            <li><a href="#">Comments 0</a></li>
+                          </ul>
+                        </div>
+                        <h4>
+                          <a href="#">Elevate Your Professional Presence</a>
+                        </h4>
+                      </div>
+                      <picture>
+                      <source srcset="./img/blog-1.webp" type="image/webp" />
+                      <img src="./img/blog-1.jpg" alt="" width="800" height="533" loading="lazy" decoding="async" />
+                    </picture>
+                    </div>
+                    <div class="recent-post-item">
+                      <div class="recent-post-content">
+                        <div class="recent-post-info">
+                          <ul>
+                            <li><a href="#">Category</a></li>
+                            <li><a href="#">Comments 0</a></li>
+                          </ul>
+                        </div>
+                        <h4>
+                          <a href="#">Make an Impression with Your Portfolio</a>
+                        </h4>
+                      </div>
+                      <picture>
+                      <source srcset="./img/blog-2.webp" type="image/webp" />
+                      <img src="./img/blog-2.jpg" alt="" width="800" height="533" loading="lazy" decoding="async" />
+                    </picture>
+                    </div>
+                    <div class="recent-post-item">
+                      <div class="recent-post-content">
+                        <div class="recent-post-info">
+                          <ul>
+                            <li><a href="#">Category</a></li>
+                            <li><a href="#">Comments 0</a></li>
+                          </ul>
+                        </div>
+                        <h4>
+                          <a href="#">Unlock Your Career the Opportunities</a>
+                        </h4>
+                      </div>
+                      <picture>
+                      <source srcset="./img/blog-3.webp" type="image/webp" />
+                      <img src="./img/blog-3.jpg" alt="" width="800" height="533" loading="lazy" decoding="async" />
+                    </picture>
+                    </div>
+                  </div>
+                </div>
+                <!-- Category -->
+                <div
+                  class="sidebar-widget"
+                  data-animation="fade"
+                  data-animation-direction="bottom"
+                >
+                  <h3>Category</h3>
+                  <div class="sidebar-categorys">
+                    <ul>
+                      <li>
+                        <a href="#">Writing and Editing <span>01</span></a>
+                      </li>
+                      <li>
+                        <a href="#">Graphic Design <span>05</span></a>
+                      </li>
+                      <li>
+                        <a href="#">Video Editing <span>03</span></a>
+                      </li>
+                      <li>
+                        <a href="#">Consulting Services <span>02</span></a>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <!-- Tags -->
+                <div
+                  class="sidebar-widget"
+                  data-animation="fade"
+                  data-animation-direction="bottom"
+                >
+                  <h3>Tags</h3>
+                  <div class="tags">
+                    <a href="#" class="current">All Project</a>
+                    <a href="#">Graphic</a>
+                    <a href="#">Editing</a>
+                    <a href="#">Video</a>
+                    <a href="#">Social</a>
+                    <a href="#">Branding</a>
+                  </div>
+                </div>
+                <!-- Ad -->
+                <div
+                  class="sidebar-ad"
+                  data-animation="fade"
+                  data-animation-direction="bottom"
+                >
+                  <div class="text-center">
+                    <h3>About Me</h3>
+                    <p>Subscribe for get more help and information</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Footer -->
+      <footer class="footer-2 pt-80 mt-120 default-footer">
+        <div class="container">
+          <div class="row gap-md-30">
+            <div class="col-lg-3 col-md-4">
+              <div class="footer-logo mb-25">
+                <img src="./img/logo-dark.png" alt="" loading="lazy" decoding="async" />
+              </div>
+              <p>
+                Lorem ipsum dolor sit amet, consect etuer adipiscing elit, sed
+                diam nonu mmy nibh euis
+              </p>
+              <div class="social mt-30 mb-60">
+                <a href="https://www.facebook.com/profile.php?id=61581895563324" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i></a>
+                <a href="https://www.instagram.com/srtdigitalsolutions/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+                <a href="https://www.linkedin.com/company/srt-digital-solutions/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
+                <a href="https://www.youtube.com/@SRTDigitalSolutions" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
+                <a href="https://in.pinterest.com/srtdigital/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-pinterest-p"></i></a>
+              </div>
+              <div class="footer-2-contact">
+                <i class="fa-solid fa-phone"></i>
+                <div class="footer-2-contact-content">
+                  <h4>Phone Number</h4>
+                  <p>012 345 678 9101</p>
+                </div>
+              </div>
+              <div class="footer-2-contact">
+                <i class="fa-solid fa-envelope"></i>
+                <div class="footer-2-contact-content">
+                  <h4>Email</h4>
+                  <p>abcd@gmail.com</p>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-8 offset-lg-3">
+              <form class="footer-form">
+                <h2>Send Message</h2>
+                <div class="row">
+                  <div class="col-md-6">
+                    <input type="text" placeholder="First Name" />
+                  </div>
+                  <div class="col-md-6">
+                    <input type="text" placeholder="Last Name" />
+                  </div>
+                  <div class="col-md-6">
+                    <input type="email" placeholder="E-mail Address" />
+                  </div>
+                  <div class="col-md-6">
+                    <input type="text" placeholder="Phone Number" />
+                  </div>
+                  <div class="col-md-12">
+                    <textarea placeholder="Write Message"></textarea>
+                  </div>
+                  <div class="col-md-12">
+                    <button class="theme-btn-with-bg">Send Message</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="mt-80 copyright">
+            <div class="row gap-lg-10">
+              <div class="col-lg-6">
+                <p>© codeefly 2024 | All Rights Reserved</p>
+              </div>
+              <div class="col-lg-6 flex-lg-end">
+                <div class="copyright-menus">
+                  <a href="#">Trams & Condition</a>
+                  <a href="#">Privacy Policy</a>
+                  <a href="#">Contact Us</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!--==============================
+        SCROLL BUTTON START
+    ===============================-->
+    <div class="tf__scroll_btn">
+      <i class="fa-regular fa-arrow-up-long"></i>
+    </div>
+    <!--==============================
+        SCROLL BUTTON END
+    ===============================-->
+
+    <div id="magic-cursor">
+      <div id="ball"></div>
+    </div>
+
+    <!-- Critical JS (sync - required for GSAP animations) -->
+    <script src="./js/lib/jquery.min.js"></script>
+    <script src="./js/lib/bootstrap.bundle.min.js"></script>
+    <script src="./js/gsap/gsap.min.js"></script>
+    <script src="./js/gsap/SplitText.min.js"></script>
+    <script src="./js/gsap/ScrollSmoother.min.js"></script>
+    <script src="./js/gsap/ScrollTrigger.min.js"></script>
+
+    <!-- Deferred JS (load after first paint) -->
+    <script src="./js/lib/waypoints.min.js" defer></script>
+    <script src="./js/lib/jquery.counterup.min.js" defer></script>
+    <script src="./js/lib/swiper-bundle.min.js" defer></script>
+    <script src="./js/lib/imagesloaded.js" defer></script>
+    <script src="./js/lib/jquery.magnific-popup.min.js" defer></script>
+    <script src="./js/lib/isotope.js" defer></script>
+    <script src="./js/animation.js" defer></script>
+    <script src="./js/main.js" defer></script>
+  </body>
+</html>

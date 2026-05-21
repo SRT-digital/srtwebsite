@@ -1,0 +1,91 @@
+:root {
+  --black: #000;
+  --white: #fff;
+  --theme: #25bbcc;
+  --theme-2: #25bbcc;
+  --text: #5e5f63;
+  --dark: #222222;
+  --dark-2: #3a3b5b;
+  --dark-3: #0d0d0d;
+  --dark-4: #1c1c1c;
+  --gray: #f6f7f9;
+  --gray-2: #cccccc;
+  --gray-3: #d9d9d9;
+  --gray-4: #5a5a5a;
+  --rating: #ffd234;
+  --bg: #eadfce;
+  ---box-shadow: 0px 0px 60px 0px rgba(0, 0, 0, 0.05);
+  --box-shadow-white: 0px 0px 60px 0px rgba(255, 255, 255, 0.05);
+}
+
+$black: var(--black);
+$white: var(--white);
+$theme-1: var(--theme);
+$theme-2: var(--theme-2);
+$text-color: var(--text);
+$dark: var(--dark);
+$dark-2: var(--dark-2);
+$dark-3: var(--dark-3);
+$dark-4: var(--dark-4);
+$gray: var(--gray);
+$gray-2: var(--gray-2);
+$gray-3: var(--gray-3);
+$gray-4: var(--gray-4);
+$rating: var(--rating);
+$bg: var(--bg);
+$shadow: var(---box-shadow);
+$shadow-white: var(---box-shadow-white);
+
+$colors-list: (
+  transparent: transparent,
+  black: var(--black),
+  white: var(--white),
+  theme-1: var(--theme),
+  theme-2: var(--theme-2),
+  text-color: var(--text),
+  dark: var(--dark),
+  dark-2: var(--dark-2),
+  dark-3: var(--dark-3),
+  dark-4: var(--dark-4),
+  gray: var(--gray),
+  gray-2: var(--gray-2),
+  gray-3: var(--gray-3),
+  gray-4: var(--gray-4),
+  rating: var(--rating),
+  bg: var(--bg),
+);
+
+@each $name, $value in $colors-list {
+  .color-#{$name} {
+    color: #{$value};
+  }
+  .#{$name}-bg {
+    background-color: #{$value};
+  }
+  .border-color-#{$name} {
+    border-color: #{$value};
+  }
+  .hover-color-#{$name} {
+    color: #{$value};
+  }
+  .hover-#{$name}-bg {
+    background-color: #{$value};
+  }
+  .hover-border-color-#{$name} {
+    border-color: #{$value};
+  }
+  .btn_moveing_hover.theme-btn-with-bg.hover-color-#{$name}:hover {
+    span {
+      color: #{$value};
+    }
+  }
+  .btn_moveing_hover.theme-btn-with-bg.hover-bg-#{$name} {
+    &:hover {
+      border: 1px solid #{$value};
+    }
+
+    .magnet-bubble {
+      background-color: #{$value};
+    }
+  }
+}

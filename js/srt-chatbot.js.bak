@@ -1,0 +1,933 @@
+(function() {
+      /* ─── DOM refs ─── */
+      var chatbotFab    = document.getElementById('chatbotFab');
+      var chatbotWindow = document.getElementById('chatbotWindow');
+      var chatbotClose  = document.getElementById('chatbotClose');
+      var chatbotForm   = document.getElementById('chatbotForm');
+      var chatbotInput  = document.getElementById('chatbotInput');
+      var chatbotBody   = document.getElementById('chatbotBody');
+      var quickReplies  = document.getElementById('quickReplies');
+      var chatTooltip   = document.getElementById('chatTooltip');
+      var tooltipClose  = document.getElementById('tooltipClose');
+      var isOpen = false, tooltipDismissed = false;
+
+      /* ─── Conversation context ─── */
+      var ctx = { turns: 0, lastIntent: '', userName: '', specialty: '', asked: {} };
+
+      /* ─── Helpers ─── */
+      var L = function(s){ return '<a href="./index.html#contact" style="color:#25bbcc;text-decoration:underline;font-weight:600;">'; };
+      var CTA_BOOK   = '<a href="./index.html#contact" style="color:#25bbcc;text-decoration:underline;font-weight:600;">Book Free Consultation</a>';
+      var CTA_WA     = '<a href="https://wa.me/919876543210?text=Hi%20SRT%2C%20I%20need%20help%20with%20my%20clinic%20growth" target="_blank" style="color:#25D366;text-decoration:underline;font-weight:600;">Chat on WhatsApp</a>';
+      var CTA_PRICE  = '<a href="./index.html#pricing" style="color:#25bbcc;text-decoration:underline;">View Plans</a>';
+      var CTA_CALL   = '<strong>+91 98765 43210</strong>';
+
+      function link(href, text) { return '<a href="'+href+'" style="color:#25bbcc;text-decoration:underline;">'+text+'</a>'; }
+      function bold(t) { return '<strong>'+t+'</strong>'; }
+      function br(n) { var s=''; for(var i=0;i<(n||1);i++) s+='<br>'; return s; }
+      function bullet(items) { return items.map(function(i){ return '&bull; '+i; }).join('<br>'); }
+      function getTime() { var n=new Date(); return n.getHours().toString().padStart(2,'0')+':'+n.getMinutes().toString().padStart(2,'0'); }
+      function escapeHtml(s) { var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+
+      /* ─── Normalize input — remove noise, fix typos ─── */
+      function normalize(s) {
+        s = s.toLowerCase().trim()
+          .replace(/[''`]/g, "'")
+          .replace(/[""]/g, '"')
+          .replace(/[^\w\s'?.,@]/g, ' ')
+          .replace(/\s+/g, ' ');
+        // Common misspellings / abbreviations
+        var fixes = {
+          'socail':'social','soical':'social','socal':'social','midea':'media','meida':'media',
+          'instagaram':'instagram','insta':'instagram','ig':'instagram','fb':'facebook',
+          'gogle':'google','googl':'google','googe':'google','gmb':'google business profile',
+          'gbp':'google business profile','goolge':'google',
+          'seo':'seo','serch':'search','seach':'search','srch':'search',
+          'websit':'website','webiste':'website','wesite':'website','wbsite':'website',
+          'priceing':'pricing','prcing':'pricing','prise':'price','prce':'price',
+          'coimbtor':'coimbatore','cbe':'coimbatore','kovai':'coimbatore','coimbtre':'coimbatore',
+          'consltation':'consultation','consultaion':'consultation','consult':'consultation',
+          'pateint':'patient','patint':'patient','patien':'patient',
+          'dermotologist':'dermatologist','derma':'dermatologist','skin':'dermatologist',
+          'dentis':'dentist','dental':'dentist','teeth':'dentist','tooth':'dentist',
+          'gynaecologist':'gynecologist','gynae':'gynecologist','gyne':'gynecologist',
+          'physio':'physiotherapist','physiotherapy':'physiotherapist',
+          'ivf':'ivf','fertility':'ivf','infertility':'ivf',
+          'gp':'general practitioner','general doctor':'general practitioner',
+          'ads':'advertising','ad':'advertising','advertisment':'advertising',
+          'brandig':'branding','brandng':'branding',
+          'revew':'review','reveiw':'review','reviw':'review',
+          'reputaion':'reputation','reputaton':'reputation',
+          'roi':'return on investment','rtrn':'return',
+          'hw':'how','wht':'what','wen':'when','wher':'where','cn':'can',
+          'plz':'please','pls':'please','thnk':'thank','thnks':'thanks','ty':'thanks',
+          'yr':'your','ur':'your','u':'you','r':'are','m':'am',
+          'dont':'do not','cant':'cannot','wont':'will not','isnt':'is not',
+          'whtsapp':'whatsapp','wattsapp':'whatsapp','wa':'whatsapp',
+          'pkg':'package','pkgs':'packages',
+          'no ':'number ','num':'number','ph':'phone','fone':'phone',
+          'erod':'erode','tamil nad':'tamil nadu',
+          'doc':'doctor','dr':'doctor','docs':'doctors'
+        };
+        Object.keys(fixes).forEach(function(k) {
+          s = s.replace(new RegExp('\\b'+k+'\\b', 'g'), fixes[k]);
+        });
+        return s;
+      }
+
+      /* ─── Intent scoring engine ─── */
+      var intents = [
+        /* ── Greetings ── */
+        { id:'greet', keys:['hello','hi','hey','good morning','good afternoon','good evening','howdy','hola','namaste','vanakkam'], w:3 },
+        { id:'thanks', keys:['thank','thanks','thank you','appreciate','helpful','great help','nice'], w:3 },
+        { id:'bye', keys:['bye','goodbye','see you','good night','take care','ttyl','later'], w:3 },
+
+        /* ── Core Services ── */
+        { id:'social_media', keys:['social media','instagram','facebook','youtube','reels','content','posting','content creation','content strategy','social media marketing','smm'], w:2 },
+        { id:'local_seo', keys:['seo','local seo','search engine','organic','search ranking','keyword','on page','off page','backlink','search optimization'], w:2 },
+        { id:'google_business', keys:['google business','google maps','google listing','google my business','google profile','maps ranking','3 pack','local pack','google reviews'], w:2 },
+        { id:'paid_ads', keys:['advertising','paid ads','google ads','facebook ads','instagram ads','ppc','pay per click','campaign','lead generation','ad budget','ad spend','running ads','boost'], w:2 },
+        { id:'personal_branding', keys:['personal branding','personal brand','doctor brand','authority','thought leader','doctor image','doctor reputation','build brand','positioning'], w:2 },
+        { id:'website', keys:['website','web design','web development','landing page','clinic website','site','online presence','domain','hosting'], w:2 },
+        { id:'reputation', keys:['reputation','review','reviews','online reputation','rating','star rating','negative review','bad review','review management','testimonial'], w:2 },
+        { id:'video', keys:['video','video marketing','reels','youtube','short video','video content','video production','filming','shoot'], w:2 },
+
+        /* ── Specialties ── */
+        { id:'derma', keys:['dermatologist','dermatology','skin','cosmetic','skin care','acne','hair loss','laser','skin clinic'], w:3 },
+        { id:'dentist', keys:['dentist','dental','orthodontic','teeth','tooth','smile','dental clinic','oral','braces','implant','root canal'], w:3 },
+        { id:'gynec', keys:['gynecologist','gynecology','women health','maternity','pregnancy','obstetric','fertility clinic'], w:3 },
+        { id:'physio', keys:['physiotherapist','physiotherapy','rehabilitation','therapy','rehab','sports injury','back pain','joint pain'], w:3 },
+        { id:'ivf_spec', keys:['ivf','fertility','infertility','ivf clinic','test tube','iui','assisted reproduction'], w:3 },
+        { id:'gp', keys:['general practitioner','family doctor','general doctor','family medicine','general practice','gp','primary care'], w:3 },
+        { id:'other_spec', keys:['cardiologist','cardiology','orthopedic','ent','eye','ophthalmologist','neurologist','pediatric','urologist','surgeon','hospital','multi specialty','ayurveda','homeopathy'], w:2 },
+
+        /* ── Business Questions ── */
+        { id:'pricing', keys:['price','pricing','cost','rate','charge','fee','budget','afford','expensive','cheap','how much','package','plan','investment','monthly','rupee','inr','per month'], w:2 },
+        { id:'results', keys:['result','results','how long','time','timeline','when','duration','month','week','how fast','quick','immediately','guarantee','roi','return on investment','outcome','expect'], w:2 },
+        { id:'process', keys:['process','how do you work','how it works','steps','methodology','approach','workflow','strategy','what happens','procedure','start','begin','onboard'], w:2 },
+        { id:'consultation', keys:['consultation','book','appointment','call','schedule','meeting','discuss','talk','free consultation','demo','trial'], w:2 },
+        { id:'why_srt', keys:['why you','why srt','why choose','what makes','different','unique','better','advantage','benefit','compared','vs','versus','competitor','other agency'], w:2 },
+        { id:'about_srt', keys:['about','who are you','your company','srt digital','your team','your experience','years','background','about srt','tell me about'], w:2 },
+        { id:'location', keys:['location','where','address','office','coimbatore','erode','tamil nadu','rs puram','peelamedu','gandhipuram','singanallur','saibaba colony','race course','area','city','serve','region'], w:2 },
+        { id:'contact_info', keys:['contact','phone','email','number','call','whatsapp','reach','connect','how to contact','mail','get in touch'], w:2 },
+
+        /* ── Patient / Clinic Growth ── */
+        { id:'patients', keys:['patient','patients','more patients','get patients','attract patients','patient flow','footfall','walk in','appointment','booking','new patients','patient acquisition','grow practice','clinic growth','increase patients'], w:2 },
+        { id:'competition', keys:['competition','competitor','other doctor','other clinic','competing','market','saturated','many doctors','too many','stand out','differentiate'], w:2 },
+        { id:'referral', keys:['referral','word of mouth','recommendation','existing patient','patient referral','doctor referral'], w:2 },
+        { id:'no_result', keys:['not working','no result','waste','scam','fraud','useless','no patient','not getting','failed','disappointing','bad experience','agency failed'], w:2 },
+
+        /* ── Marketing Concepts ── */
+        { id:'geo', keys:['geo','generative engine','ai search','chatgpt search','ai overviews','perplexity','ai optimization','ai marketing'], w:3 },
+        { id:'content_ideas', keys:['content idea','what to post','post idea','topic','caption','reel idea','what content','content plan','what should i post'], w:2 },
+        { id:'analytics', keys:['analytics','data','report','tracking','measure','metrics','dashboard','performance','insight','kpi'], w:2 },
+
+        /* ── General ── */
+        { id:'help', keys:['help','assist','support','guide','need help','can you help','what can you do','what do you do','service','services','offer','offering'], w:2 },
+        { id:'blog', keys:['blog','article','read','guide','learn','resource','tips','information','knowledge'], w:2 }
+      ];
+
+      function detectIntent(text) {
+        var n = normalize(text);
+        var scores = {};
+        intents.forEach(function(intent) {
+          var score = 0;
+          intent.keys.forEach(function(key) {
+            if (n.indexOf(key) > -1) {
+              // Longer key = more specific = more weight
+              score += intent.w * (1 + key.split(' ').length * 0.5);
+            }
+          });
+          if (score > 0) scores[intent.id] = score;
+        });
+        // Sort by score descending
+        var sorted = Object.keys(scores).sort(function(a,b){ return scores[b]-scores[a]; });
+        return { top: sorted[0] || 'unknown', all: sorted.slice(0,3), scores: scores };
+      }
+
+      /* ─── Quick Reply renderer ─── */
+      function showQuickReplies(items) {
+        var qr = document.getElementById('quickReplies');
+        qr.innerHTML = '';
+        items.forEach(function(item) {
+          var b = document.createElement('button');
+          b.className = 'srt-quick-btn';
+          b.setAttribute('data-reply', item.reply || item.label);
+          b.textContent = item.label;
+          qr.appendChild(b);
+        });
+        qr.style.display = 'flex';
+      }
+
+      /* ─── Response database ─── */
+      function getResponse(intent, text) {
+        ctx.turns++;
+        ctx.lastIntent = intent.top;
+        var n = normalize(text);
+        var r = '', qr = [];
+
+        switch(intent.top) {
+
+          case 'greet':
+            var greets = [
+              '👋 Hello! Welcome to '+bold('SRT Digital Solutions')+'. I am here to help you grow your medical practice digitally. 🏥',
+              '😊 Hi there! Great to see you. I am the digital growth assistant for doctors in Coimbatore. 🤖',
+              '👋 Hey! Welcome. I can help you with social media marketing, local SEO, Google ranking, and more for your clinic. 🚀'
+            ];
+            r = greets[Math.floor(Math.random()*greets.length)] + br(2) + 'How can I help you today? 💬';
+            qr = [
+              {label:'Grow my social media', reply:'I want to grow my clinic social media presence'},
+              {label:'Rank on Google', reply:'How can I rank my clinic on Google'},
+              {label:'Get more patients', reply:'I want to get more patients to my clinic'},
+              {label:'See pricing', reply:'What are your pricing plans'}
+            ];
+            break;
+
+          case 'thanks':
+            r = '😊 You are welcome! I am glad I could help. If you have any more questions about growing your clinic, feel free to ask anytime. 💪' + br(2) + 'Or you can ' + CTA_BOOK + ' to get a personalized strategy. 📋';
+            qr = [{label:'Ask another question', reply:'I have another question'},{label:'Book consultation', reply:'I want to book a free consultation'}];
+            break;
+
+          case 'bye':
+            r = '🙏 Thank you for chatting with us! We are always here to help.' + br(2) + 'Remember, a '+bold('free growth consultation')+ ' is just one click away when you are ready: ' + CTA_BOOK + br(2) + 'Have a great day! ✨';
+            break;
+
+          case 'social_media':
+            r = '📱 Great choice! '+bold('Social media marketing')+ ' is the #1 way doctors build trust and attract patients in 2026.' + br(2) +
+              'Here is what we do for doctors in Coimbatore: ⬇️' + br() +
+              bullet([
+                bold('Authority-Based Content Strategy') + ' &mdash; Not random posts, but structured content that positions you as the go-to specialist',
+                bold('Professional Medical Creatives') + ' &mdash; Custom-designed graphics and reels for your specialty',
+                bold('Instagram + Facebook + YouTube') + ' &mdash; Multi-platform presence management',
+                bold('Patient-Focused Messaging') + ' &mdash; Content that speaks to patient concerns and builds trust',
+                bold('Engagement Management') + ' &mdash; We respond to comments and DMs to convert inquiries into appointments',
+                bold('Monthly Analytics') + ' &mdash; Track real patient inquiries, not just likes'
+              ]) + br(2) +
+              '📊 82% of patients research doctors online before booking. Your social media is their first impression.' + br(2) +
+              link('./blog-social-media-marketing-doctors-coimbatore.html','Read our complete social media guide') + ' | ' + CTA_BOOK;
+            qr = [
+              {label:'How much does it cost?', reply:'What is the cost of social media marketing'},
+              {label:'What about paid ads?', reply:'Do you run paid ads on social media'},
+              {label:'Show me results timeline', reply:'How long to see results from social media'},
+              {label:'Book consultation', reply:'I want to book a free consultation'}
+            ];
+            break;
+
+          case 'local_seo':
+            r = '🔍 ' + bold('Local SEO') + ' is how patients find you when they search "best doctor near me" on Google.' + br(2) +
+              'Our local SEO services for doctors in Coimbatore: ⬇️' + br() +
+              bullet([
+                bold('Google Search Ranking') + ' &mdash; Rank for terms like "dermatologist in RS Puram" or "dentist near Gandhipuram"',
+                bold('Google Maps / 3-Pack') + ' &mdash; Appear in the top 3 map results when patients search locally',
+                bold('On-Page SEO') + ' &mdash; Optimized title tags, meta descriptions, headers, and location pages',
+                bold('Citation Building') + ' &mdash; Consistent NAP (Name, Address, Phone) across 50+ directories',
+                bold('Technical SEO') + ' &mdash; Site speed, mobile optimization, schema markup',
+                bold('Content Strategy') + ' &mdash; Location-specific medical content that ranks for treatment + locality keywords'
+              ]) + br(2) +
+              '📍 76% of patients who search for a doctor nearby visit a clinic within 24 hours.' + br(2) +
+              link('./blog-local-seo-doctors-coimbatore.html','Read our Local SEO guide') + ' | ' + CTA_BOOK;
+            qr = [
+              {label:'Google Business Profile help', reply:'Help with Google Business Profile'},
+              {label:'How long to rank?', reply:'How long does SEO take to show results'},
+              {label:'SEO pricing', reply:'How much does SEO cost'},
+              {label:'Book free SEO audit', reply:'I want a free SEO audit for my clinic'}
+            ];
+            break;
+
+          case 'google_business':
+            r = '📌 Your '+bold('Google Business Profile')+ ' is often the '+bold('very first thing')+ ' patients see when they search for you.' + br(2) +
+              'We optimize every aspect: ⬇️' + br() +
+              bullet([
+                bold('Profile Setup & Verification') + ' &mdash; Correct category, description, services, and attributes',
+                bold('Photo & Video Optimization') + ' &mdash; Professional clinic images, doctor photos, treatment rooms',
+                bold('Review Strategy') + ' &mdash; Ethical approach to get more 5-star Google reviews',
+                bold('Google Business Posts') + ' &mdash; Weekly updates with health tips, offers, and news',
+                bold('Q&A Management') + ' &mdash; Monitor and respond to patient questions',
+                bold('Appointment Integration') + ' &mdash; Enable direct booking from your Google listing',
+                bold('Insights Tracking') + ' &mdash; Track calls, direction requests, and website visits'
+              ]) + br(2) +
+              '🔥 Clinics with optimized Google Business Profiles get '+bold('7x more clicks')+ ' than incomplete listings.' + br(2) +
+              link('./blog-google-business-profile-doctors.html','Read our GBP optimization guide') + ' | ' + CTA_BOOK;
+            qr = [
+              {label:'How to get more reviews?', reply:'How do I get more Google reviews for my clinic'},
+              {label:'Maps ranking tips', reply:'How to rank higher on Google Maps'},
+              {label:'Book GBP audit', reply:'I want a free Google Business audit'}
+            ];
+            break;
+
+          case 'paid_ads':
+            r = '💰 ' + bold('Paid Social Media Advertising') + ' generates patient inquiries fast while your organic presence builds.' + br(2) +
+              'Our ad services for clinics:' + br() +
+              bullet([
+                bold('Facebook & Instagram Ads') + ' &mdash; Treatment-specific campaigns targeting patients in Coimbatore',
+                bold('Google Ads') + ' &mdash; Search ads for "best [specialty] in Coimbatore" keywords',
+                bold('Radius Targeting') + ' &mdash; Show ads only within 10-15 km of your clinic',
+                bold('Retargeting') + ' &mdash; Re-engage people who visited your profile but did not book',
+                bold('Lead Generation Forms') + ' &mdash; Capture patient inquiries directly within Instagram/Facebook',
+                bold('A/B Testing') + ' &mdash; Continuous optimization for lower cost per lead',
+                bold('Monthly ROI Reports') + ' &mdash; Track cost per inquiry and cost per patient acquired'
+              ]) + br(2) +
+              '⚡ Most clinics see their first patient inquiries within '+bold('2-4 weeks')+ ' of starting paid ads.' + br(2) +
+              CTA_BOOK + ' to get a free ad strategy for your clinic.';
+            qr = [
+              {label:'What budget do I need?', reply:'What ad budget do I need for clinic advertising'},
+              {label:'Facebook vs Google Ads?', reply:'Should I use Facebook or Google Ads for my clinic'},
+              {label:'Book ads consultation', reply:'I want to discuss paid advertising for my clinic'}
+            ];
+            break;
+
+          case 'personal_branding':
+            r = '⭐ ' + bold('Personal Branding')+ ' is what separates a busy specialist from just another doctor in the market.' + br(2) +
+              'We help doctors build authority through:' + br() +
+              bullet([
+                bold('Speaking Videos') + ' &mdash; Doctor-to-camera content that builds personal connection',
+                bold('LinkedIn Thought Leadership') + ' &mdash; Position yourself among professional networks',
+                bold('Case Study Content') + ' &mdash; Ethical showcase of treatment outcomes (with consent)',
+                bold('Specialty Positioning') + ' &mdash; Be known as THE expert in your field in Coimbatore',
+                bold('Media & PR') + ' &mdash; Local press features and health column opportunities',
+                bold('Consistent Visual Identity') + ' &mdash; Professional branding across all platforms'
+              ]) + br(2) +
+              '💡 When patients see you as an authority, they book '+bold('without asking about fees first')+'.' + br(2) +
+              link('./blog-personal-branding-doctors-online.html','Read our personal branding guide') + ' | ' + CTA_BOOK;
+            qr = [
+              {label:'How to start?', reply:'How do I start building my personal brand as a doctor'},
+              {label:'Which platform is best?', reply:'Which platform is best for doctor personal branding'},
+              {label:'Book branding consultation', reply:'I want to discuss personal branding strategy'}
+            ];
+            break;
+
+          case 'website':
+            r = '🌐 A modern '+bold('clinic website')+ ' is your 24/7 digital receptionist.' + br(2) +
+              'We build websites that convert visitors into patients:' + br() +
+              bullet([
+                bold('Modern, Professional Design') + ' &mdash; Built to instill trust within seconds',
+                bold('Mobile-First') + ' &mdash; 70%+ of patients browse on mobile',
+                bold('SEO-Optimized') + ' &mdash; Built to rank on Google from day one',
+                bold('Speed Optimized') + ' &mdash; Fast loading for better user experience and SEO',
+                bold('Clear Call-to-Actions') + ' &mdash; Appointment booking, click-to-call, WhatsApp integration',
+                bold('Treatment Pages') + ' &mdash; Dedicated pages for each service/treatment you offer',
+                bold('Doctor Profile Pages') + ' &mdash; Build trust with professional bios and credentials'
+              ]) + br(2) +
+              '📈 A well-designed clinic website can increase patient bookings by '+bold('40-60%')+'.' + br(2) +
+              CTA_BOOK + ' for a free website consultation.';
+            qr = [
+              {label:'Website pricing', reply:'How much does a clinic website cost'},
+              {label:'How long to build?', reply:'How long does it take to build a clinic website'},
+              {label:'See portfolio', reply:'Can I see your website portfolio'}
+            ];
+            break;
+
+          case 'reputation':
+            r = '⭐ ' + bold('Online reputation')+ ' directly impacts whether patients choose you or your competitor.' + br(2) +
+              'Our reputation management for doctors:' + br() +
+              bullet([
+                bold('Ethical Review Generation') + ' &mdash; Systematic approach to get genuine 5-star reviews',
+                bold('Review Response Strategy') + ' &mdash; Professional responses to all reviews (positive and negative)',
+                bold('Negative Review Management') + ' &mdash; Address concerns before they damage your reputation',
+                bold('Review Monitoring') + ' &mdash; Track reviews across Google, Practo, Justdial, and more',
+                bold('Testimonial Content') + ' &mdash; Turn patient reviews into social proof for marketing'
+              ]) + br(2) +
+              '💬 88% of patients trust online reviews as much as personal recommendations.' + br(2) +
+              CTA_BOOK + ' to get a free reputation audit.';
+            qr = [
+              {label:'Handle negative reviews', reply:'How to handle negative reviews for my clinic'},
+              {label:'Get more reviews', reply:'How do I get more Google reviews'},
+              {label:'Book reputation audit', reply:'I want a reputation audit for my clinic'}
+            ];
+            break;
+
+          case 'video':
+            r = '🎬 ' + bold('Video marketing') + ' is the most powerful tool for doctors in 2026.' + br(2) +
+              'What we create:' + br() +
+              bullet([
+                bold('Educational Reels (30-60 sec)') + ' &mdash; Explain conditions, bust myths in simple language',
+                bold('Doctor Speaking Videos') + ' &mdash; Face-to-camera builds personal connection and trust',
+                bold('Treatment Explainers') + ' &mdash; Visual walk-throughs that reduce patient anxiety',
+                bold('Patient Testimonials') + ' &mdash; Real stories that address common fears',
+                bold('Behind-the-Scenes') + ' &mdash; Show your clinic culture and technology',
+                bold('YouTube Long-Form') + ' &mdash; Detailed condition guides for lasting SEO value'
+              ]) + br(2) +
+              'Healthcare video content gets '+bold('3.7% engagement')+ ' on Instagram &mdash; higher than almost any other industry.' + br(2) +
+              CTA_BOOK + ' to discuss video strategy for your practice.';
+            qr = [
+              {label:'I am camera shy', reply:'I am not comfortable on camera what to do'},
+              {label:'Video content ideas', reply:'What video content should a doctor create'},
+              {label:'Book video consultation', reply:'I want to discuss video marketing for my clinic'}
+            ];
+            break;
+
+          /* ── Specialties ── */
+          case 'derma':
+            r = 'We have deep experience marketing for '+bold('dermatologists in Coimbatore')+ '.' + br(2) +
+              'Dermatology marketing that works:' + br() +
+              bullet([
+                'Before/after treatment showcases (with patient consent)',
+                'Skin care education reels &mdash; acne, pigmentation, hair loss, laser treatments',
+                'Google ranking for "best dermatologist in Coimbatore", "skin clinic near [area]"',
+                'Treatment-specific ad campaigns for cosmetic procedures',
+                'Seasonal content aligned to Coimbatore climate and skin concerns',
+                'Patient testimonial videos for trust building'
+              ]) + br(2) +
+              'Dermatology is one of the most visual specialties &mdash; '+bold('Instagram is your strongest platform')+'.' + br(2) +
+              CTA_BOOK + ' for a free dermatology marketing consultation.';
+            ctx.specialty = 'dermatologist';
+            qr = [{label:'Social media for derma', reply:'Social media strategy for dermatologist'},{label:'See pricing', reply:'What is the pricing'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'dentist':
+            r = 'We specialize in marketing for '+bold('dental clinics in Coimbatore')+ '.' + br(2) +
+              'What works for dentists:' + br() +
+              bullet([
+                'Smile transformation showcases &mdash; before/after results',
+                'Treatment education content &mdash; implants, braces, root canals, cosmetic dentistry',
+                'Google Maps ranking for "dentist near [area]"',
+                'Family dentistry targeting for households in your locality',
+                'Instagram reels demystifying dental procedures',
+                'Emergency dental care visibility campaigns'
+              ]) + br(2) +
+              'Dental patients are highly research-driven. '+bold('Strong Google + Instagram presence')+ ' is essential.' + br(2) +
+              CTA_BOOK + ' for a free dental marketing consultation.';
+            ctx.specialty = 'dentist';
+            qr = [{label:'Dental SEO help', reply:'SEO for my dental clinic'},{label:'See pricing', reply:'What is the pricing'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'gynec':
+            r = 'We understand the sensitivity of marketing '+bold('gynecology and women\'s health')+ ' practices.' + br(2) +
+              'Our approach for gynecologists:' + br() +
+              bullet([
+                'Educational content on women\'s health &mdash; PCOD, pregnancy, menopause',
+                'Empathetic, trust-building messaging that respects patient privacy',
+                'Google ranking for "gynecologist in Coimbatore", "women\'s clinic near [area]"',
+                'Maternity and pregnancy journey content',
+                'Patient education videos in Tamil and English',
+                'Discreet retargeting campaigns for sensitive procedures'
+              ]) + br(2) +
+              CTA_BOOK + ' for a free gynecology practice growth consultation.';
+            ctx.specialty = 'gynecologist';
+            qr = [{label:'Content ideas for gynec', reply:'What content should a gynecologist post'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'physio':
+            r = 'We help '+bold('physiotherapy centers in Coimbatore')+ ' attract more patients digitally.' + br(2) +
+              'What works for physiotherapists:' + br() +
+              bullet([
+                'Exercise demonstration videos and pain management tips',
+                'Before/after rehabilitation success stories',
+                'Google ranking for "physiotherapy center in Coimbatore"',
+                'Targeting sports injury, back pain, and post-surgery rehab keywords',
+                'Corporate wellness partnership content',
+                'YouTube channel for exercise guides (long-term SEO value)'
+              ]) + br(2) +
+              CTA_BOOK + ' to discuss growth for your physiotherapy practice.';
+            ctx.specialty = 'physiotherapist';
+            qr = [{label:'Video marketing for physio', reply:'Video marketing for physiotherapy'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'ivf_spec':
+            r = 'Marketing for '+bold('IVF and fertility clinics')+ ' requires a highly sensitive, trust-first approach.' + br(2) +
+              'Our fertility marketing strategy:' + br() +
+              bullet([
+                'Success story content (anonymous, with consent) that gives hope',
+                'Educational content on IVF process, IUI, and fertility options',
+                'Google ranking for "IVF center in Coimbatore", "fertility clinic near me"',
+                'Emotional, empathetic messaging that connects with couples',
+                'Doctor authority videos explaining treatment processes',
+                'Discreet, privacy-focused advertising campaigns'
+              ]) + br(2) +
+              'IVF patients research extensively. '+bold('Trust and authority')+ ' are everything.' + br(2) +
+              CTA_BOOK + ' for a fertility clinic growth consultation.';
+            ctx.specialty = 'ivf';
+            qr = [{label:'Content ideas for IVF', reply:'What content should an IVF clinic post'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'gp':
+            r = 'Even '+bold('general practitioners and family doctors')+ ' benefit massively from digital visibility.' + br(2) +
+              'GP marketing that works:' + br() +
+              bullet([
+                'Community health awareness content &mdash; seasonal illness, prevention tips',
+                'Google Maps visibility for "doctor near me", "clinic near [area]"',
+                'Family health packages promotion',
+                'Health check-up campaign advertising',
+                'Building trust as the go-to neighborhood doctor',
+                'Patient review strategy for local credibility'
+              ]) + br(2) +
+              CTA_BOOK + ' to discuss growth for your practice.';
+            ctx.specialty = 'gp';
+            qr = [{label:'Local visibility help', reply:'I want more local visibility for my clinic'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'other_spec':
+            r = 'We work with '+bold('all medical specialties')+ '. Our strategy is always customized based on your specialty, competition, and local market dynamics in Coimbatore.' + br(2) +
+              'Whether you are a cardiologist, orthopedic surgeon, ENT specialist, pediatrician, neurologist, ophthalmologist, or run a multi-specialty hospital &mdash; we build the right digital growth system for you.' + br(2) +
+              'What is your specialty? I can share a more specific strategy.' + br(2) +
+              CTA_BOOK + ' to discuss your specific needs.';
+            qr = [
+              {label:'I am a cardiologist', reply:'Marketing for cardiologist clinic'},
+              {label:'I am an orthopedic', reply:'Marketing for orthopedic practice'},
+              {label:'Multi-specialty hospital', reply:'Marketing for multi-specialty hospital'},
+              {label:'Tell me about pricing', reply:'What are your pricing plans'}
+            ];
+            break;
+
+          /* ── Business Questions ── */
+          case 'pricing':
+            r = '💼 We offer '+bold('3 structured growth plans')+ ':' + br(2) +
+              bullet([
+                bold('Foundation (Starter)') + br() + 'Social media posts, profile optimization, monthly strategy call.' + br() + 'Best for clinics starting their digital journey.',
+                '',
+                bold('Authority (Growth) &mdash; Most Popular') + br() + 'Social media + paid ads + basic local SEO + review strategy + monthly strategy call.' + br() + 'Best for clinics serious about consistent growth.',
+                '',
+                bold('Dominance (Advanced)') + br() + 'Everything in Authority + advanced SEO + personal branding + bi-monthly strategy.' + br() + 'Best for clinics ready to dominate their local market.'
+              ]) + br(2) +
+              bold('Important:') + ' Each plan is customized per specialty. We limit the number of clinics we serve per specialty in Coimbatore to avoid conflict of interest.' + br(2) +
+              CTA_PRICE + ' | ' + CTA_BOOK + ' for a tailored quote.';
+            qr = [
+              {label:'What is the ROI?', reply:'What ROI can I expect from digital marketing'},
+              {label:'Minimum commitment?', reply:'What is the minimum commitment period'},
+              {label:'Book consultation', reply:'I want to book a free consultation'}
+            ];
+            break;
+
+          case 'results':
+            r = '📅 Here is a '+bold('realistic results timeline')+ ':' + br(2) +
+              bullet([
+                bold('Week 1-2:') + ' Digital audit, strategy creation, profile optimization',
+                bold('Week 2-4:') + ' Paid ads can start generating patient inquiries',
+                bold('Month 1-3:') + ' Social media authority building, engagement growth, content pipeline active',
+                bold('Month 3-6:') + ' SEO rankings start improving, organic visibility increases significantly',
+                bold('Month 6+:') + ' Compounding results &mdash; organic + paid working together for predictable patient flow'
+              ]) + br(2) +
+              bold('Key insight:') + ' If your average consultation is &#8377;800 and just 1 patient converts to a &#8377;10,000+ treatment, you only need 5-8 additional patients to see clear ROI.' + br(2) +
+              'We focus on '+bold('predictable systems')+ ' &mdash; not overnight promises.' + br(2) +
+              CTA_BOOK + ' to discuss realistic goals for your practice.';
+            qr = [
+              {label:'What about guarantees?', reply:'Do you guarantee results'},
+              {label:'See pricing', reply:'What are your pricing plans'},
+              {label:'Book consultation', reply:'Book a free consultation'}
+            ];
+            break;
+
+          case 'process':
+            r = '⚙️ Here is '+bold('how we work')+ ':' + br(2) +
+              bold('Step 1: Digital Audit') + br() +
+              'We analyze your current social media, Google ranking, reviews, website, and competition in Coimbatore. Complete visibility analysis.' + br(2) +
+              bold('Step 2: Strategy Blueprint') + br() +
+              'We create a custom roadmap aligned to your specialty, target localities, and growth goals.' + br(2) +
+              bold('Step 3: Implementation') + br() +
+              'Content creation, ads management, SEO optimization, and authority building. You focus on patients &mdash; we handle the digital growth.' + br(2) +
+              bold('Step 4: Optimization & Scaling') + br() +
+              'Continuous improvement based on data. We track actual patient inquiries &mdash; not vanity metrics.' + br(2) +
+              'Every partnership begins with a '+bold('free consultation')+ '.' + br(2) +
+              CTA_BOOK;
+            qr = [
+              {label:'What do I need to provide?', reply:'What do I need to provide for the marketing to work'},
+              {label:'How involved do I need to be?', reply:'How much time do I need to invest from my side'},
+              {label:'Book consultation', reply:'I want to book a free consultation'}
+            ];
+            break;
+
+          case 'consultation':
+            r = '📞 Your '+bold('free growth consultation')+ ' includes:' + br(2) +
+              bullet([
+                'Review of your current social media and digital presence',
+                'Google visibility analysis in Coimbatore',
+                'Competition analysis for your specialty and locality',
+                'Patient acquisition gap identification',
+                'Custom growth roadmap and strategy recommendations'
+              ]) + br(2) +
+              bold('This is not a sales call.') + ' It is a professional strategy conversation designed to give you clarity.' + br(2) +
+              bold('3 ways to book:') + br() +
+              '1. ' + CTA_BOOK + br() +
+              '2. ' + CTA_WA + br() +
+              '3. Call ' + CTA_CALL + br(2) +
+              bold('Available:') + ' Mon-Sat, 9 AM &ndash; 6 PM';
+            break;
+
+          case 'why_srt':
+            r = '🏆 Here is '+bold('what makes SRT Digital Solutions different')+':' + br(2) +
+              bullet([
+                bold('Healthcare-Only Focus') + ' &mdash; We do not market restaurants or clothing stores. We specialize exclusively in healthcare.',
+                bold('Coimbatore Local Expertise') + ' &mdash; We understand the local market dynamics, competition, and patient behavior in every major area.',
+                bold('Patient Psychology Understanding') + ' &mdash; We know how patients search, compare, and decide. Our strategies align with this journey.',
+                bold('Ethical Approach') + ' &mdash; We follow medical advertising compliance guidelines. No misleading claims.',
+                bold('Limited Clients Per Specialty') + ' &mdash; We do not take competing clinics in the same specialty and locality.',
+                bold('Data-Driven Results') + ' &mdash; We measure patient inquiries, not just likes. Clear ROI tracking.',
+                bold('Structured Systems') + ' &mdash; Not random posts. We build repeatable growth systems.'
+              ]) + br(2) +
+              CTA_BOOK + ' and experience the difference.';
+            qr = [{label:'See pricing', reply:'Show me your pricing'},{label:'How it works', reply:'Tell me about your process'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'about_srt':
+            r = '🏢 ' + bold('SRT Digital Solutions') + ' is a digital growth agency specializing exclusively in '+bold('social media marketing and local SEO for doctors in Coimbatore')+'.' + br(2) +
+              'With '+bold('5+ years of digital marketing experience')+', we understand the unique challenges of healthcare marketing:' + br() +
+              bullet([
+                'Patient decision psychology',
+                'Medical advertising compliance',
+                'Local competition dynamics in Coimbatore',
+                'Reputation management sensitivity',
+                'Authority-based content strategy'
+              ]) + br(2) +
+              'We serve dermatologists, dentists, gynecologists, physiotherapists, IVF clinics, and general practitioners across Coimbatore and Erode.' + br(2) +
+              CTA_BOOK + ' to meet our team.';
+            qr = [{label:'Why choose SRT?', reply:'Why should I choose SRT over other agencies'},{label:'See services', reply:'What services do you offer'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'location':
+            r = '📍 We are based in '+bold('Coimbatore, Tamil Nadu, India')+'.' + br(2) +
+              bold('Areas we serve:') + br() +
+              bullet([
+                'RS Puram, Peelamedu, Saibaba Colony',
+                'Gandhipuram, Singanallur, Race Course',
+                'Townhall, Ukkadam, Vadavalli',
+                'Avinashi Road, Thudiyalur, Kaundampalayam',
+                'Sulur, Pollachi Road, Mettupalayam Road',
+                'Erode and surrounding areas in Tamil Nadu'
+              ]) + br(2) +
+              'Each strategy is customized based on your '+bold('specific locality and local competition')+'.' + br(2) +
+              bold('Contact:') + br() +
+              '&bull; Email: growwithus@srtdigitalsolutions.com' + br() +
+              '&bull; Phone: '+CTA_CALL + br() +
+              '&bull; ' + CTA_WA;
+            qr = [{label:'Book consultation', reply:'Book a free consultation'},{label:'Services offered', reply:'What services do you offer'}];
+            break;
+
+          case 'contact_info':
+            r = '📬 ' + bold('Get in touch with us:') + br(2) +
+              '&bull; '+bold('Phone:')+' '+CTA_CALL + br() +
+              '&bull; '+bold('Email:')+' growwithus@srtdigitalsolutions.com' + br() +
+              '&bull; '+bold('WhatsApp:')+' '+CTA_WA + br() +
+              '&bull; '+bold('Location:')+' Coimbatore, Tamil Nadu' + br() +
+              '&bull; '+bold('Hours:')+' Mon &ndash; Sat, 9:00 AM &ndash; 6:00 PM' + br(2) +
+              'Or ' + CTA_BOOK + ' directly on our website!';
+            break;
+
+          case 'patients':
+            r = '🩺 Getting '+bold('more patients')+ ' requires a structured multi-channel approach:' + br(2) +
+              bold('The Modern Patient Journey:') + br() +
+              '1. Patient '+bold('searches')+ ' on Google or social media' + br() +
+              '2. Patient '+bold('compares')+ ' 2-3 doctor profiles, reviews, and social presence' + br() +
+              '3. Patient '+bold('decides')+ ' based on trust signals and ease of booking' + br(2) +
+              bold('Our Patient Acquisition System:') + br() +
+              bullet([
+                bold('Social Media') + ' &mdash; Build authority and trust before patients even contact you',
+                bold('Local SEO') + ' &mdash; Be found when patients search "doctor near me"',
+                bold('Google Ads') + ' &mdash; Capture high-intent patients searching for specific treatments',
+                bold('Reviews & Reputation') + ' &mdash; Build the social proof that converts searchers to patients',
+                bold('Website') + ' &mdash; Convert visitors into booked appointments',
+                bold('Retargeting') + ' &mdash; Re-engage people who showed interest but did not book'
+              ]) + br(2) +
+              link('./blog-patient-acquisition-strategy-clinics.html','Read our patient acquisition guide') + ' | ' + CTA_BOOK;
+            qr = [
+              {label:'How many patients can I expect?', reply:'How many new patients can I expect per month'},
+              {label:'Cost per patient?', reply:'What is the cost per patient acquisition'},
+              {label:'Book growth consultation', reply:'I want to book a free consultation'}
+            ];
+            break;
+
+          case 'competition':
+            r = '🥊 Competition is increasing, but that is '+bold('exactly why structured digital marketing matters')+'.' + br(2) +
+              'Here is how we help you stand out:' + br() +
+              bullet([
+                bold('Specialty Positioning') + ' &mdash; We position you as THE expert in your specific field, not a generic doctor',
+                bold('Locality Domination') + ' &mdash; Rank #1 for "[specialty] in [your area]" searches',
+                bold('Content Authority') + ' &mdash; Consistent, professional content sets you apart from clinics with empty social pages',
+                bold('Review Advantage') + ' &mdash; More genuine reviews = more trust than competitors',
+                bold('Personal Branding') + ' &mdash; Patients choose doctors, not just clinics. Your personal brand is your moat'
+              ]) + br(2) +
+              bold('We limit our clients per specialty in each locality') + ' to avoid serving competing clinics.' + br(2) +
+              CTA_BOOK + ' before your competitors do.';
+            qr = [{label:'How to beat competitors', reply:'How do I outrank my competitors on Google'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'referral':
+            r = 'Referrals are great, but '+bold('relying solely on them is risky')+'.' + br(2) +
+              bullet([
+                'Referrals are unpredictable &mdash; some months are great, others are dry',
+                'New patients increasingly find doctors through Google and social media FIRST',
+                'Even referred patients verify you online before booking',
+                'Digital visibility amplifies referrals &mdash; when someone recommends you, the patient Googles you'
+              ]) + br(2) +
+              bold('The best approach:') + ' Digital marketing + referrals working together. Your online presence validates referrals and generates new patients independently.' + br(2) +
+              link('./blog-patient-acquisition-strategy-clinics.html','Read our complete guide') + ' | ' + CTA_BOOK;
+            qr = [{label:'Get started with digital', reply:'I want to start digital marketing for my clinic'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'no_result':
+            r = '😔 I understand the frustration. Many doctors have had bad experiences with agencies that promise everything and deliver nothing.' + br(2) +
+              bold('Here is why most marketing fails for doctors:') + br() +
+              bullet([
+                'Generic strategies not tailored for healthcare',
+                'Agencies that do not understand patient psychology',
+                'Focus on vanity metrics (followers, likes) instead of patient inquiries',
+                'No structured system &mdash; just random posting',
+                'No understanding of local competition'
+              ]) + br(2) +
+              bold('How SRT is different:') + br() +
+              bullet([
+                'We ONLY work with healthcare &mdash; we understand this space deeply',
+                'We track patient inquiries, not likes',
+                'We limit clients per specialty to avoid conflicts',
+                'We provide monthly ROI reports with clear metrics',
+                'Free consultation is a genuine strategy discussion, not a sales pitch'
+              ]) + br(2) +
+              'Give us '+bold('one free consultation')+' and you will see the difference in approach.' + br(2) +
+              CTA_BOOK + ' &mdash; no obligation, no pressure.';
+            qr = [{label:'Book free consultation', reply:'Okay let me book a consultation'},{label:'Tell me about pricing', reply:'What are your pricing plans'}];
+            break;
+
+          case 'geo':
+            r = '🤖 ' + bold('Generative Engine Optimization (GEO)') + ' is the biggest shift in healthcare marketing in 2026.' + br(2) +
+              bold('What is GEO?') + br() +
+              'GEO is optimizing your content so AI platforms (ChatGPT, Google AI Overviews, Perplexity) cite and recommend you when patients ask health questions.' + br(2) +
+              bold('Why doctors must care:') + br() +
+              bullet([
+                '40% of health-related searches now show AI-generated answers',
+                'Patients increasingly ask AI "Who is the best dermatologist in Coimbatore?"',
+                'If your content is not optimized for AI, you become invisible in these results'
+              ]) + br(2) +
+              bold('How we optimize for GEO:') + br() +
+              bullet([
+                'Structured Q&A content that AI can extract',
+                'Schema markup (Article, FAQ, Medical) on all content',
+                'Physician bylines and authority signals',
+                'Content freshness with regular updates',
+                'Multi-platform presence for entity authority'
+              ]) + br(2) +
+              link('./blog-digital-marketing-trends-doctors-2026.html','Read our complete GEO guide') + ' | ' + CTA_BOOK;
+            qr = [{label:'Is SEO dead?', reply:'Is traditional SEO still important for doctors'},{label:'Book GEO consultation', reply:'I want to optimize my clinic for AI search'}];
+            break;
+
+          case 'content_ideas':
+            r = '💡 Here are '+bold('content ideas that work for doctors')+':' + br(2) +
+              bold('High-Engagement Content:') + br() +
+              bullet([
+                bold('Myth vs Fact') + ' &mdash; Debunk common health misconceptions',
+                bold('Day-in-the-Life') + ' &mdash; Show your daily routine at the clinic',
+                bold('Treatment Explainers') + ' &mdash; Simple explanations of what patients can expect',
+                bold('Before/After') + ' &mdash; Treatment results (with consent)',
+                bold('Patient FAQ Videos') + ' &mdash; Answer the most common questions you hear daily',
+                bold('Quick Health Tips') + ' &mdash; 15-30 second actionable advice',
+                bold('Behind the Scenes') + ' &mdash; Show your clinic, equipment, team',
+                bold('Local Health Awareness') + ' &mdash; Coimbatore-specific seasonal health tips',
+                bold('Doctor Opinion Pieces') + ' &mdash; Your expert take on trending health topics',
+                bold('Patient Success Stories') + ' &mdash; Emotional, real stories that build trust'
+              ]) + br(2) +
+              bold('Pro tip:') + ' Post in both Tamil and English for maximum reach in Coimbatore.' + br(2) +
+              CTA_BOOK + ' and we will create a custom content calendar for your specialty.';
+            qr = [{label:'Video content tips', reply:'What video content should I create'},{label:'How often to post?', reply:'How often should a doctor post on social media'},{label:'Book consultation', reply:'Book a consultation'}];
+            break;
+
+          case 'analytics':
+            r = '📊 We believe in '+bold('data-driven marketing')+ '. No guesswork.' + br(2) +
+              bold('What we track and report:') + br() +
+              bullet([
+                bold('Patient Inquiries') + ' &mdash; Total messages, calls, and form submissions from digital channels',
+                bold('Cost Per Lead') + ' &mdash; How much each patient inquiry costs through ads',
+                bold('Google Ranking Positions') + ' &mdash; Your ranking for target keywords over time',
+                bold('Website Traffic') + ' &mdash; Total visitors, source breakdown, and behavior',
+                bold('Social Media Growth') + ' &mdash; Followers, engagement rate, reach, and saves',
+                bold('Google Business Insights') + ' &mdash; Calls, direction requests, website clicks from your Google listing',
+                bold('Review Growth') + ' &mdash; New reviews, average rating, and review response rate',
+                bold('ROI Summary') + ' &mdash; Total investment vs estimated patient revenue generated'
+              ]) + br(2) +
+              'You get a '+bold('clear monthly report')+ ' with all these metrics. No vanity numbers.' + br(2) +
+              CTA_BOOK + ' to see a sample report.';
+            qr = [{label:'Book consultation', reply:'Book a free consultation'},{label:'See pricing', reply:'What are your pricing plans'}];
+            break;
+
+          case 'blog':
+            r = '📚 We have written '+bold('comprehensive guides')+ ' to help you understand healthcare digital marketing:' + br(2) +
+              '&bull; ' + link('./blog-social-media-marketing-doctors-coimbatore.html','Social Media Marketing for Doctors in Coimbatore') + br() +
+              '&bull; ' + link('./blog-local-seo-doctors-coimbatore.html','Local SEO for Doctors: How to Rank #1 on Google') + br() +
+              '&bull; ' + link('./blog-google-business-profile-doctors.html','Google Business Profile Optimization Guide') + br() +
+              '&bull; ' + link('./blog-personal-branding-doctors-online.html','Personal Branding for Doctors') + br() +
+              '&bull; ' + link('./blog-digital-marketing-trends-doctors-2026.html','Digital Marketing Trends 2026: SEO to GEO') + br() +
+              '&bull; ' + link('./blog-patient-acquisition-strategy-clinics.html','Patient Acquisition Strategy for Clinics') + br(2) +
+              'Each article is packed with actionable strategies you can start using today.' + br(2) +
+              'Want personalized advice? ' + CTA_BOOK;
+            qr = [{label:'Book consultation', reply:'Book a free consultation'},{label:'Ask a question', reply:'I have a specific question about my clinic'}];
+            break;
+
+          case 'help':
+            r = '🤝 I can help you with everything related to '+bold('growing your medical practice digitally')+':' + br(2) +
+              bullet([
+                bold('Social Media Marketing') + ' &mdash; Instagram, Facebook, YouTube strategy',
+                bold('Local SEO') + ' &mdash; Google ranking and Maps visibility',
+                bold('Google Business Profile') + ' &mdash; Optimization and review management',
+                bold('Paid Advertising') + ' &mdash; Facebook, Instagram, and Google Ads',
+                bold('Personal Branding') + ' &mdash; Build your authority as a specialist',
+                bold('Clinic Website') + ' &mdash; Modern, SEO-optimized clinic websites',
+                bold('Reputation Management') + ' &mdash; Online reviews and trust building',
+                bold('Patient Acquisition') + ' &mdash; Complete growth systems',
+                bold('GEO (AI Search Optimization)') + ' &mdash; Be visible in AI-powered search'
+              ]) + br(2) +
+              'What would you like to know more about?';
+            qr = [
+              {label:'Social media', reply:'Tell me about social media marketing'},
+              {label:'SEO & Google ranking', reply:'How can I rank on Google'},
+              {label:'Pricing & plans', reply:'What are your pricing plans'},
+              {label:'Book consultation', reply:'I want to book a free consultation'}
+            ];
+            break;
+
+          default:
+            // Smart fallback — extract keywords and try to give relevant response
+            var n2 = normalize(text);
+            var fallbackReply = '';
+
+            if (n2.indexOf('how often') > -1 || n2.indexOf('frequency') > -1 || n2.indexOf('how many post') > -1) {
+              fallbackReply = 'For doctors, we recommend '+bold('3-4 posts per week')+ ' with a mix of educational content, patient stories, and behind-the-scenes.' + br(2) + 'Consistency matters more than frequency. A well-planned content calendar beats random daily posts.' + br(2) + CTA_BOOK + ' and we will create a posting schedule for your specialty.';
+            }
+            else if (n2.indexOf('camera shy') > -1 || n2.indexOf('not comfortable') > -1 || n2.indexOf('shy') > -1 || n2.indexOf('don\'t want video') > -1) {
+              fallbackReply = 'Totally understandable! Many doctors feel the same initially. Here is the good news:' + br(2) + bullet(['We can start with voice-over content with medical animations','Text-based educational posts work great too','Our team guides you through simple 30-second scripts','Most doctors get comfortable after 2-3 videos','You can start with just voice and progress to face-to-camera']) + br(2) + 'The goal is building trust. Even simple spoken content performs well.' + br(2) + CTA_BOOK + ' and we will find the right approach for you.';
+            }
+            else if (n2.indexOf('guarantee') > -1 || n2.indexOf('promise') > -1) {
+              fallbackReply = 'We do not make unrealistic promises. What we '+bold('do guarantee:')+'' + br(2) + bullet(['A structured, data-driven strategy tailored to your practice','Professional content creation and consistent execution','Transparent monthly reports tracking real patient inquiries','Continuous optimization based on performance data','Direct access to our team for strategy discussions']) + br(2) + 'Results depend on specialty, competition, and budget. But our systematic approach maximizes your chances significantly.' + br(2) + CTA_BOOK + ' for honest, realistic expectations.';
+            }
+            else if (n2.indexOf('time') > -1 && (n2.indexOf('my side') > -1 || n2.indexOf('invest') > -1 || n2.indexOf('involved') > -1 || n2.indexOf('need from me') > -1)) {
+              fallbackReply = 'We designed our system to be '+bold('minimal effort for doctors')+':' + br(2) + bullet([bold('Initial setup:')+' 1-2 hours for strategy discussion and brand inputs',bold('Ongoing:')+' 30-60 minutes per week for video recording (optional)',bold('Review:')+' 15 minutes to approve content calendar','We handle everything else: creation, posting, ads, SEO, analytics']) + br(2) + 'You focus on patients. We handle the digital growth.' + br(2) + CTA_BOOK;
+            }
+            else if (n2.indexOf('budget') > -1 || n2.indexOf('ad spend') > -1 || n2.indexOf('how much.*ad') > -1) {
+              fallbackReply = 'For '+bold('paid advertising')+', we recommend:' + br(2) + bullet([bold('Starting budget:')+' INR 10,000 - 15,000/month for ads (this is ad spend, separate from our management fee)',bold('Growth budget:')+' INR 20,000 - 40,000/month for more aggressive campaigns',bold('Advanced:')+' INR 50,000+ for multi-platform dominance']) + br(2) + 'The right budget depends on your specialty, competition, and growth goals. We help you maximize every rupee.' + br(2) + CTA_BOOK + ' for a customized ad budget recommendation.';
+            }
+            else if (n2.indexOf('commitment') > -1 || n2.indexOf('contract') > -1 || n2.indexOf('minimum') > -1 || n2.indexOf('lock in') > -1) {
+              fallbackReply = 'We recommend a '+bold('minimum 3-6 month engagement')+' because:' + br(2) + bullet(['Social media authority takes time to build','SEO results typically show in 3-6 months','A structured system needs consistent execution to deliver','Short-term campaigns rarely create lasting results']) + br(2) + 'However, we do not lock you into long contracts. Our results speak for themselves.' + br(2) + CTA_BOOK + ' to discuss the right commitment for your goals.';
+            }
+            else if (n2.indexOf('provide') > -1 || n2.indexOf('need from') > -1 || n2.indexOf('what do i') > -1 || n2.indexOf('requirement') > -1) {
+              fallbackReply = 'To get started, we need '+bold('minimal inputs from you')+':' + br(2) + bullet(['Basic clinic information (specialties, location, services offered)','Doctor photos and clinic images (we can also arrange a professional shoot)','Any existing branding assets (logo, colors)','Brief inputs on your target audience and growth goals','Access to existing social media accounts (if any)']) + br(2) + 'We handle all the strategy, content creation, and execution.' + br(2) + CTA_BOOK + ' and we will guide you through everything.';
+            }
+            else if (n2.indexOf('portfolio') > -1 || n2.indexOf('sample') > -1 || n2.indexOf('example') > -1 || n2.indexOf('case study') > -1 || n2.indexOf('previous work') > -1) {
+              fallbackReply = 'You can see our work and approach:' + br(2) + '&bull; ' + link('./index.html#projects','View our portfolio') + ' &mdash; Website, branding, and SEO work' + br() + '&bull; ' + link('./blog.html','Read our blog') + ' &mdash; In-depth guides showcasing our expertise' + br(2) + 'For specific case studies and results from healthcare clients, ' + CTA_BOOK + ' and we will share relevant examples for your specialty.';
+            }
+            else if (n2.indexOf('tamil') > -1 || n2.indexOf('language') > -1 || n2.indexOf('regional') > -1) {
+              fallbackReply = 'Yes! We create content in '+bold('both Tamil and English')+ '.' + br(2) + 'Over 60% of internet users in Tamil Nadu prefer regional language content. Posting in Tamil significantly increases reach and engagement in Coimbatore.' + br(2) + 'We handle bilingual content creation as part of our service.' + br(2) + CTA_BOOK + ' to discuss your content language strategy.';
+            }
+            else if (n2.indexOf('negative') > -1 || n2.indexOf('bad review') > -1 || n2.indexOf('one star') > -1 || n2.indexOf('complaint') > -1) {
+              fallbackReply = 'Negative reviews happen to everyone. Here is how we handle them:' + br(2) + bullet([bold('Respond professionally')+ ' within 24 hours showing empathy and resolution',bold('Never argue')+ ' publicly. Take the conversation offline',bold('Encourage satisfied patients')+ ' to share their experience (drowns out negatives)',bold('Report fake reviews')+ ' that violate Google guidelines',bold('Learn from feedback')+ ' to improve patient experience']) + br(2) + 'A few negative reviews among many positive ones actually increases '+bold('credibility')+ '.' + br(2) + CTA_BOOK + ' for a reputation management strategy.';
+            }
+            else if (n2.indexOf('outrank') > -1 || n2.indexOf('beat competitor') > -1 || n2.indexOf('top position') > -1) {
+              fallbackReply = 'To '+bold('outrank competitors on Google')+':' + br(2) + bullet(['Optimize Google Business Profile with complete info and regular posts','Build more genuine reviews than competitors','Create location-specific content for your area','Ensure consistent NAP (Name, Address, Phone) across directories','Build a fast, mobile-optimized clinic website','Earn local citations and backlinks']) + br(2) + 'We perform a complete '+bold('competitor analysis')+ ' to identify exactly where you can win.' + br(2) + CTA_BOOK + ' for a free competitive analysis.';
+            }
+            else {
+              // Ultimate fallback — still helpful
+              var contextHint = ctx.specialty ? ' for your '+ctx.specialty+' practice' : '';
+              fallbackReply = '🤔 That is a great question! Let me help you with that.' + br(2) +
+                'I can assist with:' + br() +
+                bullet([
+                  bold('Social Media Marketing') + ' for doctors',
+                  bold('Local SEO & Google Ranking'),
+                  bold('Paid Advertising') + ' (Facebook/Instagram/Google)',
+                  bold('Reputation & Review Management'),
+                  bold('Personal Branding'),
+                  bold('Clinic Website Development'),
+                  bold('Patient Acquisition Strategies')
+                ]) + br(2) +
+                'For a detailed answer'+contextHint+', I recommend a quick chat with our growth team:' + br(2) +
+                CTA_BOOK + ' | ' + CTA_WA + br(2) +
+                'Or feel free to ask me something more specific!';
+              qr = [
+                {label:'Social media help', reply:'Tell me about social media marketing for doctors'},
+                {label:'SEO & Google ranking', reply:'How can I rank on Google'},
+                {label:'Get more patients', reply:'How to get more patients to my clinic'},
+                {label:'Talk to someone', reply:'I want to book a free consultation'}
+              ];
+            }
+
+            r = fallbackReply;
+            break;
+        }
+
+        addBotMsg(r);
+        // Show follow-up quick replies if available
+        if (qr && qr.length > 0) {
+          setTimeout(function() { showQuickReplies(qr); scrollBottom(); }, 400);
+        }
+      }
+
+      /* ─── Show initial quick replies ─── */
+      showQuickReplies([
+        {label:'Social media for my clinic', reply:'I want to grow my clinic social media presence'},
+        {label:'Rank on Google', reply:'How can I rank my clinic higher on Google'},
+        {label:'Pricing & plans', reply:'What are your pricing plans and packages'},
+        {label:'Book free consultation', reply:'I want to book a free growth consultation'}
+      ]);
+
+      /* ─── UI: Tooltip ─── */
+      setTimeout(function() { if (!isOpen && !tooltipDismissed) chatTooltip.classList.add('visible'); }, 3000);
+      setTimeout(function() { if (!tooltipDismissed) chatTooltip.classList.remove('visible'); }, 11000);
+      tooltipClose.addEventListener('click', function(e) { e.stopPropagation(); chatTooltip.classList.remove('visible'); tooltipDismissed = true; });
+
+      /* ─── UI: Open / Close ─── */
+      chatbotFab.addEventListener('click', function() {
+        isOpen = !isOpen;
+        if (isOpen) {
+          chatbotWindow.style.display = 'flex';
+          chatTooltip.classList.remove('visible');
+          tooltipDismissed = true;
+          chatbotWindow.offsetHeight;
+          chatbotWindow.classList.add('open');
+          chatbotFab.classList.add('active');
+          chatbotInput.focus();
+        } else { closeChatbot(); }
+      });
+      chatbotClose.addEventListener('click', function() { isOpen = false; closeChatbot(); });
+
+      function closeChatbot() {
+        chatbotWindow.classList.remove('open');
+        chatbotFab.classList.remove('active');
+        setTimeout(function() { if (!isOpen) chatbotWindow.style.display = 'none'; }, 350);
+      }
+
+      /* ─── UI: Quick Replies ─── */
+      quickReplies.addEventListener('click', function(e) {
+        var btn = e.target.closest('.srt-quick-btn');
+        if (!btn) return;
+        var msg = btn.getAttribute('data-reply');
+        addUserMsg(msg);
+        quickReplies.style.display = 'none';
+        showTyping();
+        var delay = 800 + Math.random() * 600;
+        setTimeout(function() { removeTyping(); getResponse(detectIntent(msg), msg); }, delay);
+      });
+
+      /* ─── UI: Form Submit ─── */
+      chatbotForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var val = chatbotInput.value.trim();
+        if (!val) return;
+        addUserMsg(val);
+        chatbotInput.value = '';
+        quickReplies.style.display = 'none';
+        showTyping();
+        var delay = 600 + Math.min(val.length * 20, 1200);
+        setTimeout(function() { removeTyping(); getResponse(detectIntent(val), val); }, delay);
+      });
+
+      /* ─── UI: Message helpers ─── */
+      function addUserMsg(text) {
+        var div = document.createElement('div');
+        div.className = 'srt-chat-msg srt-chat-user';
+        div.innerHTML = '<div class="srt-chat-bubble">' + escapeHtml(text) + '</div><span class="srt-chat-time">' + getTime() + '</span>';
+        chatbotBody.appendChild(div);
+        scrollBottom();
+      }
+
+      function addBotMsg(html) {
+        var div = document.createElement('div');
+        div.className = 'srt-chat-msg srt-chat-bot';
+        div.innerHTML = '<div class="srt-chat-bubble">' + html + '</div><span class="srt-chat-time">' + getTime() + '</span>';
+        chatbotBody.appendChild(div);
+        scrollBottom();
+      }
+
+      function showTyping() {
+        var div = document.createElement('div');
+        div.className = 'srt-typing'; div.id = 'srtTypingIndicator';
+        div.innerHTML = '<div class="srt-typing-dot"></div><div class="srt-typing-dot"></div><div class="srt-typing-dot"></div>';
+        chatbotBody.appendChild(div); scrollBottom();
+      }
+
+      function removeTyping() { var el = document.getElementById('srtTypingIndicator'); if (el) el.remove(); }
+      function scrollBottom() { chatbotBody.scrollTop = chatbotBody.scrollHeight; }
+
+    })();

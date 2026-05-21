@@ -1,0 +1,59 @@
+@charset "UTF-8";
+/*----------------------------------------------------------------------
+    Template Name: Ashik Personal Portfolio HTML Template
+    Template URI: https://ashik-html.vercel.app/
+    Author: Codeefly
+    Author URI:  https://codeefly.net/
+    Version: 1.0
+
+    Note: This is Main Style CSS File.
+/*----------------------------------------------------------------------
+	CSS INDEX
+	----------------------
+
+    ## Common CSS
+    ## Template Default Fonts & Fonts Styles
+    ## Button
+    ## Helper
+    ## Header
+    ## Banner
+    ## About
+    ## Breadcrumbs
+    ## Service
+    ## Project
+    ## Testimonial
+    ## Counter
+    ## Contact
+    ## Resume
+    ## Others
+    ## Portfolio
+    ## Blog
+    ## Footer
+    ## Animation
+
+/* -------------------------------------------------------------- */
+
+// IMPORT ALL SCSS DIRECTORY FILES
+
+@import "_mixing";
+@import "_variable";
+@import "_typography";
+
+@import "_layout";
+@import "_btn";
+@import "_help";
+@import "_header";
+@import "_banner";
+@import "_about";
+@import "_breadcrumbs";
+@import "_service";
+@import "_project";
+@import "_testimonial";
+@import "_counter";
+@import "_contact";
+@import "_resume";
+@import "_others";
+@import "_portfolio";
+@import "_blog";
+@import "_footer";
+@import "_animation";

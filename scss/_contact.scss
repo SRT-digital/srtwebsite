@@ -1,0 +1,115 @@
+/* --------------------------------------------
+  Contact
+ ---------------------------------------------- */
+.contact-info {
+  ul {
+    li {
+      @include flex(center, start);
+      gap: 11px;
+      margin-top: 10px;
+      &:first-child {
+        margin-top: 20px;
+      }
+    }
+  }
+}
+
+.social {
+  display: flex;
+  gap: 10px;
+  a {
+    width: 40px;
+    height: 40px;
+    @include flex;
+    border-radius: 5px;
+    background-color: $white;
+    @include transition;
+    .dark-bg & {
+      background-color: $black;
+      &:hover {
+        color: $black;
+      }
+    }
+    &:hover {
+      background-color: $theme-1;
+    }
+  }
+}
+
+.contact-form {
+  background-color: $white;
+  padding: 60px 40px;
+  border-radius: 30px;
+  box-shadow: $shadow;
+  margin-top: -190px;
+  .dark-bg & {
+    background-color: $black;
+    box-shadow: $shadow-white;
+    input,
+    textarea {
+      color: $white;
+      border: 1px solid rgbaGenerate($white, 20%);
+    }
+  }
+  @include breakpoint(max-xl) {
+    margin-top: 60px;
+  }
+  input,
+  textarea {
+    background-color: transparent;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid rgbaGenerate($black, 20%);
+    border-radius: 5px;
+    margin-bottom: 20px;
+    color: $dark;
+    font-size: 18px;
+    &:focus {
+      outline: none;
+    }
+  }
+  textarea {
+    height: 190px;
+    resize: none;
+  }
+}
+
+.contact-info-bg {
+  background-color: rgbaGenerate($white, 5%);
+  border-radius: 20px;
+  padding: 40px;
+  margin-top: 50px;
+  .contact-info {
+    li {
+      gap: 20px;
+      margin-bottom: 20px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+    i {
+      color: $theme-1;
+      font-size: 14px;
+    }
+  }
+  .social a {
+    border: 1px solid rgbaGenerate($gray-4, 20%);
+    background-color: transparent;
+    &:hover {
+      background-color: rgbaGenerate($white, 10%);
+      color: $white;
+    }
+  }
+}
+
+.contact-form-2 {
+  textarea {
+    height: 311px;
+  }
+}
+
+.map-container {
+  border-radius: 10px;
+  height: 515px;
+  overflow: hidden;
+}

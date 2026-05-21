@@ -1,0 +1,251 @@
+/* --------------------------------------------
+    About
+ ---------------------------------------------- */
+.about-list {
+  margin-top: 30px;
+  ul {
+    li {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      margin-bottom: 10px;
+      text-transform: capitalize;
+      &::before {
+        content: "\f00c";
+        font-family: "Font Awesome 6 Pro";
+        font-size: 16px;
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+.projects-items {
+  .about-list {
+    li {
+      &::before {
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.about-counter {
+  @include flex();
+  gap: 24px;
+  padding: 30px 40px;
+  border-radius: 30px;
+  box-shadow: $shadow;
+  background-color: $white;
+  margin-top: 30px;
+  @include breakpoint(max-md) {
+    gap: 0;
+    margin-top: 0px;
+  }
+  .section-title {
+    width: 70px;
+  }
+}
+
+.about-section {
+  padding-bottom: 560px;
+  @include breakpoint(max-md) {
+    padding-bottom: 60px;
+  }
+}
+
+.about-2-title {
+  @extend h1;
+  text-transform: uppercase;
+  @include breakpoint(max-xl) {
+    font-size: 55px;
+  }
+  @include breakpoint(max-lg) {
+    font-size: 44px;
+  }
+  @include breakpoint(max-xxsmall) {
+    font-size: 35px;
+  }
+  span {
+    display: flex;
+    align-items: center;
+    &::before {
+      content: "";
+      height: 8px;
+      width: 121px;
+      background-color: $theme-2;
+      margin-right: 30px;
+      @include breakpoint(max-sm) {
+        width: 50px;
+        margin-right: 10px;
+        display: none;
+      }
+    }
+  }
+}
+
+.about-2-img-1 {
+  max-height: 268px;
+  overflow: hidden;
+  @include breakpoint(max-xl) {
+    img {
+      width: 100%;
+    }
+  }
+}
+
+.about-tab-content {
+  &::before {
+    content: "";
+    height: 100%;
+    width: 70%;
+    background-color: $gray;
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 10px;
+    z-index: -1;
+    @include breakpoint(max-lg) {
+      right: unset;
+      left: 0;
+      width: 100%;
+    }
+  }
+  .blur-bg {
+    @include flex(center, start);
+    gap: 15px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: rgbaGenerate($white, 20%);
+    backdrop-filter: blur(50px);
+    position: absolute;
+    right: -34px;
+    top: -34px;
+    @include breakpoint(max-sm) {
+      padding: 15px;
+    }
+    @include breakpoint(max-lg) {
+      right: 12px;
+    }
+    .users-mini {
+      width: 160px;
+    }
+    .user-conter {
+      float: right;
+      h6 {
+        font-size: 36px;
+        line-height: 50px;
+        color: $white;
+        @include breakpoint(max-sm) {
+          font-size: 26px;
+          line-height: 30px;
+        }
+      }
+      p {
+        color: $white;
+      }
+    }
+  }
+}
+
+.users-mini {
+  $height: 54px;
+  @include breakpoint(max-sm) {
+    $height: 44px;
+  }
+  position: relative;
+  height: 100%;
+  height: $height;
+  .user {
+    height: $height;
+    width: $height;
+    background-color: $white;
+    position: absolute;
+    border-radius: 50%;
+    img {
+      height: $height;
+      width: $height;
+      border: 2px solid $white;
+      border-radius: 50%;
+    }
+    @for $i from 1 through 4 {
+      &:nth-child(#{$i}) {
+        left: #{($i - 1) * 35}px;
+      }
+    }
+  }
+  .plus-mini {
+    font-size: 25px;
+    @include flex;
+    i {
+      color: $dark;
+    }
+  }
+}
+
+.dot-shap {
+  position: absolute;
+  bottom: 60px;
+  left: 0;
+  z-index: -1;
+  @include breakpoint(max-lg) {
+    left: unset;
+    right: 0;
+  }
+}
+
+.about-right-tab-content {
+  padding-bottom: 85px;
+  @include breakpoint(max-lg) {
+    @include flex;
+    flex-direction: column;
+  }
+  @include breakpoint(max-lg) {
+    display: block;
+  }
+  h3 {
+    font-size: 36px;
+    line-height: 50px;
+    @include breakpoint(max-lg) {
+      text-align: center;
+    }
+    @include breakpoint(max-sm) {
+      text-align: left;
+    }
+  }
+  ul {
+    margin-top: 50px;
+    margin-left: 30px;
+    @include breakpoint(max-xl) {
+      margin-left: 0;
+    }
+    @include breakpoint(max-lg) {
+      margin: 0px auto;
+      margin-top: 50px;
+    }
+    @include breakpoint(max-sm) {
+      margin: 0px;
+      margin-top: 50px;
+    }
+
+    li {
+      @include flex(center, start);
+      gap: 60px;
+      margin-bottom: 15px;
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      h4 {
+        width: 110px;
+        @include breakpoint(max-sm) {
+          font-size: 18px;
+        }
+      }
+      @include breakpoint(max-sm) {
+        display: block;
+      }
+    }
+  }
+}

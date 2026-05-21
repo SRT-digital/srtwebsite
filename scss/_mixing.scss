@@ -1,0 +1,229 @@
+/* --------------------------------------------
+    Common CSS
+ ---------------------------------------------- */
+@mixin breakpoint($point) {
+  @if $point==xsmall {
+    @media (min-width: 450px) {
+      @content;
+    }
+  } @else if $point==max-xxsmall {
+    @media (max-width: 450px) {
+      @content;
+    }
+  }
+  @if $point==xxs {
+    @media (min-width: 470px) {
+      @content;
+    }
+  } @else if $point==max-xxs {
+    @media (max-width: 470px) {
+      @content;
+    }
+  }
+  @if $point==xs {
+    @media (min-width: 500px) {
+      @content;
+    }
+  } @else if $point==max-xs {
+    @media (max-width: 500px) {
+      @content;
+    }
+  }
+  @if $point==sm {
+    @media (min-width: 576px) {
+      @content;
+    }
+  } @else if $point==max-sm {
+    @media (max-width: 575px) {
+      @content;
+    }
+  } @else if $point==md {
+    @media (min-width: 768px) {
+      @content;
+    }
+  } @else if $point==max-md {
+    @media (max-width: 767px) {
+      @content;
+    }
+  } @else if $point==lg {
+    @media (min-width: 992px) {
+      @content;
+    }
+  } @else if $point==max-lg {
+    @media (max-width: 991px) {
+      @content;
+    }
+  } @else if $point==xl {
+    @media (min-width: 1200px) {
+      @content;
+    }
+  } @else if $point==max-xl {
+    @media (max-width: 1199px) {
+      @content;
+    }
+  } @else if $point==xxl {
+    @media (min-width: 1400px) {
+      @content;
+    }
+  } @else if $point==max-xxl {
+    @media (max-width: 1399px) {
+      @content;
+    }
+  } @else if $point==xxxl {
+    @media (min-width: 1600px) {
+      @content;
+    }
+  } @else if $point==max-xxxl {
+    @media (max-width: 1600px) {
+      @content;
+    }
+  } @else if $point==xl4 {
+    @media (min-width: 1899px) {
+      @content;
+    }
+  } @else if $point==max-xl4 {
+    @media (max-width: 1899px) {
+      @content;
+    }
+  }
+}
+// RGBA COLOR GENERATE
+@function rgbaGenerate($color, $percentage) {
+  @return rgb(from $color r g b / $percentage);
+}
+// FILL TEXT
+@mixin text-fill($fill, $shadow) {
+  -webkit-text-fill-color: $fill;
+  text-shadow: -1px -1px 0 $shadow, 1px -1px 0 $shadow, -1px 1px 0 $shadow,
+    1px 1px 0 $shadow;
+}
+
+// BEFORE
+@mixin before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  content: "";
+}
+// FLEX
+@mixin flex($align: center, $justify: center) {
+  display: flex;
+  align-items: $align;
+  justify-content: $justify;
+}
+// TRANSITION
+@mixin transition {
+  transition: all 0.4s ease-in-out;
+}
+
+// Breakpoints
+$breakpoints: (
+  "": 0,
+  "xxxl": 1599px,
+  "xxl": 1399px,
+  "xl": 1199px,
+  "lg": 991px,
+  "md": 767px,
+  "sm": 575px,
+);
+
+// Define a function to get the infix for each breakpoint
+@function breakpoint-infix($breakpoint) {
+  @if $breakpoint == "" {
+    @return "";
+  } @else {
+    @return "-#{$breakpoint}";
+  }
+}
+
+// Define a mixin to generate spacing classes
+@mixin generate-spacing-classes($infix) {
+  @for $i from 0 through 100 {
+    .m#{$infix}-#{$i} {
+      margin: #{$i}px;
+    }
+    .p#{$infix}-#{$i} {
+      padding: #{$i}px;
+    }
+    .mb#{$infix}-#{$i} {
+      margin-bottom: #{$i}px;
+    }
+    .mt#{$infix}-#{$i} {
+      margin-top: #{$i}px;
+    }
+    .ml#{$infix}-#{$i} {
+      margin-left: #{$i}px;
+    }
+    .mr#{$infix}-#{$i} {
+      margin-right: #{$i}px;
+    }
+    .pb#{$infix}-#{$i} {
+      padding-bottom: #{$i}px;
+    }
+    .pt#{$infix}-#{$i} {
+      padding-top: #{$i}px;
+    }
+    .pl#{$infix}-#{$i} {
+      padding-left: #{$i}px;
+    }
+    .pr#{$infix}-#{$i} {
+      padding-right: #{$i}px;
+    }
+    .fs#{$infix}-#{$i} {
+      font-size: #{$i}px;
+    }
+    .lh#{$infix}-#{$i} {
+      line-height: #{$i}px;
+    }
+    .gap#{$infix}-#{$i} {
+      gap: #{$i}px;
+    }
+    .br#{$infix}-#{$i} {
+      border-radius: #{$i}px;
+    }
+    .h#{$infix}-#{$i} {
+      height: #{$i}px;
+    }
+    .w#{$infix}-#{$i} {
+      width: #{$i}px;
+    }
+  }
+}
+
+// Loop through each breakpoint
+@each $breakpoint, $breakpoint-size in $breakpoints {
+  $infix: breakpoint-infix($breakpoint);
+
+  @if $breakpoint-size != 0 {
+    @media (max-width: #{$breakpoint-size}) {
+      @include generate-spacing-classes($infix);
+    }
+  } @else {
+    @include generate-spacing-classes($infix);
+  }
+}
+
+@for $i from 1 through 9 {
+  .fw-#{$i*100} {
+    font-weight: #{$i * 100};
+  }
+}
+
+$sizes: ("md", "xl", "lg", "sm", "xs", "xxl", "");
+@each $size in $sizes {
+  @include breakpoint("#{$size}") {
+    .flex-#{$size}-end {
+      display: flex;
+      justify-content: end;
+    }
+  }
+}
+
+.flex-end {
+  display: flex;
+  justify-content: end;
+}

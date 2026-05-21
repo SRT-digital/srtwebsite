@@ -1,0 +1,99 @@
+/* --------------------------------------------
+  Portfolio
+ ---------------------------------------------- */
+.portfolio-items {
+  .row > * {
+    transition: all 0.5s;
+  }
+}
+.portfolio-item {
+  position: relative;
+  height: 100%;
+  transition: all 0.5s;
+  overflow: hidden;
+  img {
+    height: 500px;
+    object-fit: cover;
+  }
+  &.active {
+    .portfolio-content {
+      bottom: 0;
+      transition: all 0.5s;
+    }
+  }
+  .portfolio-content {
+    padding: 30px 0 36px 39px;
+    background-color: $gray;
+    border-radius: 0 0 10px 10px;
+    position: absolute;
+    bottom: -100%;
+    @include breakpoint(max-xl) {
+      h3 {
+        font-size: 20px;
+        line-height: 25px;
+      }
+    }
+    .dark-bg & {
+      background-color: $dark-3;
+    }
+    @include transition;
+    p {
+      margin-top: 10px;
+    }
+    i {
+      font-size: 20px;
+      @include flex;
+      height: 60px;
+      width: 60px;
+      border: 1px solid $gray-3;
+      border-radius: 10px 0 10px 0;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      .dark-bg & {
+        border: 0;
+        background-color: rgbaGenerate($white, 50%);
+      }
+    }
+  }
+}
+
+.portfolio2-items {
+  width: 100%;
+  margin: auto;
+  .portfolio2-item {
+    margin: 10px;
+    border-radius: 20px;
+    overflow: hidden;
+    width: calc(33% - 20px);
+    a {
+      display: block;
+    }
+    img {
+      width: 100%;
+      transition: all 1.5s cubic-bezier(0, 0, 0.2, 1);
+      vertical-align: middle;
+      &:hover {
+        transform: scale3d(1.1, 1.1, 1.1);
+      }
+    }
+  }
+}
+
+.portfolio2_titles {
+  visibility: hidden;
+  position: fixed;
+  z-index: 15;
+  white-space: nowrap;
+  background-color: $theme-2;
+  padding: 5px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  color: $white;
+  opacity: 0;
+}
+.portfolio2_titles.visible {
+  opacity: 1;
+  visibility: visible !important;
+  z-index: 99999;
+}

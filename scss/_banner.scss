@@ -1,0 +1,59 @@
+/* --------------------------------------------
+    Banner
+ ---------------------------------------------- */
+.banner {
+  padding-top: 207px;
+  position: relative;
+  .banner-shap {
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    img {
+      max-width: 100%;
+      opacity: 60%;
+    }
+  }
+}
+
+.banner-2 {
+  background: url("../img/banner-1.jpg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: $white;
+  position: relative;
+  &::before {
+    position: absolute;
+    content: "";
+    bottom: 0;
+    right: 0px;
+    width: 760px;
+    height: 180px;
+    background: url("../img/banner-1-shap.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 1;
+  }
+  h1 {
+    text-transform: uppercase;
+    span {
+      color: $theme-2;
+    }
+    @include breakpoint(max-xl) {
+      font-size: 65px;
+    }
+    @include breakpoint(max-sm) {
+      font-size: 40px;
+    }
+  }
+}
+
+.banner-2-author-img {
+  margin-top: 152px;
+  margin-bottom: 60px;
+}
+
+.banner-2-content {
+  margin-top: 150px;
+}

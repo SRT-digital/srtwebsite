@@ -1,0 +1,30 @@
+/* --------------------------------------------
+  Counter
+ ---------------------------------------------- */
+.counter-container {
+  @include breakpoint(max-md) {
+    padding-bottom: 10px;
+  }
+}
+
+.counter-item {
+  @include flex();
+  gap: 20px;
+  color: $black;
+  @include breakpoint(max-lg) {
+    flex-direction: column;
+    gap: 0px;
+    text-align: center;
+  }
+  @include breakpoint(max-md) {
+    margin-bottom: 30px;
+  }
+  i {
+    font-size: 40px;
+  }
+  h4 {
+    font-size: 34px;
+    font-weight: 700;
+    line-height: 50px;
+  }
+}

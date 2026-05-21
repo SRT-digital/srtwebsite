@@ -1,0 +1,80 @@
+@font-face {
+  font-family: "ashik-icon";
+  src: url("../../fonts/ashik-icon.eot?l9ylbg");
+  src: url("../../fonts/ashik-icon.eot?l9ylbg#iefix")
+      format("embedded-opentype"),
+    url("../../fonts/ashik-icon.ttf?l9ylbg") format("truetype"),
+    url("../../fonts/ashik-icon.woff?l9ylbg") format("woff"),
+    url("../../fonts/ashik-icon.svg?l9ylbg#ashik-icon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+[class^="ashik-icon-"],
+[class*=" ashik-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: "ashik-icon" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ashik-icon-star-2:before {
+  content: "\e90f";
+}
+.ashik-icon-ziczac-arrow:before {
+  content: "\e910";
+}
+.ashik-icon-star:before {
+  content: "\e90e";
+}
+.ashik-icon-arrow:before {
+  content: "\e900";
+}
+.ashik-icon-arrow-2:before {
+  content: "\e901";
+}
+.ashik-icon-download:before {
+  content: "\e902";
+}
+.ashik-icon-frequency:before {
+  content: "\e903";
+}
+.ashik-icon-long-arrow:before {
+  content: "\e904";
+}
+.ashik-icon-misc:before {
+  content: "\e905";
+}
+.ashik-icon-qota:before {
+  content: "\e906";
+}
+.ashik-icon-trash:before {
+  content: "\e907";
+}
+.ashik-icon-trophy:before {
+  content: "\e908";
+}
+.ashik-icon-umbrella:before {
+  content: "\e909";
+}
+.ashik-icon-ziczac:before {
+  content: "\e90a";
+}
+.ashik-icon-support:before {
+  content: "\e90b";
+}
+.ashik-icon-analytics:before {
+  content: "\e90c";
+}
+.ashik-icon-archive:before {
+  content: "\e90d";
+}

@@ -1,0 +1,36 @@
+/* --------------------------------------------
+  Breadcrumbs
+ ---------------------------------------------- */
+.breadcrumbs {
+  background-image: url("../img/breadcrumbs.png");
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+  padding-top: 230px;
+  padding-bottom: 180px;
+  h1 {
+    font-size: 70px;
+    line-height: 80px;
+    @include breakpoint(max-sm) {
+      font-size: 50px;
+      line-height: 60px;
+    }
+  }
+  .tf__breadcrumbs_text {
+    ul {
+      @include flex(center, start);
+      gap: 10px;
+      margin-top: 27px;
+      a {
+        font-size: 18px;
+        font-weight: 500;
+        line-height: 30px;
+        text-transform: uppercase;
+        @include transition;
+        &:hover {
+          color: $theme-1;
+        }
+      }
+    }
+  }
+}

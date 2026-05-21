@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Spline+Sans:wght@400;500;600;700&display=swap"
+    media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Spline+Sans:wght@400;500;600;700&display=swap" />
+  </noscript>
+
+  <!-- Critical CSS -->
+  <link rel="stylesheet" href="./css/lib/bootstrap.min.css" />
+  <link rel="stylesheet" href="./css/main.css" />
+  <link rel="stylesheet" href="./css/custom.css" />
+
+  <!-- Non-critical CSS -->
+  <link rel="stylesheet" href="./css/lib/magnific-popup.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="./css/lib/swiper-bundle.min.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="./css/fonts/font-awesome.css" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="./css/fonts/ashik-icon.css" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="./css/lib/magnific-popup.css" />
+    <link rel="stylesheet" href="./css/lib/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="./css/fonts/font-awesome.css" />
+    <link rel="stylesheet" href="./css/fonts/ashik-icon.css" />
+  </noscript>
+
+  <!-- Font preloads -->
+  <link rel="preload" href="./fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="./fonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin />
+
+  <style>
+    body { background: #0a1a2e; color: #ccc; margin: 0 }
+    .preloader { position: fixed; inset: 0; z-index: 99999; background: #0a1a2e }
+    .main-header { will-change: transform }
+    img[loading="lazy"] { content-visibility: auto }
+  </style>
+  <link rel="shortcut icon" href="./img/fav.png" type="image/x-icon" />
+  <title id="pageTitle">Portfolio Detail | SRT Digital Solutions</title>
+  <meta name="description" id="pageMeta" content="View our project case study — SRT Digital Solutions" />
+
+  <!-- Case Study Page Styles -->
+  <style>
+    /* ===== BREADCRUMB HERO ===== */
+    .cs-breadcrumb {
+      padding: 140px 0 60px;
+      position: relative;
+      overflow: hidden;
+    }
+    .cs-breadcrumb::before {
+      content: "";
+      position: absolute;
+      top: -200px;
+      right: -200px;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(37, 187, 204, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cs-breadcrumb-nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .cs-breadcrumb-nav a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .cs-breadcrumb-nav a:hover { color: #25bbcc; }
+    .cs-breadcrumb-nav i { color: rgba(255,255,255,0.25); font-size: 11px; }
+    .cs-breadcrumb-nav span { color: #25bbcc; }
+
+    /* ===== CASE STUDY HERO ===== */
+    .cs-hero {
+      padding-bottom: 80px;
+    }
+    .cs-hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+    .cs-hero-content {
+      position: relative;
+    }
+    .cs-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(37, 187, 204, 0.1);
+      border: 1px solid rgba(37, 187, 204, 0.2);
+      color: #25bbcc;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      padding: 8px 20px;
+      border-radius: 30px;
+      margin-bottom: 24px;
+    }
+    .cs-tag i {
+      font-size: 10px;
+    }
+    .cs-title {
+      font-size: 44px;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 24px;
+    }
+    .cs-desc {
+      font-size: 16px;
+      line-height: 1.85;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 40px;
+    }
+
+    /* Meta Info */
+    .cs-meta {
+      display: flex;
+      gap: 32px;
+      padding-top: 32px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .cs-meta-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .cs-meta-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #25bbcc;
+      font-weight: 600;
+    }
+    .cs-meta-value {
+      font-size: 15px;
+      color: #fff;
+      font-weight: 500;
+    }
+
+    /* Hero Image */
+    .cs-hero-img {
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+    }
+    .cs-hero-img img {
+      width: 100%;
+      height: 450px;
+      object-fit: cover;
+      display: block;
+      border-radius: 20px;
+      transition: transform 0.6s ease;
+    }
+    .cs-hero-img:hover img {
+      transform: scale(1.03);
+    }
+    .cs-hero-img::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      pointer-events: none;
+    }
+    /* Decorative glow behind image */
+    .cs-hero-img::before {
+      content: "";
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      height: 60px;
+      background: rgba(37, 187, 204, 0.15);
+      filter: blur(40px);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* ===== DELIVERABLES SECTION ===== */
+    .cs-deliverables {
+      padding: 80px 0;
+      position: relative;
+    }
+    .cs-section-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: #25bbcc;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .cs-section-label::before {
+      content: "";
+      width: 30px;
+      height: 2px;
+      background: #25bbcc;
+    }
+    .cs-section-heading {
+      font-size: 34px;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 50px;
+      line-height: 1.25;
+    }
+
+    .cs-deliver-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+    .cs-deliver-card {
+      background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 16px;
+      padding: 28px 30px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .cs-deliver-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 3px;
+      height: 0;
+      background: #25bbcc;
+      border-radius: 0 2px 2px 0;
+      transition: height 0.4s ease;
+    }
+    .cs-deliver-card:hover {
+      border-color: rgba(37, 187, 204, 0.2);
+      background: linear-gradient(145deg, rgba(37, 187, 204, 0.06), rgba(37, 187, 204, 0.02));
+      transform: translateY(-3px);
+    }
+    .cs-deliver-card:hover::before {
+      height: 100%;
+    }
+    .cs-deliver-num {
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(37, 187, 204, 0.1);
+      border: 1px solid rgba(37, 187, 204, 0.2);
+      border-radius: 10px;
+      color: #25bbcc;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    .cs-deliver-text {
+      color: rgba(255,255,255,0.85);
+      font-size: 15px;
+      line-height: 1.6;
+      padding-top: 6px;
+    }
+
+    /* ===== RESULT SECTION ===== */
+    .cs-result {
+      padding: 80px 0;
+      position: relative;
+    }
+    .cs-result-box {
+      position: relative;
+      background: linear-gradient(135deg, #0e2540 0%, #0a1a2e 100%);
+      border: 1px solid rgba(37, 187, 204, 0.15);
+      border-radius: 24px;
+      padding: 60px;
+      overflow: hidden;
+    }
+    .cs-result-box::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #25bbcc, transparent);
+    }
+    .cs-result-box::after {
+      content: "";
+      position: absolute;
+      top: -80px;
+      right: -80px;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(37, 187, 204, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .cs-result-icon {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(37, 187, 204, 0.1);
+      border: 1px solid rgba(37, 187, 204, 0.2);
+      border-radius: 16px;
+      margin-bottom: 24px;
+    }
+    .cs-result-icon i {
+      font-size: 24px;
+      color: #25bbcc;
+    }
+    .cs-result-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: #25bbcc;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    .cs-result-text {
+      font-size: 22px;
+      font-weight: 600;
+      color: #fff;
+      line-height: 1.6;
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+    .cs-result-text strong {
+      color: #25bbcc;
+    }
+
+    /* ===== WEBSITE SHOWCASE GRID ===== */
+    .cs-showcase-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 28px;
+      margin-top: 40px;
+    }
+    .cs-showcase-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 14px;
+      overflow: hidden;
+      transition: transform 0.3s, border-color 0.3s;
+    }
+    .cs-showcase-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(37,187,204,0.25);
+    }
+    /* Carousel */
+    .app-carousel {
+      position: relative;
+      overflow: hidden;
+      background: #0d1f35;
+    }
+    .app-slide {
+      display: none;
+    }
+    .app-slide.active {
+      display: block;
+      animation: appFadeIn 0.45s ease;
+    }
+    @keyframes appFadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+    .app-slide img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      object-position: top;
+      display: block;
+      cursor: zoom-in;
+    }
+    .app-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 2;
+    }
+    .app-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.35);
+      cursor: pointer;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .app-dot.active {
+      background: #25bbcc;
+      transform: scale(1.3);
+    }
+    .cs-showcase-card-info {
+      padding: 20px 24px 24px;
+    }
+    .cs-showcase-card-info h4 {
+      font-size: 17px;
+      font-weight: 700;
+      color: #fff;
+      margin: 0 0 6px;
+    }
+    .cs-showcase-card-info p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      margin: 0 0 16px;
+      line-height: 1.5;
+    }
+    .cs-showcase-card-info a {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #25bbcc;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    .cs-showcase-card-info a:hover {
+      color: #fff;
+    }
+    /* Lightbox overlay */
+    .app-lightbox-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 99999;
+      align-items: center;
+      justify-content: center;
+      cursor: zoom-out;
+    }
+    .app-lightbox-overlay.open {
+      display: flex;
+    }
+    .app-lightbox-overlay img {
+      max-width: 90vw;
+      max-height: 90vh;
+      border-radius: 10px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+      cursor: default;
+    }
+    .app-lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 28px;
+      font-size: 32px;
+      color: rgba(255,255,255,0.7);
+      cursor: pointer;
+      line-height: 1;
+      transition: color 0.2s;
+    }
+    .app-lightbox-close:hover { color: #fff; }
+
+    /* ===== CTA SECTION ===== */
+    .cs-cta {
+      padding: 60px 0 80px;
+      text-align: center;
+    }
+    .cs-cta-inner {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .cs-cta-icon {
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(37, 187, 204, 0.08);
+      border: 1px solid rgba(37, 187, 204, 0.15);
+      border-radius: 50%;
+      margin: 0 auto 28px;
+    }
+    .cs-cta-icon i {
+      font-size: 26px;
+      color: #25bbcc;
+    }
+    .cs-cta h3 {
+      color: #fff;
+      font-size: 30px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      line-height: 1.3;
+    }
+    .cs-cta p {
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 15px;
+      margin-bottom: 36px;
+      line-height: 1.7;
+    }
+
+    /* Back to portfolio floating link */
+    .cs-back-float {
+      position: fixed;
+      bottom: 100px;
+      left: 30px;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(10, 26, 46, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(37, 187, 204, 0.2);
+      color: #25bbcc;
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      padding: 10px 18px;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    .cs-back-float.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .cs-back-float:hover {
+      background: rgba(37, 187, 204, 0.1);
+      color: #25bbcc;
+      border-color: rgba(37, 187, 204, 0.4);
+    }
+
+    /* ===== DIVIDER ===== */
+    .cs-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.06), transparent);
+      margin: 0;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 991px) {
+      .cs-hero-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+      .cs-hero-content { order: 2; }
+      .cs-hero-img { order: 1; }
+      .cs-hero-img img { height: 350px; }
+      .cs-title { font-size: 34px; }
+      .cs-section-heading { font-size: 28px; }
+      .cs-deliver-grid { grid-template-columns: 1fr; }
+      .cs-result-box { padding: 40px 30px; }
+      .cs-result-text { font-size: 18px; }
+      .cs-back-float { display: none; }
+    }
+    @media (max-width: 767px) {
+      .cs-breadcrumb { padding: 120px 0 40px; }
+      .cs-hero { padding-bottom: 50px; }
+      .cs-hero-img img { height: 260px; }
+      .cs-title { font-size: 28px; }
+      .cs-desc { font-size: 14px; }
+      .cs-meta { flex-direction: column; gap: 20px; }
+      .cs-deliverables { padding: 50px 0; }
+      .cs-section-heading { font-size: 24px; margin-bottom: 30px; }
+      .cs-deliver-card { padding: 22px; }
+      .cs-result { padding: 50px 0; }
+      .cs-result-box { padding: 30px 24px; }
+      .cs-result-text { font-size: 16px; }
+      .cs-cta h3 { font-size: 24px; }
+      .cs-showcase-grid { grid-template-columns: 1fr; gap: 20px; }
+      .cs-showcase-card img { height: 180px; }
+    }
+  </style>
+</head>
+
+<body class="dark-bg">
+  <div class="preloader">
+    <svg viewBox="0 0 1000 1000" preserveAspectRatio="none">
+      <path id="svg" d="M0,1005S175,995,500,995s500,5,500,5V0H0Z"></path>
+    </svg>
+    <img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT Digital Solutions" class="preloader-logo" width="420"
+      height="104" loading="lazy" decoding="async" />
+  </div>
+
+  <header class="main-header fixed-header">
+    <div class="container">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="logo">
+          <a href="./index.html"><img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT Digital Solutions"
+              width="420" height="104" loading="lazy" decoding="async" /></a>
+        </div>
+        <div class="d-none d-lg-block main-menu">
+          <nav class="navbar-nav m-auto" id="navbarNav">
+            <ul>
+              <li><a href="./index.html">Home</a></li>
+              <li><a href="./index.html#about">About</a></li>
+              <li><a href="./index.html#services">Services</a></li>
+              <li><a href="./portfolio.html" class="color-theme-1">Portfolio</a></li>
+              <li><a href="./blog.html">Blog</a></li>
+              <li><a href="./index.html#contact">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div>
+          <a href="./index.html#contact" class="theme-btn d-none d-lg-block btn_moveing_hover">Free Consultation</a>
+          <a href="#" class="toggle-sidebar d-flex d-lg-none ms-0 theme-1-bg">
+            <div class="toggle"><span></span><span></span></div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-menu">
+    <div class="menu-backdrop"></div>
+    <div class="main-menu-mobile">
+      <div class="d-flex align-items-center justify-content-between">
+        <div class="logo"><a href="./index.html"><img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT" width="420" height="104" loading="lazy" decoding="async" /></a></div>
+        <div class="close-mobile-menu"><i class="fa-sharp fa-regular fa-xmark"></i></div>
+      </div>
+      <ul class="mobile-menu-list mt-40">
+        <li><a href="./index.html">Home</a></li>
+        <li><a href="./index.html#about">About</a></li>
+        <li><a href="./index.html#services">Services</a></li>
+        <li><a href="./portfolio.html">Portfolio</a></li>
+        <li><a href="./blog.html">Blog</a></li>
+        <li><a href="./index.html#contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Back to portfolio floating button -->
+  <a href="./portfolio.html" class="cs-back-float" id="csBackFloat">
+    <i class="fa-solid fa-arrow-left"></i> Portfolio
+  </a>
+
+  <div id="scrollsmoother-container">
+
+    <!-- Breadcrumb -->
+    <section class="cs-breadcrumb">
+      <div class="container">
+        <nav class="cs-breadcrumb-nav">
+          <a href="./index.html">Home</a>
+          <i class="fa-light fa-angle-right"></i>
+          <a href="./portfolio.html">Portfolio</a>
+          <i class="fa-light fa-angle-right"></i>
+          <span id="csBreadcrumbTitle">Case Study</span>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Hero Section -->
+    <section class="cs-hero">
+      <div class="container">
+        <div class="cs-hero-grid">
+          <div class="cs-hero-content" data-animation="fade" data-animation-direction="left" data-animation-offset="40">
+            <div class="cs-tag" id="csTag">
+              <i class="fa-solid fa-circle"></i>
+              <span></span>
+            </div>
+            <h1 class="cs-title" id="csTitle"></h1>
+            <p class="cs-desc" id="csDesc"></p>
+            <div class="cs-meta" id="csMeta">
+              <div class="cs-meta-item">
+                <span class="cs-meta-label">Category</span>
+                <span class="cs-meta-value" id="csCategory"></span>
+              </div>
+              <div class="cs-meta-item">
+                <span class="cs-meta-label">Client</span>
+                <span class="cs-meta-value" id="csClient"></span>
+              </div>
+              <div class="cs-meta-item">
+                <span class="cs-meta-label">Location</span>
+                <span class="cs-meta-value" id="csLocation"></span>
+              </div>
+              <div class="cs-meta-item" id="csWebsiteWrap" style="display:none;">
+                <span class="cs-meta-label">Website</span>
+                <span class="cs-meta-value"><a id="csWebsite" href="#" target="_blank" rel="noopener" style="color:#25bbcc;text-decoration:underline;"></a></span>
+              </div>
+            </div>
+          </div>
+          <div class="cs-hero-img" data-animation="fade" data-animation-direction="right" data-animation-offset="40">
+            <img id="csHeroImg" src="" alt="" loading="eager" />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="cs-divider"></div>
+
+    <!-- Deliverables Section -->
+    <section class="cs-deliverables">
+      <div class="container">
+        <div class="cs-section-label">What We Delivered</div>
+        <h2 class="cs-section-heading" data-text-animation="slide" data-split="words">
+          Scope & <span class="color-theme-1">Deliverables</span>
+        </h2>
+        <div class="cs-deliver-grid" id="csDeliverables"></div>
+      </div>
+    </section>
+
+    <div class="cs-divider"></div>
+
+    <!-- App Showcase Section (only for projects with websites array) -->
+    <section class="cs-showcase" id="csShowcaseSection" style="display:none;">
+      <div class="container">
+        <div class="cs-section-label">Our Work</div>
+        <h2 class="cs-section-heading" data-text-animation="slide" data-split="words">
+          Applications We <span class="color-theme-1">Built</span>
+        </h2>
+        <div id="csShowcaseGrid" class="cs-showcase-grid"></div>
+      </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="app-lightbox-overlay" id="appLightbox">
+      <span class="app-lightbox-close" id="appLightboxClose">&times;</span>
+      <img id="appLightboxImg" src="" alt="" />
+    </div>
+
+    <div class="cs-divider" id="csShowcaseDivider" style="display:none;"></div>
+
+    <!-- Result Section -->
+    <section class="cs-result">
+      <div class="container">
+        <div class="cs-result-box" data-animation="fade" data-animation-direction="bottom" data-animation-offset="40">
+          <div class="cs-result-icon">
+            <i class="fa-solid fa-chart-line"></i>
+          </div>
+          <div class="cs-result-label">Project Result</div>
+          <p class="cs-result-text" id="csResult"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer mt-120 gray-bg pt-75 pb-30 position-relative z-2">
+      <div class="container">
+        <div class="row gap-lg-30">
+          <div class="col-lg-5">
+            <h2 class="footer-title">
+              <i class="ashik-icon-star"></i>
+              <span data-text-animation="slide" data-split="words">
+                <span>Your Clinic Deserves</span> Professional Digital Authority
+              </span>
+            </h2>
+            <div class="footer-email" data-animation="fade" data-animation-direction="left" data-animation-offset="40">
+              <i class="fa-sharp fa-solid fa-paper-plane"></i>
+              <h3 class="footer-email-text">
+                <a href="mailto:growwithus@srtdigitalsolutions.com">growwithus@srtdigitalsolutions.com</a>
+              </h3>
+            </div>
+            <div class="social mt-40">
+              <a href="https://www.facebook.com/profile.php?id=61581895563324" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-facebook-f"></i></a>
+              <a href="https://www.instagram.com/srtdigitalsolutions/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/company/srt-digital-solutions/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-linkedin-in"></i></a>
+              <a href="https://www.youtube.com/@SRTDigitalSolutions" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-youtube"></i></a>
+              <a href="https://in.pinterest.com/srtdigital/" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-pinterest-p"></i></a>
+            </div>
+          </div>
+          <div class="col-lg-4 offset-lg-2">
+            <a href="./index.html"><img src="./img/srtimg/mine-Blue-logo-01srt.png" alt="SRT Digital Solutions"
+                width="420" height="104" loading="lazy" decoding="async" /></a>
+            <p class="mt-35">
+              SRT Digital Solutions specializes in social media marketing and digital growth
+              systems for doctors in Coimbatore.
+            </p>
+            <p class="mt-15" style="font-size: 13px; opacity: 0.6;">
+              Serving: Coimbatore (RS Puram, Peelamedu, Saibaba Colony, Gandhipuram, Singanallur) &amp; Erode
+            </p>
+            <div class="footer-menus mt-65">
+              <a href="./index.html">Home</a>
+              <a href="./index.html#services">Services</a>
+              <a href="./portfolio.html">Portfolio</a>
+              <a href="./blog.html">Blog</a>
+              <a href="./index.html#contact">Contact</a>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-80 gap-lg-10">
+          <div class="col-lg-6">
+            <p>&copy; 2026 SRT Digital Solutions | Social Media Marketing for Doctors in Coimbatore</p>
+          </div>
+          <div class="col-lg-6 flex-lg-end">
+            <div class="copyright-menus">
+              <a href="./terms.html">Terms &amp; Conditions</a>
+              <a href="./privacy.html">Privacy Policy</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <div class="tf__scroll_btn">
+    <i class="fa-regular fa-arrow-up-long"></i>
+  </div>
+  <div id="magic-cursor">
+    <div id="ball"></div>
+  </div>
+
+  <!-- Critical JS -->
+  <script src="./js/lib/jquery.min.js"></script>
+  <script src="./js/lib/bootstrap.bundle.min.js"></script>
+  <script src="./js/gsap/gsap.min.js"></script>
+  <script src="./js/gsap/SplitText.min.js"></script>
+  <script src="./js/gsap/ScrollSmoother.min.js"></script>
+  <script src="./js/gsap/ScrollTrigger.min.js"></script>
+
+  <!-- Deferred JS -->
+  <script src="./js/lib/waypoints.min.js" defer></script>
+  <script src="./js/lib/jquery.counterup.min.js" defer></script>
+  <script src="./js/lib/swiper-bundle.min.js" defer></script>
+  <script src="./js/lib/imagesloaded.js" defer></script>
+  <script src="./js/lib/jquery.magnific-popup.min.js" defer></script>
+  <script src="./js/lib/isotope.js" defer></script>
+  <script src="./js/animation.min.js" defer></script>
+  <script src="./js/main.js" defer></script>
+
+  <!-- Portfolio Detail Data & Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var portfolioData = {
+        'social-posts': {
+          img: './img/blog-1.jpg',
+          tag: 'Social Media',
+          title: 'Clinical Social Media Posts',
+          desc: 'We created a complete social media content system for a dermatology clinic in Coimbatore — educational health creatives, patient testimonials, and authority-building posts across Facebook and Instagram. The strategy focused on building the doctor\'s personal brand while educating patients about skin health.',
+          category: 'Social Media Marketing',
+          client: 'Dermatology Clinic',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Educational health content creation', 'High-quality digital creatives (posts, carousels)', 'Consistent brand voice across platforms', 'Strategic content calendar planning', 'Audience engagement & community building'],
+          result: '3x increase in profile visits and consistent patient inquiries through social media within 60 days.'
+        },
+        'social-growth': {
+          img: './img/portfolio/social-growth.jpg',
+          tag: 'Social Media',
+          title: 'Social Media Growth Strategy',
+          desc: 'A structured 90-day authority-building strategy for a multi-specialty clinic — content pillars, audience targeting, and growth milestones designed for predictable patient acquisition. We built a content engine that positions doctors as thought leaders in their specialty.',
+          category: 'Social Media Strategy',
+          client: 'Multi-Specialty Clinic',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Content calendar with specialty themes', 'Platform-specific strategy (IG + FB)', 'Audience segmentation & targeting', 'Monthly performance review & optimization', 'Authority-driven hashtag strategy'],
+          result: 'Built a consistent patient inquiry pipeline with 4x follower growth and high engagement rate in 90 days.'
+        },
+        'reels': {
+          img: './img/portfolio/reels.jpg',
+          tag: 'Social Media',
+          title: 'Instagram & Facebook Reels',
+          desc: 'Short-form video content scripted, shot-listed, and edited specifically for doctor profiles — hook-first structure, trending formats, and educational storytelling. Each reel was designed to maximize reach and position the doctor as a trusted voice in healthcare.',
+          category: 'Video Content',
+          client: 'Healthcare Professionals',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Script writing & storyboard creation', 'Professional reel editing & captioning', 'Trending audio & format integration', 'Hook-first video structure', 'Specialty-specific health tips content'],
+          result: 'Reels averaged 5x more reach than static posts, driving significant profile discovery and appointment bookings.'
+        },
+        'paid-ads': {
+          img: './img/portfolio/paid-ads.jpg',
+          tag: 'Social Media',
+          title: 'Paid Ads & Lead Generation',
+          desc: 'Targeted Facebook and Google ad campaigns for a dental clinic in Coimbatore — audience segmentation, creative testing, and conversion-optimized landing pages for patient lead generation. Every rupee was tracked and optimized for maximum return on ad spend.',
+          category: 'Paid Advertising',
+          client: 'Dental Clinic',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Custom audience segmentation', 'Ad creative design & copywriting', 'A/B testing for maximum performance', 'Budget optimization & bid strategy', 'Conversion tracking & lead attribution'],
+          result: 'Generated 40+ qualified patient inquiries per month at a cost well below the industry average.'
+        },
+        'local-seo': {
+          img: './img/portfolio/local-seo.jpg',
+          tag: 'Google Ranking',
+          title: 'Local SEO & Map Pack Ranking',
+          desc: 'Complete local SEO implementation for a gynecology clinic — Google Business Profile optimization, local citation building, review management, and map pack ranking strategy. We ensured the clinic dominates "near me" searches in their area.',
+          category: 'Local SEO',
+          client: 'Gynecology Clinic',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Google Business Profile optimization', 'Local citation building & NAP consistency', 'Map pack ranking strategy', 'Review generation & management', 'Local keyword targeting & on-page SEO'],
+          result: 'Clinic ranked in Google Maps top 3 for key specialty searches in Coimbatore within 4 months.'
+        },
+        'seo-optimization': {
+          img: './img/portfolio-3.jpg',
+          tag: 'SEO',
+          title: 'SEO Implementation & Optimization',
+          desc: 'End-to-end SEO strategy for a physiotherapy centre — keyword research, on-page optimization, technical SEO fixes, and content strategy for long-term organic visibility. Built a sustainable organic traffic engine that grows month over month.',
+          category: 'Search Engine Optimization',
+          client: 'Physiotherapy Centre',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['In-depth keyword research for specialty', 'On-page SEO optimization', 'Technical SEO audit & fixes', 'Search structure & schema markup', 'Content strategy for local visibility'],
+          result: 'Organic traffic increased by 180% in 5 months with multiple page-1 rankings for treatment keywords.'
+        },
+        'clinic-website': {
+          img: './img/portfolio-2.jpg',
+          tag: 'Web Development',
+          title: 'Clinic Website Development',
+          desc: 'A professional, conversion-focused clinic website built for a multi-specialty hospital — responsive design, SEO-optimized structure, and clear call-to-action flows for appointment booking. Every element was designed to turn website visitors into booked patients.',
+          category: 'Website Development',
+          client: 'Multi-Specialty Hospital',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Responsive website design', 'SEO-friendly page structure', 'Clear call-to-action placement', 'Mobile-first optimization', 'Fast loading & performance tuning'],
+          websites: [
+            { name: 'Sunshine Institutions', url: 'https://sunshineinstitutions.in/', screenshot: './img/showcase-sunshine.jpg', desc: 'Coaching institute website with LMS integration' },
+            { name: 'Indian Biogenesis', url: 'https://indianbiogenesis.in/', screenshot: './img/portfolio/Screenshot 2026-04-09 202500.png', desc: 'Specialty healthcare corporate website' }
+          ],
+          result: 'Website conversion rate of 6.5% — significantly above the healthcare industry average of 2-3%.'
+        },
+        'landing-pages': {
+          img: './img/portfolio/ui/3.jpg',
+          tag: 'Web Development',
+          title: 'High-Converting Landing Pages',
+          desc: 'Dedicated campaign landing pages for paid ad traffic — built with conversion-first layouts, clear offers, lead capture forms, and A/B tested structures. Each page is a focused conversion machine designed for a specific campaign goal.',
+          category: 'Landing Page Design',
+          client: 'Healthcare Clinics',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Conversion-first layout design', 'Fast load speed optimization', 'Lead capture form integration', 'A/B tested page structures', 'Mobile-optimized responsive design'],
+          result: 'Landing pages achieved 12% conversion rate on paid ad traffic — 3x better than generic website pages.'
+        },
+        'clinic-webapp': {
+          img: './img/portfolio/ui/Screenshot 2026-04-09 201436.png',
+          tag: 'Web App',
+          title: 'Clinic Web Application Development',
+          desc: 'We build full-stack web applications for healthcare and business — from dental practice management systems to business invoicing platforms and CMS dashboards. Each app is custom-built with the right modules, clean UI, and role-based access to match the client\'s exact workflow.',
+          category: 'Web Application Development',
+          client: 'Multiple Clients',
+          location: 'Coimbatore, Tamil Nadu',
+          items: [
+            'Custom module design per client workflow',
+            'Role-based access control & authentication',
+            'Real-time dashboards & analytics',
+            'Patient / client / product data management',
+            'Reports, exports & billing modules',
+            'Mobile-responsive & fast-loading UI'
+          ],
+          websites: [
+            {
+              name: 'VR Dental Care',
+              url: 'https://vrdental.vercel.app/',
+              screenshots: [
+                './img/portfolio/ui/Screenshot 2026-04-09 201436.png',
+                './img/portfolio/ui/Screenshot 2026-04-09 201623.png'
+              ],
+              desc: 'Full dental practice management — patient records, appointments, expenses, intake forms, prescriptions & monthly analytics reports.'
+            },
+            {
+              name: 'Website CMS & Analytics',
+              url: '#',
+              screenshots: [
+                './img/portfolio/ui/Screenshot 2026-04-09 201741.png'
+              ],
+              desc: 'Custom CMS with section editor and real-time analytics — page views, unique visitors, session time & scroll depth over 7/14/30 days.'
+            },
+            {
+              name: 'SuiteZ — Business Suite',
+              url: 'https://suitezai.com',
+              screenshots: [
+                './img/portfolio/ui/Screenshot 2026-04-09 202030.png',
+                './img/portfolio/ui/Screenshot 2026-04-09 202114.png'
+              ],
+              desc: 'Complete business management — invoices (Draft/Pending/Paid), quotations, proposals, clients & revenue analytics in one platform.'
+            }
+          ],
+          result: 'Each web application delivered replaced manual processes, reduced operational overhead, and gave clients full digital control of their business in one platform.'
+        },
+        'booking-system': {
+          img: './img/portfolio/ui/5.jpg',
+          tag: 'Web App',
+          title: 'Online Appointment Booking System',
+          desc: 'A streamlined online booking web app for a dermatology clinic — real-time slot availability, automated confirmations, and doctor schedule management. Patients can book 24/7 without calling the clinic.',
+          category: 'Booking System',
+          client: 'Dermatology Clinic',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Real-time slot availability', 'SMS & email confirmation', 'Doctor schedule management', 'Patient profile & history', 'Admin dashboard for bookings'],
+          result: '60% of appointments now booked online, reducing phone calls and improving patient convenience.'
+        },
+        'admin-panel': {
+          img: './img/portfolio/ui/6.jpg',
+          tag: 'Web App',
+          title: 'Clinic Admin Panel',
+          desc: 'Comprehensive admin web application for full clinic operations — staff management, billing & invoices, analytics, and reporting for a multi-doctor practice. Complete visibility into every aspect of clinic performance.',
+          category: 'Admin System',
+          client: 'Multi-Doctor Practice',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Staff & role management', 'Billing & invoice tracking', 'Analytics & reporting dashboards', 'Multi-branch support', 'Inventory & supply management'],
+          result: 'Centralized operations for 5 doctors across 2 branches with real-time visibility into clinic performance.'
+        },
+        'brand-identity': {
+          img: './img/portfolio/brand-identity.jpg',
+          tag: 'Branding',
+          title: 'Brand Identity & Credibility',
+          desc: 'Complete brand identity for an IVF clinic in Coimbatore — logo design, color system, typography, and visual identity that builds immediate professional trust with patients. A cohesive brand that communicates expertise and care.',
+          category: 'Brand Design',
+          client: 'IVF Clinic',
+          location: 'Coimbatore, Tamil Nadu',
+          items: ['Logo design & refinement', 'Brand color system & guidelines', 'Visual identity consistency', 'Professional typography selection', 'Trust-building digital assets'],
+          result: 'Unified brand identity across all touchpoints — clinic signage, website, social media, and print materials.'
+        }
+      };
+
+      var params = new URLSearchParams(window.location.search);
+      var projectId = params.get('project');
+      var d = portfolioData[projectId];
+
+      if (!d) {
+        window.location.href = './portfolio.html';
+        return;
+      }
+
+      // Page title & meta
+      document.getElementById('pageTitle').textContent = d.title + ' | SRT Digital Solutions';
+      document.getElementById('pageMeta').setAttribute('content', d.desc.substring(0, 160));
+
+      // Breadcrumb
+      document.getElementById('csBreadcrumbTitle').textContent = d.title;
+
+      // Hero
+      document.getElementById('csTag').querySelector('span').textContent = d.tag;
+      document.getElementById('csTitle').textContent = d.title;
+      document.getElementById('csDesc').textContent = d.desc;
+      document.getElementById('csHeroImg').src = d.img;
+      document.getElementById('csHeroImg').alt = d.title;
+
+      // Meta info
+      document.getElementById('csCategory').textContent = d.category;
+      document.getElementById('csClient').textContent = d.client;
+      document.getElementById('csLocation').textContent = d.location;
+
+      // Website link (if available)
+      if (d.website) {
+        document.getElementById('csWebsiteWrap').style.display = '';
+        var wsEl = document.getElementById('csWebsite');
+        wsEl.href = d.website;
+        wsEl.textContent = d.website.replace(/^https?:\/\//, '').replace(/\/$/, '');
+      }
+
+      // Deliverables
+      var delEl = document.getElementById('csDeliverables');
+      delEl.innerHTML = d.items.map(function (item, i) {
+        return '<div class="cs-deliver-card">' +
+          '<div class="cs-deliver-num">0' + (i + 1) + '</div>' +
+          '<div class="cs-deliver-text">' + item + '</div>' +
+          '</div>';
+      }).join('');
+
+      // App showcase carousel (grouped by project)
+      if (d.websites && d.websites.length > 0) {
+        document.getElementById('csShowcaseSection').style.display = '';
+        document.getElementById('csShowcaseDivider').style.display = '';
+
+        document.getElementById('csShowcaseGrid').innerHTML = d.websites.map(function(w, wi) {
+          var shots = w.screenshots || (w.screenshot ? [w.screenshot] : []);
+          var slides = shots.map(function(src, si) {
+            return '<div class="app-slide' + (si === 0 ? ' active' : '') + '">' +
+              '<img src="' + src + '" alt="' + w.name + '" loading="lazy" decoding="async" />' +
+              '</div>';
+          }).join('');
+          var dots = shots.length > 1
+            ? '<div class="app-dots">' + shots.map(function(_, si) {
+                return '<span class="app-dot' + (si === 0 ? ' active' : '') + '" data-idx="' + si + '"></span>';
+              }).join('') + '</div>'
+            : '';
+          return '<div class="cs-showcase-card" data-animation="fade" data-animation-direction="bottom">' +
+            '<div class="app-carousel">' + slides + dots + '</div>' +
+            '<div class="cs-showcase-card-info">' +
+            '<h4>' + w.name + '</h4>' +
+            '<p>' + w.desc + '</p>' +
+            (w.url && w.url !== '#' ? '<a href="' + w.url + '" target="_blank" rel="noopener noreferrer">View Application <i class="fa-solid fa-arrow-up-right-from-square"></i></a>' : '') +
+            '</div>' +
+            '</div>';
+        }).join('');
+
+        // Init carousels
+        document.querySelectorAll('.cs-showcase-card').forEach(function(card) {
+          var slides = card.querySelectorAll('.app-slide');
+          var dots   = card.querySelectorAll('.app-dot');
+          var cur = 0;
+
+          function goTo(idx) {
+            slides[cur].classList.remove('active');
+            if (dots[cur]) dots[cur].classList.remove('active');
+            cur = (idx + slides.length) % slides.length;
+            slides[cur].classList.add('active');
+            if (dots[cur]) dots[cur].classList.add('active');
+          }
+
+          dots.forEach(function(dot) {
+            dot.addEventListener('click', function(e) {
+              e.stopPropagation();
+              goTo(parseInt(this.dataset.idx));
+            });
+          });
+
+          if (slides.length > 1) {
+            setInterval(function() { goTo(cur + 1); }, 3200);
+          }
+        });
+
+        // Lightbox on image click
+        var lb    = document.getElementById('appLightbox');
+        var lbImg = document.getElementById('appLightboxImg');
+        document.querySelectorAll('.app-slide img').forEach(function(img) {
+          img.addEventListener('click', function() {
+            lbImg.src = this.src;
+            lb.classList.add('open');
+          });
+        });
+        document.getElementById('appLightboxClose').addEventListener('click', function() {
+          lb.classList.remove('open');
+        });
+        lb.addEventListener('click', function(e) {
+          if (e.target === lb) lb.classList.remove('open');
+        });
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape') lb.classList.remove('open');
+        });
+      }
+
+      // Result
+      document.getElementById('csResult').textContent = d.result;
+
+      // Floating back button
+      var backFloat = document.getElementById('csBackFloat');
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > 400) {
+          backFloat.classList.add('visible');
+        } else {
+          backFloat.classList.remove('visible');
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>
