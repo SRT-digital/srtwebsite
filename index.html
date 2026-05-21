@@ -3734,44 +3734,11 @@
     });
   </script>
 
-  <!-- Rotating Text Animation -->
+  <!-- Rotating Text Animation - DISABLED so CMS values are not overwritten.
+       The hero's "titleLine3" field is now controlled via the admin panel only. -->
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const words = [
-        'for Doctors',
-        'in Coimbatore',
-        'That Works',
-        'for Growth',
-        'You Can Trust'
-      ];
-
-      let currentIndex = 0;
-      const rotatingText = document.querySelector('.rotating-text');
-
-      if (rotatingText) {
-        setInterval(() => {
-          // Blur out with scale down
-          rotatingText.classList.add('blur-out');
-
-          setTimeout(() => {
-            // Change text while hidden
-            currentIndex = (currentIndex + 1) % words.length;
-            rotatingText.textContent = words[currentIndex];
-
-            // Prepare for blur in
-            rotatingText.classList.remove('blur-out');
-            rotatingText.classList.add('blur-in');
-
-            // Small delay then animate in
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                rotatingText.classList.remove('blur-in');
-              });
-            });
-          }, 600);
-        }, 3500);
-      }
-    });
+    /* Rotating text disabled - was overwriting CMS values every 3.5s.
+       To restore the rotating effect, set rotation words in admin CMS as a comma-separated list. */
   </script>
 
   <!-- Hero: Cursor Glow + Floating Particles -->
